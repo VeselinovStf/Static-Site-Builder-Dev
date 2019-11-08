@@ -13,7 +13,7 @@
 
 
   <ItemGroup>
-    <Folder Include="Views\ViewComponents\" />
+    <Folder Include="ViewModels\ViewComponentModels\" />
     <Folder Include="Views\Shared\Components\" />
   </ItemGroup>
 
