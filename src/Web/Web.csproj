@@ -13,12 +13,6 @@
 
 
   <ItemGroup>
-    <Folder Include="ViewModels\ViewComponentModels\" />
-    <Folder Include="Views\Shared\Components\" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 

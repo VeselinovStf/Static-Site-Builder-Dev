@@ -36,6 +36,13 @@ namespace Web
             //App inner services
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
 
+            //App Identity
+            services.AddScoped<IAppUserManager<ApplicationUser>,UserManagerAdapter>();
+            services.AddScoped<IAppSignInManager<ApplicationUser>,SignInManagerAdapter>();
+            services.AddScoped<IAccountService<ApplicationUser>,AccountService>();
+
+
+            services.AddHttpContextAccessor();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -76,6 +83,8 @@ namespace Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
+            
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>
