@@ -16,5 +16,7 @@ namespace ApplicationCore.Interfaces
         Task AddToRoleAsync(T user, string role);
         Task<IEnumerable<string>> GetRolesAsync(T user);
         Task<T> GetUserAsync(ClaimsPrincipal user);
+        Task<T> FindByIdAsync(string userId);
+        Task<IdentityResult> ConfirmEmailAsync(T user, string code);
     }
 }

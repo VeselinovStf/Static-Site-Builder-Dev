@@ -10,7 +10,14 @@ namespace ApplicationCore.Interfaces
     {
         Task<T> RegisterAccountAsync(string userName, string email, string password);
         bool IsSignedIn(ClaimsPrincipal user);
-        Task<IEnumerable<string>> GetRolesAsync(T client);
+        Task<IEnumerable<string>> GetRolesAsync(T user);
         Task<T> RetrieveUserAsync(ClaimsPrincipal user);
+
+        Task<string> GenerateEmailConfirmationTokenAsync(T user);
+        Task SignInAsync(T user, bool isPersistent);
+
+        Task AddToRoleAsync(T user, string role);
+        Task<T> FindByIdAsync(string userId);
+        Task<bool> ConfirmEmailAsync(T user, string code);
     }
 }

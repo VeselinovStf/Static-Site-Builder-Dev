@@ -6,6 +6,7 @@ using ApplicationCore.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Infrastructure.Logging;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -40,6 +41,9 @@ namespace Web
             services.AddScoped<IAppUserManager<ApplicationUser>,UserManagerAdapter>();
             services.AddScoped<IAppSignInManager<ApplicationUser>,SignInManagerAdapter>();
             services.AddScoped<IAccountService<ApplicationUser>,AccountService>();
+
+            //Extend Service
+            services.AddTransient<IEmailSender, EmailSender>();
 
 
             services.AddHttpContextAccessor();

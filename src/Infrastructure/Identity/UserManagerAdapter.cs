@@ -42,5 +42,15 @@ namespace Infrastructure.Identity
         {
             return await this.userManager.GetUserAsync(user);
         }
+
+        public async Task<ApplicationUser> FindByIdAsync(string userId)
+        {
+            return await this.userManager.FindByIdAsync(userId);
+        }
+
+        public Task<IdentityResult> ConfirmEmailAsync(ApplicationUser user, string code)
+        {
+            return this.userManager.ConfirmEmailAsync(user, code);
+        }
     }
 }
