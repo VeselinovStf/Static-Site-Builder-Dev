@@ -64,7 +64,7 @@ namespace Web.Controllers
 
                     this.logger.LogInformation($"{nameof(AccountController)} : {nameof(Register)} : Sending Confirmation Email to Created user");
 
-                     this.emailSender.SendEmailAsync(serviceCallResultUser.Email, "Sonic Site Builder - Confirm Your Email",
+                    await this.emailSender.SendEmailAsync(serviceCallResultUser.Email, "Sonic Site Builder - Confirm Your Email",
                         $"Wellcome to SSB, Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callBackUrl)}'>Click Here</a>.");
 
                     //await this.accountService.SignInAsync(serviceCallResultUser, isPersistent: false);
@@ -183,9 +183,9 @@ namespace Web.Controllers
         {
             try
             {
-                var user = await this.accountService.FindByIdAsync(userId);
+               
 
-                if (await this.accountService.ConfirmEmailAsync(user, code))
+                if (await this.accountService.ConfirmEmailAsync(userId, code))
                 {
                     return View();
                 }

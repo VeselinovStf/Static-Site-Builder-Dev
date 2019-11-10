@@ -42,16 +42,18 @@ namespace Infrastructure.Identity
             }
         }
 
-        public async Task<bool> ConfirmEmailAsync(ApplicationUser user, string code)
+        public async Task<bool> ConfirmEmailAsync(string userId, string code)
         {
-            Validator.ObjectIsNull(
-                user, $"{nameof(AccountService)} : {nameof(ConfirmEmailAsync)} : {nameof(user)} : object is null");
+            Validator.StringIsNullOrEmpty(
+             userId, $"{nameof(AccountService)} : {nameof(ConfirmEmailAsync)} : {nameof(userId)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-             code, $"{nameof(AccountService)} : {nameof(AddToRoleAsync)} : {nameof(code)} : is null/empty");
+             code, $"{nameof(AccountService)} : {nameof(ConfirmEmailAsync)} : {nameof(code)} : is null/empty");
 
             try
             {
+                var user = await this.userManager.FindByIdAsync(userId);
+
                 var confirmResult = await this.userManager.ConfirmEmailAsync(user, code);
 
                 if (confirmResult.Succeeded)

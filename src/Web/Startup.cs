@@ -44,7 +44,7 @@ namespace Web
 
             //Extend Service
             services.AddTransient<IEmailSender, EmailSender>();
-
+        
 
             services.AddHttpContextAccessor();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
