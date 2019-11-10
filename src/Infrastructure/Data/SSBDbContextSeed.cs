@@ -11,8 +11,7 @@ namespace Infrastructure.Data
     public class SSBDbContextSeed
     {
         public static async Task SeedAsync(
-            SSBDbContext ssbDbContext,
-            ModelBuilder builder,
+            SSBDbContext ssbDbContext,            
             ILoggerFactory loggerFactory,
             int? retry = 0)
         {
@@ -32,11 +31,12 @@ namespace Infrastructure.Data
 
                 if (!ssbDbContext.Users.Any())
                 {
-                    ssbDbContext.Users.Add(
-                        GetPreconfiguredAdmin(builder));
 
                     ssbDbContext.Users.Add(
-                        GetPreconfiguredClient(builder));
+                        GetPreconfiguredAdmin(ssbDbContext));
+
+                    ssbDbContext.Users.Add(
+                        GetPreconfiguredClient(ssbDbContext));
 
                     await ssbDbContext.SaveChangesAsync();
                 }
@@ -49,7 +49,7 @@ namespace Infrastructure.Data
                     retryAvailibility++;
                     var log = loggerFactory.CreateLogger<SSBDbContextSeed>();
                     log.LogError(ex.Message);
-                    await SeedAsync(ssbDbContext,builder, loggerFactory, retryAvailibility);
+                    await SeedAsync(ssbDbContext, loggerFactory, retryAvailibility);
                 }
             }
         }
@@ -62,7 +62,7 @@ namespace Infrastructure.Data
             return new IdentityRole[] { administrator, client };
         }
 
-        private static ApplicationUser GetPreconfiguredClient(ModelBuilder builder)
+        private static ApplicationUser GetPreconfiguredClient(SSBDbContext dbContext)
         {
 
             var clientUser = new ApplicationUser()
@@ -85,17 +85,17 @@ namespace Infrastructure.Data
             var hashePass = new PasswordHasher<ApplicationUser>().HashPassword(clientUser, "!Aa12345678");
             clientUser.PasswordHash = hashePass;
 
-            builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+            dbContext.UserRoles.AddAsync(new IdentityUserRole<string>
             {
                 RoleId = 2.ToString(),
                 UserId = clientUser.Id
-            });
+            }).Wait();          
 
             return clientUser;
 
         }
 
-        private static ApplicationUser GetPreconfiguredAdmin(ModelBuilder builder)
+        private static ApplicationUser GetPreconfiguredAdmin(SSBDbContext dbContext)
         {
 
             var adminUser = new ApplicationUser()
@@ -117,11 +117,11 @@ namespace Infrastructure.Data
             var hashePass = new PasswordHasher<ApplicationUser>().HashPassword(adminUser, "!Aa12345678");
             adminUser.PasswordHash = hashePass;
 
-            builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+            dbContext.UserRoles.AddAsync(new IdentityUserRole<string>
             {
                 RoleId = 1.ToString(),
                 UserId = adminUser.Id
-            });
+            }).Wait();
 
             return adminUser;
         }

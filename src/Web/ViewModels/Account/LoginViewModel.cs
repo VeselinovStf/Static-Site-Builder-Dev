@@ -14,5 +14,8 @@ namespace Web.ViewModels.Account
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
+        public bool IsInvalid { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

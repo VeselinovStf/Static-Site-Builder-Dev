@@ -18,5 +18,7 @@ namespace ApplicationCore.Interfaces
         Task<T> GetUserAsync(ClaimsPrincipal user);
         Task<T> FindByIdAsync(string userId);
         Task<IdentityResult> ConfirmEmailAsync(T user, string code);
+
+        Task<T> FindByEmailAsync(string email);
     }
 }

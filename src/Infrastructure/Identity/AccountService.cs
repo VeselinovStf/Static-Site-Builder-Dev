@@ -1,11 +1,9 @@
 ﻿using ApplicationCore.Interfaces;
 using Infrastructure.Guard;
-using Infrastructure.Identity.DTOs;
 using Infrastructure.Identity.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Identity
@@ -33,9 +31,9 @@ namespace Infrastructure.Identity
 
             try
             {
-                
+
                 await this.userManager.AddToRoleAsync(user, role);
-               
+
             }
             catch (Exception ex)
             {
@@ -93,7 +91,7 @@ namespace Infrastructure.Identity
             Validator.ObjectIsNull(
                 user, $"{nameof(AccountService)} : {nameof(GenerateEmailConfirmationTokenAsync)} : {nameof(user)} : object is null");
 
-           
+
             try
             {
                 return await this.userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -127,7 +125,7 @@ namespace Infrastructure.Identity
 
             try
             {
-                var result =  this.signInManager.IsSignedIn(user, isPersistent: false);
+                var result = this.signInManager.IsSignedIn(user, isPersistent: false);
 
                 return result;
             }
@@ -135,6 +133,42 @@ namespace Infrastructure.Identity
             {
                 throw new AccountServiceIsSignInException("Can't sign in with role: " + ex.Message);
             }
+        }
+
+        public async Task PasswordSignInAsync(string email, string password, bool rememberMe, bool lockoutOnFailure)
+        {
+            Validator.StringIsNullOrEmpty(
+               email, $"{nameof(AccountService)} : {nameof(PasswordSignInAsync)} : {nameof(email)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+              password, $"{nameof(AccountService)} : {nameof(PasswordSignInAsync)} : {nameof(password)} : is null/empty");
+
+
+            var user = await this.userManager.FindByEmailAsync(email);
+
+            Validator.ObjectIsNull(
+                user, $"{nameof(AccountService)} : {nameof(PasswordSignInAsync)} : {nameof(user)} : object is null");
+
+            if (user.EmailConfirmed)
+            {
+                var result = await this.signInManager.PasswordSignInAsync(email, password, rememberMe, lockoutOnFailure);
+
+                if (!result.Succeeded)
+                {
+                    throw new AccountServiceAccountInvalidLoginAttempt("Invalid login attempt");
+                }
+
+                if (result.IsLockedOut)
+                {
+                    throw new AccountServiceAccountLockedOutException("User account locked out.");
+                }
+            }
+            else
+            {
+                throw new AccountServiceAccountEmailNotConfirmedException("User Email is not Confirmed");
+            }
+
+
         }
 
         public async Task<ApplicationUser> RegisterAccountAsync(string userName, string email, string password)
@@ -154,25 +188,20 @@ namespace Infrastructure.Identity
                 Email = email,
             };
 
-            try
+
+            var result = await this.userManager.CreateAsync(newUser, password);
+
+            if (result.Succeeded)
             {
-                var result = await this.userManager.CreateAsync(newUser, password);
-
-                if (result.Succeeded)
-                {                   
-                    return newUser;
-                }
-                else
-                {
-                    throw new AccountServiceCreateAccountException($"Account creation fails : {result.Errors}");
-                }
-
-
+                return newUser;
             }
-            catch (Exception ex)
+            else
             {
-                throw new AccountServiceCreateAccountException("Can't register user:" + ex.Message);
+                throw new AccountServiceCreateAccountException($"Account creation fails : {result.Errors}");
             }
+
+
+
         }
 
         public async Task<ApplicationUser> RetrieveUserAsync(ClaimsPrincipal user)
@@ -189,7 +218,7 @@ namespace Infrastructure.Identity
 
                 throw new AccountServiceGetRoleException("Can't get role : " + ex.Message);
             }
-           
+
         }
 
         public async Task SignInAsync(ApplicationUser user, bool isPersistent)
@@ -206,6 +235,11 @@ namespace Infrastructure.Identity
 
                 throw new AccountServiceIsSignInException(ex.Message);
             }
+        }
+
+        public async Task SignOutAsync()
+        {
+            await this.signInManager.SignOutAsync();
         }
     }
 }

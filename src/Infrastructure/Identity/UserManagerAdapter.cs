@@ -21,6 +21,7 @@ namespace Infrastructure.Identity
         public async Task<IdentityResult> CreateAsync(ApplicationUser user, string password)
         {
             return await this.userManager.CreateAsync(user, password);
+
         }
 
         public async Task<string> GenerateEmailConfirmationTokenAsync(ApplicationUser user)
@@ -51,6 +52,11 @@ namespace Infrastructure.Identity
         public Task<IdentityResult> ConfirmEmailAsync(ApplicationUser user, string code)
         {
             return this.userManager.ConfirmEmailAsync(user, code);
+        }
+
+        public async Task<ApplicationUser> FindByEmailAsync(string email)
+        {
+           return await this.userManager.FindByEmailAsync(email);
         }
     }
 }

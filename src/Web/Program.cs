@@ -24,11 +24,11 @@ namespace Web
             {
                 var services = scope.ServiceProvider;
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-                var modelBuilder = new ModelBuilder(new Microsoft.EntityFrameworkCore.Metadata.Conventions.ConventionSet());
+                
                 try
                 {
                     var ssbDbContext = services.GetRequiredService<SSBDbContext>();
-                    SSBDbContextSeed.SeedAsync(ssbDbContext, modelBuilder,loggerFactory).Wait();
+                    SSBDbContextSeed.SeedAsync(ssbDbContext,loggerFactory).Wait();
                    
                 }
                 catch (Exception ex)

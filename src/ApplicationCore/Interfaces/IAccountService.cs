@@ -19,5 +19,7 @@ namespace ApplicationCore.Interfaces
         Task AddToRoleAsync(T user, string role);
         Task<T> FindByIdAsync(string userId);
         Task<bool> ConfirmEmailAsync(T user, string code);
+        Task SignOutAsync();
+        Task PasswordSignInAsync(string email, string password, bool rememberMe, bool lockoutOnFailure);
     }
 }

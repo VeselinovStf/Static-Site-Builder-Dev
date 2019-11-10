@@ -24,9 +24,21 @@ namespace Infrastructure.Identity
             return this.signInManager.IsSignedIn(user);
         }
 
+        public async Task<SignInResult> PasswordSignInAsync(string email, string password, bool rememberMe, bool lockoutOnFailure)
+        {
+            return await this.signInManager.PasswordSignInAsync(email, password, rememberMe, lockoutOnFailure);
+        }
+
         public async Task SignInAsync(ApplicationUser user, bool isPersistent)
         {
             await this.signInManager.SignInAsync(user, isPersistent);
         }
+
+        public async Task SignOutAsync()
+        {
+            await this.signInManager.SignOutAsync();
+        }
+
+      
     }
 }
