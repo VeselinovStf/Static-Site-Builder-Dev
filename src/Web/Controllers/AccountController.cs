@@ -65,7 +65,7 @@ namespace Web.Controllers
                     this.logger.LogInformation($"{nameof(AccountController)} : {nameof(Register)} : Sending Confirmation Email to Created user");
 
                     await this.emailSender.SendEmailAsync(serviceCallResultUser.Email, "Sonic Site Builder - Confirm Your Email",
-                        $"Wellcome to SSB, Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callBackUrl)}'>Click Here</a>.");
+                        $"Wellcome to SSB, Please confirm your account by <a href='{callBackUrl}'>Click Here</a>.");
 
                     //await this.accountService.SignInAsync(serviceCallResultUser, isPersistent: false);
 

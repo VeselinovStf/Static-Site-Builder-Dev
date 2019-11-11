@@ -12,6 +12,6 @@ namespace ApplicationCore.Interfaces
         Task SignInAsync(T user, bool isPersistent);
         bool IsSignedIn(ClaimsPrincipal user, bool isPersistent);
         Task SignOutAsync();
-        Task<SignInResult> PasswordSignInAsync(string email, string password, bool rememberMe, bool lockoutOnFailure);
+        Task<SignInResult> PasswordSignInAsync(string userName, string password, bool rememberMe, bool lockoutOnFailure);
     }
 }

@@ -145,7 +145,6 @@ namespace Infrastructure.Identity
             Validator.StringIsNullOrEmpty(
               password, $"{nameof(AccountService)} : {nameof(PasswordSignInAsync)} : {nameof(password)} : is null/empty");
 
-
             var user = await this.userManager.FindByEmailAsync(email);
 
             Validator.ObjectIsNull(
@@ -153,7 +152,7 @@ namespace Infrastructure.Identity
 
             if (user.EmailConfirmed)
             {
-                var result = await this.signInManager.PasswordSignInAsync(email, password, rememberMe, lockoutOnFailure);
+                var result = await this.signInManager.PasswordSignInAsync(user.UserName, password, rememberMe, lockoutOnFailure);
 
                 if (!result.Succeeded)
                 {

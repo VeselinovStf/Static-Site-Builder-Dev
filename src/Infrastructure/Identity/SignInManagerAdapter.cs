@@ -11,12 +11,15 @@ namespace Infrastructure.Identity
     public class SignInManagerAdapter : IAppSignInManager<ApplicationUser>
     {
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly UserManager<ApplicationUser> userManagerTest;
 
         public SignInManagerAdapter(
-            SignInManager<ApplicationUser> signInManager
+            SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManagerTest
             )
         {
             this.signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+            this.userManagerTest = userManagerTest ?? throw new ArgumentNullException(nameof(userManagerTest));
         }
 
         public bool IsSignedIn(ClaimsPrincipal user, bool isPersistent)
@@ -24,9 +27,10 @@ namespace Infrastructure.Identity
             return this.signInManager.IsSignedIn(user);
         }
 
-        public async Task<SignInResult> PasswordSignInAsync(string email, string password, bool rememberMe, bool lockoutOnFailure)
+        public async Task<SignInResult> PasswordSignInAsync(string userName, string password, bool rememberMe, bool lockoutOnFailure)
         {
-            return await this.signInManager.PasswordSignInAsync(email, password, rememberMe, lockoutOnFailure);
+         
+            return await this.signInManager.PasswordSignInAsync(userName, password, rememberMe, lockoutOnFailure);
         }
 
         public async Task SignInAsync(ApplicationUser user, bool isPersistent)
