@@ -44,7 +44,7 @@ namespace Web
 
             //Extend Service
             services.AddTransient<IEmailSender, EmailSender>();
-        
+            services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddHttpContextAccessor();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -55,9 +55,12 @@ namespace Web
             services.AddDbContext<SSBDbContext>
                (options => options.UseSqlServer(Configuration.GetConnectionString("DevelopmentConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-              .AddEntityFrameworkStores<SSBDbContext>()
-              .AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+                {
+                    config.SignIn.RequireConfirmedEmail = true;
+                })
+                .AddEntityFrameworkStores<SSBDbContext>()
+                .AddDefaultTokenProviders();
         }
 
         private void ConfigureAppCookiePolicy(IServiceCollection services)
