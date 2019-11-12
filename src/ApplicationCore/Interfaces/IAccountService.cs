@@ -14,6 +14,8 @@ namespace ApplicationCore.Interfaces
         Task<T> RetrieveUserAsync(ClaimsPrincipal user);
 
         Task<string> GenerateEmailConfirmationTokenAsync(T user);
+
+        Task<string> GeneratePasswordResetTokenAsync(T user);
         Task SignInAsync(T user, bool isPersistent);
 
         Task AddToRoleAsync(T user, string role);
@@ -21,5 +23,9 @@ namespace ApplicationCore.Interfaces
         Task<bool> ConfirmEmailAsync(string userId, string code);
         Task SignOutAsync();
         Task PasswordSignInAsync(string email, string password, bool rememberMe, bool lockoutOnFailure);
+        
+        Task<T> FindByEmailAsync(string email);
+        Task<bool> ConfirmCangePasswordAsync(string code);
+        Task<bool> ResetPasswordAsync(string userName, string password, string confirmPassword, string token);
     }
 }

@@ -31,15 +31,21 @@ namespace Infrastructure.Identity
 
             try
             {
-
                 await this.userManager.AddToRoleAsync(user, role);
-
             }
             catch (Exception ex)
             {
-
-                throw new AccountServiceAddToReleException(ex.Message);
+                throw new AccountServiceAddToReleException($"{nameof(AccountServiceAddToReleException)} : Can't add to role{ex.Message}");
             }
+        }
+
+        //TODO: Add Custom Db Search or validation
+        public async Task<bool> ConfirmCangePasswordAsync(string code)
+        {
+            Validator.StringIsNullOrEmpty(
+             code, $"{nameof(AccountService)} : {nameof(ConfirmCangePasswordAsync)} : {nameof(code)} : is null/empty");
+
+            return true;
         }
 
         public async Task<bool> ConfirmEmailAsync(string userId, string code)
@@ -65,8 +71,24 @@ namespace Infrastructure.Identity
             }
             catch (Exception ex)
             {
+                throw new AccountServiceConfirmEmailException($"{nameof(AccountServiceConfirmEmailException)}: Can't confirm user : {ex.Message}");
+            }
+        }
 
-                throw new AccountServiceConfirmEmailException($"Can't confirm user : {ex.Message}");
+        public async Task<ApplicationUser> FindByEmailAsync(string email)
+        {
+            Validator.StringIsNullOrEmpty(
+                email, $"{nameof(AccountService)} : {nameof(FindByEmailAsync)} : {nameof(email)} : is null/empty");
+
+            try
+            {
+                var user = await this.userManager.FindByEmailAsync(email);
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new AccountServiceFindByEmailException($"{nameof(AccountServiceFindByEmailException)}Can't find user with provided email : {ex.Message}");
             }
         }
 
@@ -83,8 +105,7 @@ namespace Infrastructure.Identity
             }
             catch (Exception ex)
             {
-
-                throw new AccountServiceFindByIdException($"Can't find user with provided id : {ex.Message}");
+                throw new AccountServiceFindByIdException($"{nameof(AccountServiceFindByIdException)}Can't find user with provided id : {ex.Message}");
             }
         }
 
@@ -93,14 +114,28 @@ namespace Infrastructure.Identity
             Validator.ObjectIsNull(
                 user, $"{nameof(AccountService)} : {nameof(GenerateEmailConfirmationTokenAsync)} : {nameof(user)} : object is null");
 
-
             try
             {
                 return await this.userManager.GenerateEmailConfirmationTokenAsync(user);
             }
             catch (Exception ex)
             {
-                throw new AccountServiceGenerateEmailConfirmationTokenException($"Can't create confirmation token : {ex.Message}");
+                throw new AccountServiceGenerateEmailConfirmationTokenException($"{nameof(AccountServiceGenerateEmailConfirmationTokenException)}: Can't create confirmation token : {ex.Message}");
+            }
+        }
+
+        public async Task<string> GeneratePasswordResetTokenAsync(ApplicationUser user)
+        {
+            Validator.ObjectIsNull(
+               user, $"{nameof(AccountService)} : {nameof(GeneratePasswordResetTokenAsync)} : {nameof(user)} : object is null");
+
+            try
+            {
+                return await this.userManager.GeneratePasswordResetTokenAsync(user);
+            }
+            catch (Exception ex)
+            {
+                throw new AccountServiceGeneratePasswordConfirmationTokenException($"{nameof(AccountServiceGeneratePasswordConfirmationTokenException)}: Can't create confirmation token : {ex.Message}");
             }
         }
 
@@ -115,8 +150,7 @@ namespace Infrastructure.Identity
             }
             catch (Exception ex)
             {
-
-                throw new AccountServiceGetRoleException("Can't get role : " + ex.Message);
+                throw new AccountServiceGetRoleException($"{nameof(AccountServiceGetRoleException)}: Can't get role : " + ex.Message);
             }
         }
 
@@ -133,7 +167,7 @@ namespace Infrastructure.Identity
             }
             catch (Exception ex)
             {
-                throw new AccountServiceIsSignInException("Can't sign in with role: " + ex.Message);
+                throw new AccountServiceIsSignInException($"{nameof(AccountServiceIsSignInException)}: Can't sign in with role: " + ex.Message);
             }
         }
 
@@ -156,20 +190,18 @@ namespace Infrastructure.Identity
 
                 if (!result.Succeeded)
                 {
-                    throw new AccountServiceAccountInvalidLoginAttempt("Invalid login attempt");
+                    throw new AccountServiceAccountInvalidLoginAttempt($"{nameof(AccountServiceAccountInvalidLoginAttempt)}: Invalid login attempt");
                 }
 
                 if (result.IsLockedOut)
                 {
-                    throw new AccountServiceAccountLockedOutException("User account locked out.");
+                    throw new AccountServiceAccountLockedOutException($"{nameof(AccountServiceAccountLockedOutException)}: User account locked out.");
                 }
             }
             else
             {
-                throw new AccountServiceAccountEmailNotConfirmedException("User Email is not Confirmed");
+                throw new AccountServiceAccountEmailNotConfirmedException($"{nameof(AccountServiceAccountEmailNotConfirmedException)}: User Email is not Confirmed");
             }
-
-
         }
 
         public async Task<ApplicationUser> RegisterAccountAsync(string userName, string email, string password)
@@ -189,7 +221,6 @@ namespace Infrastructure.Identity
                 Email = email,
             };
 
-
             var result = await this.userManager.CreateAsync(newUser, password);
 
             if (result.Succeeded)
@@ -198,11 +229,44 @@ namespace Infrastructure.Identity
             }
             else
             {
-                throw new AccountServiceCreateAccountException($"Account creation fails : {result.Errors}");
+                throw new AccountServiceCreateAccountException($"{nameof(AccountServiceCreateAccountException)}:Account creation fails : {result.Errors}");
             }
+        }
 
+        public async Task<bool> ResetPasswordAsync(string userName, string password, string confirmPassword, string token)
+        {
+            Validator.StringIsNullOrEmpty(
+             userName, $"{nameof(AccountService)} : {nameof(ResetPasswordAsync)} : {nameof(userName)} : is null/empty");
 
+            Validator.StringIsNullOrEmpty(
+                password, $"{nameof(AccountService)} : {nameof(ResetPasswordAsync)} : {nameof(password)} : is null/empty");
 
+            Validator.StringIsNullOrEmpty(
+                confirmPassword, $"{nameof(AccountService)} : {nameof(ResetPasswordAsync)} : {nameof(confirmPassword)} : is null/empty");
+
+            Validator.StringEqualsString(
+            password, confirmPassword, $"{nameof(AccountService)} : {nameof(ResetPasswordAsync)} : {nameof(password)} : two strings are not equal");
+
+            Validator.StringIsNullOrEmpty(
+             token, $"{nameof(AccountService)} : {nameof(ResetPasswordAsync)} : {nameof(token)} : is null/empty");
+
+            try
+            {
+                var user = await this.userManager.FindByNameAsync(userName);
+
+                var confirmResult = await this.userManager.ResetPasswordAsync(user, token, password);
+
+                if (confirmResult.Succeeded)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new AccountServiceResetPasswordException($"{nameof(AccountServiceResetPasswordException)}: Can't reset user password : {ex.Message}");
+            }
         }
 
         public async Task<ApplicationUser> RetrieveUserAsync(ClaimsPrincipal user)
@@ -216,10 +280,8 @@ namespace Infrastructure.Identity
             }
             catch (Exception ex)
             {
-
-                throw new AccountServiceGetRoleException("Can't get role : " + ex.Message);
+                throw new AccountServiceRetrieveUserException($"{nameof(AccountServiceRetrieveUserException)}: Can't get role : {ex.Message}");
             }
-
         }
 
         public async Task SignInAsync(ApplicationUser user, bool isPersistent)
@@ -233,8 +295,7 @@ namespace Infrastructure.Identity
             }
             catch (Exception ex)
             {
-
-                throw new AccountServiceIsSignInException(ex.Message);
+                throw new AccountServiceIsSignInException($"{nameof(AccountServiceIsSignInException)} : Can't Sing In with this user : {ex.Message}");
             }
         }
 

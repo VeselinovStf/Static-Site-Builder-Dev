@@ -1,6 +1,4 @@
-﻿
-
-using ApplicationCore.Interfaces;
+﻿using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -18,15 +16,15 @@ namespace Infrastructure.Identity
         {
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
+
         public async Task<IdentityResult> CreateAsync(ApplicationUser user, string password)
         {
             return await this.userManager.CreateAsync(user, password);
-
         }
 
         public async Task<string> GenerateEmailConfirmationTokenAsync(ApplicationUser user)
         {
-            return await this.userManager.GenerateEmailConfirmationTokenAsync(user);           
+            return await this.userManager.GenerateEmailConfirmationTokenAsync(user);
         }
 
         public async Task AddToRoleAsync(ApplicationUser user, string role)
@@ -56,7 +54,22 @@ namespace Infrastructure.Identity
 
         public async Task<ApplicationUser> FindByEmailAsync(string email)
         {
-           return await this.userManager.FindByEmailAsync(email);
+            return await this.userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<string> GeneratePasswordResetTokenAsync(ApplicationUser user)
+        {
+            return await this.userManager.GeneratePasswordResetTokenAsync(user);
+        }
+
+        public async Task<IdentityResult> ResetPasswordAsync(ApplicationUser user, string token, string password)
+        {
+            return await this.userManager.ResetPasswordAsync(user, token, password);
+        }
+
+        public async Task<ApplicationUser> FindByNameAsync(string userName)
+        {
+            return await this.userManager.FindByNameAsync(userName);
         }
     }
 }

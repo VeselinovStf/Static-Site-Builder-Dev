@@ -4,7 +4,6 @@ using Infrastructure.Identity.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Web.ViewModels.Account;
 
@@ -70,7 +69,6 @@ namespace Web.Controllers
                     //await this.accountService.SignInAsync(serviceCallResultUser, isPersistent: false);
 
                     return RedirectToAction("SucceededRegistration", "Account");
-
                 }
                 catch (Exception ex)
                 {
@@ -109,9 +107,8 @@ namespace Web.Controllers
                     this.logger.LogInformation($"{nameof(AccountController)} : {nameof(Login)} : Sucess - User logged in");
 
                     return RedirectToAction("Index", "Home");
-
                 }
-                catch(AccountServiceAccountEmailNotConfirmedException ex)
+                catch (AccountServiceAccountEmailNotConfirmedException ex)
                 {
                     this.logger.LogWarning($"{nameof(AccountController)} : {nameof(Login)} : Exception - {ex.Message}");
 
@@ -159,15 +156,13 @@ namespace Web.Controllers
                 this.logger.LogInformation($"{nameof(AccountController)} : {nameof(Login)} : Sucess - User logged out");
 
                 return RedirectToAction("Index", "Home");
-
             }
             catch (Exception ex)
             {
                 this.logger.LogWarning($"{nameof(AccountController)} : {nameof(Login)} : Exception - {ex.Message}");
 
-                return NotFound("Loggin out problem : Please contact site administration");
+                return RedirectToAction("Error", "Home", new { message = "Loggin out problem. Contact support" });
             }
-
         }
 
         [AllowAnonymous]
@@ -183,30 +178,154 @@ namespace Web.Controllers
         {
             try
             {
-               
-
                 if (await this.accountService.ConfirmEmailAsync(userId, code))
                 {
                     return View();
                 }
                 else
                 {
-                    throw new InvalidOperationException($"Error confirming email for user");
+                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(ConfirmEmail)} : User Email Confirmation Problem");
                 }
             }
             catch (Exception ex)
             {
                 this.logger.LogWarning($"{nameof(AccountController)} : {nameof(ConfirmEmail)} : Exception - {ex.Message}");
-
-                return NotFound($"Unable to load user");
             }
 
+            return RedirectToAction("Error", "Home", new { message = "Can't Confirm Email. Contact support" });
         }
 
         [AllowAnonymous]
         [HttpGet]
         public IActionResult SucceededRegistration()
         {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            var model = new ForgotPasswordViewModel()
+            {
+                IsSend = false
+            };
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword([Bind("Email", "IsSend")]ForgotPasswordViewModel model)
+        {
+            var returnModel = new ForgotPasswordViewModel()
+            {
+                IsSend = model.IsSend
+            };
+
+            if (ModelState.IsValid)
+            {
+                returnModel.IsSend = true;
+
+                try
+                {
+                    var serviceCallResultUser = await this.accountService.FindByEmailAsync(model.Email);
+
+                    this.logger.LogInformation($"{nameof(AccountController)} : {nameof(ForgotPassword)} : User Found.");
+
+                    var confirmationCode = await this.accountService.GeneratePasswordResetTokenAsync(serviceCallResultUser);
+
+                    var callBackUrl = Url.Action(
+                        "ChangePassword", "Account",
+                       new { code = confirmationCode },
+                        protocol: Request.Scheme
+                        );
+
+                    this.logger.LogInformation($"{nameof(AccountController)} : {nameof(ForgotPassword)} : Sending Email to user");
+
+                    await this.emailSender.SendEmailAsync(serviceCallResultUser.Email, "Sonic Site Builder - Change Password",
+                        $"Hello, from SSB. This is your request for password change <a href='{callBackUrl}'>Click Here</a>.");
+
+                    this.logger.LogInformation($"{nameof(AccountController)} : {nameof(ForgotPassword)} : Sucess - Sending Password Reset Link logged in");
+
+                    return View(returnModel);
+                }
+                catch (AccountServiceFindByEmailException ex)
+                {
+                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(ForgotPassword)} : Exception - {ex.Message}");
+                }
+                catch (AccountServiceGeneratePasswordConfirmationTokenException ex)
+                {
+                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(ForgotPassword)} : Exception - {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(ForgotPassword)} : Exception - {ex.Message}");
+                }
+
+                return View(returnModel);
+            }
+
+            return View(returnModel);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> ChangePassword(string code)
+        {
+            try
+            {
+                if (await this.accountService.ConfirmCangePasswordAsync(code))
+                {
+                    var model = new PasswordResetViewModel()
+                    {
+                        Token = code
+                    };
+
+                    return View(model);
+                }
+                else
+                {
+                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(ChangePassword)} : Error changing password for user");
+                }
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(AccountController)} : {nameof(ChangePassword)} : Exception - {ex.Message} : With CODE = {code}");
+            }
+
+            return RedirectToAction("Error", "Home", new { message = "Can't Do Your Change Password Request. Contact support" });
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword([Bind("UserName", "Password", "ConfirmPassword", "Token")] PasswordResetViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (await this.accountService.ResetPasswordAsync(model.UserName, model.Password, model.ConfirmPassword, model.Token))
+                    {
+                        this.logger.LogInformation($"{nameof(AccountController)} : {nameof(ChangePassword)} : Sucess - User change password.");
+
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        this.logger.LogWarning($"{nameof(AccountController)} : {nameof(ChangePassword)} : Error changing password for user");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(ChangePassword)} : Exception - {ex.Message}");
+                }
+
+                return RedirectToAction("Error", "Home", new { message = "Can't Do Your Change Password Request. Contact support" });
+            }
+
             return View();
         }
     }

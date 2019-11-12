@@ -5,53 +5,52 @@
 }
 
 <section class="sign-in ftco-section">
-            <div class="container">
-                <div class="signin-content">
-                    <div class="signin-image">
-                        <figure><img src="~/mainSite/images/signin-image.jpg" alt="sing up image"></figure>
-                        <a href="#" class="signup-image-link">Create an account</a>
-                    </div>
+    <div class="container">
+        <div class="signin-content">
+            <div class="signin-image">
+                <figure><img src="~/mainSite/images/signin-image.jpg" alt="sing up image"></figure>
+                <a asp-controller="Account" asp-action="Register" class="signup-image-link">Create an account</a>
+                <a asp-controller="Account" asp-action="ForgotPassword" class="signup-image-link">Can't Login ?</a>
+            </div>
 
-                    <div class="signin-form">
-                        <h2 class="form-title">Sign up</h2>
-                        <form method="POST" class="register-form" id="login-form">
-                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-group">
-                                @if (Model.IsInvalid)
-                                {
-                                    <span class="text-danger">@Model.ErrorMessage</span>
-                                }
-                                <label asp-for="Email"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input asp-for="Email" type="text" name="Email" id="your_name" placeholder="Email"/>
-                                <span asp-validation-for="Email" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Password"><i class="zmdi zmdi-lock"></i></label>
-                                <input asp-for="Password" type="password" name="Password" id="your_pass" placeholder="Password"/>
-                                  <span asp-validation-for="Password" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <input asp-for="RememberMe" type="checkbox" name="RememberMe" id="remember-me" class="agree-term" />
-                                <label  asp-for="RememberMe" class="label-agree-term"><span><span></span></span>Remember me</label>
-                            
-                            </div>
-                            <div class="form-group form-button">
-                                <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
-                            </div>
-                        </form>
-                        <div class="social-login">
-                            <span class="social-label">Or login with</span>
-                            <ul class="socials">
-                                <li><a href="#"><i class="display-flex-center zmdi zmdi-facebook"></i></a></li>
-                                <li><a href="#"><i class="display-flex-center zmdi zmdi-twitter"></i></a></li>
-                                <li><a href="#"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
-                            </ul>
-                        </div>
+            <div class="signin-form">
+                <h2 class="form-title">Sign up</h2>
+                <form method="POST" class="register-form" id="login-form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        @if (Model.IsInvalid)
+                        {
+                            <span class="text-danger">@Model.ErrorMessage</span>
+                        }
+                        <label asp-for="Email"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                        <input asp-for="Email" type="text" name="Email" id="your_name" placeholder="Email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
+                    <div class="form-group">
+                        <label asp-for="Password"><i class="zmdi zmdi-lock"></i></label>
+                        <input asp-for="Password" type="password" name="Password" id="your_pass" placeholder="Password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="RememberMe" type="checkbox" name="RememberMe" id="remember-me" class="agree-term" />
+                        <label asp-for="RememberMe" class="label-agree-term"><span><span></span></span>Remember me</label>
+                    </div>
+                    <div class="form-group form-button">
+                        <input type="submit" name="signin" id="signin" class="form-submit" value="Log in" />
+                    </div>
+                </form>
+                <div class="social-login">
+                    <span class="social-label">Or login with</span>
+                    <ul class="socials">
+                        <li><a href="#"><i class="display-flex-center zmdi zmdi-facebook"></i></a></li>
+                        <li><a href="#"><i class="display-flex-center zmdi zmdi-twitter"></i></a></li>
+                        <li><a href="#"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
+                    </ul>
                 </div>
             </div>
-        </section>
-
+        </div>
+    </div>
+</section>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
