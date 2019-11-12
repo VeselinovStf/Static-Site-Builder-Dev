@@ -27,6 +27,14 @@ namespace ApplicationCore.Interfaces
 
         Task<IdentityResult> ResetPasswordAsync(T user, string token, string password);
 
+        Task<IdentityResult> ChangePasswordAsync(T user, string currentPassword, string newPassword);
+
+        Task<IdentityResult> ChangeEmailNameAsync(T user, string newEmail, string token);
+
+        Task<IdentityResult> ChangeUserNameAsync(T user, string userName);
+
+        Task DeleteClient(string userId);
+
         Task<T> FindByNameAsync(string userName);
     }
 }

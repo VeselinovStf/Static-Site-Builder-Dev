@@ -139,6 +139,28 @@ namespace Infrastructure.Identity
             }
         }
 
+        public async Task<bool> UpdateUserName(ApplicationUser user, string newUserName)
+        {
+            Validator.ObjectIsNull(
+               user, $"{nameof(AccountService)} : {nameof(UpdateUserName)} : {nameof(user)} : object is null");
+
+            try
+            {
+                if (this.userManager.ChangeUserNameAsync(user, newUserName).IsCompletedSuccessfully)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new AccountServiceUpdateUserNameException($"{nameof(AccountServiceUpdateUserNameException)}: Can't Update user name : {ex.Message}");
+            }
+        }
+
         public async Task<IEnumerable<string>> GetRolesAsync(ApplicationUser user)
         {
             Validator.ObjectIsNull(
@@ -184,7 +206,7 @@ namespace Infrastructure.Identity
             Validator.ObjectIsNull(
                 user, $"{nameof(AccountService)} : {nameof(PasswordSignInAsync)} : {nameof(user)} : object is null");
 
-            if (user.EmailConfirmed)
+            if (user.EmailConfirmed && !user.IsDeleted)
             {
                 var result = await this.signInManager.PasswordSignInAsync(user.UserName, password, rememberMe, lockoutOnFailure);
 
@@ -302,6 +324,37 @@ namespace Infrastructure.Identity
         public async Task SignOutAsync()
         {
             await this.signInManager.SignOutAsync();
+        }
+
+        public async Task DeleteUser(ApplicationUser user)
+        {
+            Validator.ObjectIsNull(
+               user, $"{nameof(AccountService)} : {nameof(DeleteUser)} : {nameof(user)} : object is null");
+
+            try
+            {
+                await this.userManager.DeleteClient(user.Id);
+            }
+            catch (Exception ex)
+            {
+                throw new AccountServiceDeleteUserException($"{nameof(AccountServiceDeleteUserException)} : Can't Delete this user : {ex.Message}");
+            }
+        }
+
+        public async Task<ApplicationUser> GetPaymentsAsync(ApplicationUser user)
+        {
+            Validator.ObjectIsNull(
+               user, $"{nameof(AccountService)} : {nameof(DeleteUser)} : {nameof(user)} : object is null");
+
+            try
+            {
+                //TODO: IMPLEMENT THE PAYMENT IN NEXT RUN
+                return await this.userManager.FindByIdAsync(user.Id);
+            }
+            catch (Exception ex)
+            {
+                throw new AccountServiceGetPaymentsException($"{nameof(AccountServiceGetPaymentsException)} : Can't Get User Payments : {ex.Message}");
+            }
         }
     }
 }

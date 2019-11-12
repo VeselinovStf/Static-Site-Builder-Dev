@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -54,7 +55,7 @@ namespace Infrastructure.Identity
 
         public async Task<ApplicationUser> FindByEmailAsync(string email)
         {
-            return await this.userManager.FindByEmailAsync(email);
+            return await this.userManager.Users.FirstOrDefaultAsync(u => u.Email == email && !u.IsDeleted);
         }
 
         public async Task<string> GeneratePasswordResetTokenAsync(ApplicationUser user)
@@ -65,6 +66,29 @@ namespace Infrastructure.Identity
         public async Task<IdentityResult> ResetPasswordAsync(ApplicationUser user, string token, string password)
         {
             return await this.userManager.ResetPasswordAsync(user, token, password);
+        }
+
+        public async Task<IdentityResult> ChangePasswordAsync(ApplicationUser user, string currentPassword, string newPassword)
+        {
+            return await this.userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+        }
+
+        public async Task<IdentityResult> ChangeEmailNameAsync(ApplicationUser user, string newEmail, string token)
+        {
+            return await this.userManager.ChangeEmailAsync(user, newEmail, token);
+        }
+
+        public async Task<IdentityResult> ChangeUserNameAsync(ApplicationUser user, string userName)
+        {
+            return await this.userManager.SetUserNameAsync(user, userName);
+        }
+
+        //TODO: Test This
+        public async Task DeleteClient(string userId)
+        {
+            var user = await this.userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            user.IsDeleted = true;
         }
 
         public async Task<ApplicationUser> FindByNameAsync(string userName)

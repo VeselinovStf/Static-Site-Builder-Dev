@@ -1,9 +1,7 @@
 ﻿using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Identity
@@ -29,7 +27,6 @@ namespace Infrastructure.Identity
 
         public async Task<SignInResult> PasswordSignInAsync(string userName, string password, bool rememberMe, bool lockoutOnFailure)
         {
-         
             return await this.signInManager.PasswordSignInAsync(userName, password, rememberMe, lockoutOnFailure);
         }
 
@@ -42,7 +39,5 @@ namespace Infrastructure.Identity
         {
             await this.signInManager.SignOutAsync();
         }
-
-      
     }
 }
