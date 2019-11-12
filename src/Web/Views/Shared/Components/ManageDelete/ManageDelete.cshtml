@@ -1,0 +1,28 @@
+﻿@model AccountManageDeleteViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="col-md-24 ftco-animate fadeInUp ftco-animated">
+    <div class="media block-24 services border text-center">
+
+        <div class="icon d-flex align-items-center justify-content-center">
+            <span class="flaticon-database"></span>
+        </div>
+        <div class="mt-12 media-body media-body-2">
+            <h3 class="heading">Delete Account</h3>
+            <p>Delete Your Account</p>
+        </div>
+        <hr />
+        <div class="row">
+            <form asp-controller="AccountManage" asp-action="DeleteAccount" method="post" class="register-form" id="register-form">
+                <input type="hidden" asp-for="@Model.UserId" />
+
+                <div class="form-group form-button">
+                    <input type="submit" name="signup" id="signup" class="form-button" value="Delete" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -31,7 +31,7 @@ namespace Web.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
 
-            var model = new RegisterViewModel();
+            var model = new AccountRegisterViewModel();
 
             return View(model);
         }
@@ -39,7 +39,7 @@ namespace Web.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("UserName", "Email", "Password", "ConfirmPassword")] RegisterViewModel model)
+        public async Task<IActionResult> Register([Bind("UserName", "Email", "Password", "ConfirmPassword")] AccountRegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace Web.Controllers
         {
             await this.accountService.SignOutAsync();
 
-            var model = new LoginViewModel();
+            var model = new AccountLoginViewModel();
 
             ViewData["ReturnUrl"] = returnUrl;
             return View(model);
@@ -96,7 +96,7 @@ namespace Web.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([Bind("Email", "Password", "RememberMe")]LoginViewModel model)
+        public async Task<IActionResult> Login([Bind("Email", "Password", "RememberMe")]AccountLoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -118,7 +118,7 @@ namespace Web.Controllers
                 {
                     this.logger.LogWarning($"{nameof(AccountController)} : {nameof(Login)} : Exception - {ex.Message}");
 
-                    return View(new LoginViewModel()
+                    return View(new AccountLoginViewModel()
                     {
                         IsInvalid = true,
                         ErrorMessage = "Invalid Login Attempt"
@@ -134,7 +134,7 @@ namespace Web.Controllers
                 {
                     this.logger.LogWarning($"{nameof(AccountController)} : {nameof(Login)} : Exception - {ex.Message}");
 
-                    return View(new LoginViewModel()
+                    return View(new AccountLoginViewModel()
                     {
                         IsInvalid = true,
                         ErrorMessage = "Invalid Login Attempt"
@@ -206,7 +206,7 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult ForgotPassword()
         {
-            var model = new ForgotPasswordViewModel()
+            var model = new AccountForgotPasswordViewModel()
             {
                 IsSend = false
             };
@@ -217,9 +217,9 @@ namespace Web.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ForgotPassword([Bind("Email", "IsSend")]ForgotPasswordViewModel model)
+        public async Task<IActionResult> ForgotPassword([Bind("Email", "IsSend")]AccountForgotPasswordViewModel model)
         {
-            var returnModel = new ForgotPasswordViewModel()
+            var returnModel = new AccountForgotPasswordViewModel()
             {
                 IsSend = model.IsSend
             };
@@ -278,7 +278,7 @@ namespace Web.Controllers
             {
                 if (await this.accountService.ConfirmCangePasswordAsync(code))
                 {
-                    var model = new PasswordResetViewModel()
+                    var model = new AccountPasswordResetTokenViewModel()
                     {
                         Token = code
                     };
@@ -301,7 +301,7 @@ namespace Web.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword([Bind("UserName", "Password", "ConfirmPassword", "Token")] PasswordResetViewModel model)
+        public async Task<IActionResult> ChangePassword([Bind("UserName", "Password", "ConfirmPassword", "Token")] AccountPasswordResetTokenViewModel model)
         {
             if (ModelState.IsValid)
             {

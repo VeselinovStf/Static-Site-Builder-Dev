@@ -1,4 +1,5 @@
-﻿@{
+﻿@model AccountManageClientInformationViewModel
+@{
 
     Layout = "~/Views/Shared/_Layout.cshtml";
 
@@ -67,23 +68,23 @@
             <div class="col-lg-6 py-5">
                 <div class="row">
                     <div id="UserInformation" class="tabcontent">
-                        <h3>User Information</h3>
-                        <p>Change your information</p>
+
+                        @await Component.InvokeAsync("ManageUserInformation", new { model = Model.UserInformation })
                     </div>
 
                     <div id="Password" class="tabcontent">
-                        <h3>Change Password</h3>
-                        <p>Change your default password</p>
+
+                        @await Component.InvokeAsync("ManagePassword", new { model = Model.Password })
                     </div>
 
                     <div id="Delete" class="tabcontent">
-                        <h3>Delete account</h3>
-                        <p>Close down your account</p>
+
+                        @await Component.InvokeAsync("ManageDelete", new { model = Model.Delete })
                     </div>
 
                     <div id="Payments" class="tabcontent">
-                        <h3>Payments</h3>
-                        <p>Comming soon....</p>
+
+                        @await Component.InvokeAsync("ManagePayments", new { model = Model.Payments })
                     </div>
                 </div>
             </div>

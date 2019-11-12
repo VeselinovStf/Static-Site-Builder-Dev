@@ -2,7 +2,7 @@
 
 namespace Web.ViewModels.Account
 {
-    public class ForgotPasswordViewModel
+    public class AccountForgotPasswordViewModel
     {
         [Required]
         [EmailAddress]

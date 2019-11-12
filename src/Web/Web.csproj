@@ -20,7 +20,7 @@
 
 
   <ItemGroup>
-    <Folder Include="ViewModels\AccountManage\" />
+    <Folder Include="Views\Shared\Components\AccountManage\" />
   </ItemGroup>
 
 </Project>

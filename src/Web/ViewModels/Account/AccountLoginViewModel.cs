@@ -2,7 +2,7 @@
 
 namespace Web.ViewModels.Account
 {
-    public class LoginViewModel
+    public class AccountLoginViewModel
     {
         [Required]
         [EmailAddress]

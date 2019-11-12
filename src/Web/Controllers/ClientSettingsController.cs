@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using Web.ModelFatories.ClientSettings.Abstraction;
+using Web.ModelFatories.ClientSettingsModelFactory.Abstraction;
 
 namespace Web.Controllers
 {
@@ -39,7 +39,7 @@ namespace Web.Controllers
 
                 return View(model);
             }
-            catch (AccountServiceFindByEmailException ex)
+            catch (AccountServiceFindByIdException ex)
             {
                 this.logger.LogWarning($"{nameof(ClientSettingsController)} : {nameof(Index)} : Exception - {ex.Message}");
             }

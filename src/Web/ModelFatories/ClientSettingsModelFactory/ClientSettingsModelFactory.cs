@@ -1,8 +1,8 @@
 ﻿using Infrastructure.Identity;
-using Web.ModelFatories.ClientSettings.Abstraction;
+using Web.ModelFatories.ClientSettingsModelFactory.Abstraction;
 using Web.ViewModels.ClientSettings;
 
-namespace Web.ModelFatories.ClientSettings
+namespace Web.ModelFatories.ClientSettingsModelFactory
 {
     public class ClientSettingsModelFactory : IClientSettingsModelFactory
     {

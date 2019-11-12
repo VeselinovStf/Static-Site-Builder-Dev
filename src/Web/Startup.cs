@@ -12,8 +12,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using Web.ModelFatories.ClientSettings;
-using Web.ModelFatories.ClientSettings.Abstraction;
+using Web.ModelFatories.AccountManageModelFactory;
+using Web.ModelFatories.AccountManageModelFactory.Abstraction;
+using Web.ModelFatories.ClientSettingsModelFactory;
+using Web.ModelFatories.ClientSettingsModelFactory.Abstraction;
 
 namespace Web
 {
@@ -42,6 +44,9 @@ namespace Web
 
             //ClientSettings
             services.AddScoped<IClientSettingsModelFactory, ClientSettingsModelFactory>();
+
+            //AccountManage
+            services.AddScoped<IAccountManageModelFactory, AccountManageModelFactory>();
 
             //Extend Service
             services.AddTransient<IEmailSender, EmailSender>();

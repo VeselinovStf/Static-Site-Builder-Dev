@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Web.ViewModels.ViewComponentModels;
 
-namespace Web.Views.ViewComponents.MainNavigation
+namespace Web.Views.ViewComponents.MainNavigationViewComponents
 {
     public class MainNavigationViewComponent : ViewComponent
     {
@@ -25,14 +25,12 @@ namespace Web.Views.ViewComponents.MainNavigation
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var user = this.httpContext.HttpContext.User;
 
             if (this.accountService.IsSignedIn(user))
             {
-
                 var client = await this.accountService.RetrieveUserAsync(user);
                 var role = await this.accountService.GetRolesAsync(client);
 
@@ -43,8 +41,6 @@ namespace Web.Views.ViewComponents.MainNavigation
 
                 if (role.Contains("Client"))
                 {
-
-
                     return View("ClientMenu", clientViewModel);
                 }
                 else
@@ -54,7 +50,6 @@ namespace Web.Views.ViewComponents.MainNavigation
                         return View("AdministratorMenu", clientViewModel);
                     }
                 }
-
             }
             else
             {
@@ -62,7 +57,6 @@ namespace Web.Views.ViewComponents.MainNavigation
             }
 
             return View();
-
         }
     }
 }
