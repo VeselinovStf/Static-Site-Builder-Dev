@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ApplicationCore.Interfaces;
+﻿using ApplicationCore.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Infrastructure.Logging;
@@ -10,12 +6,14 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using Web.ModelFatories.ClientSettings;
+using Web.ModelFatories.ClientSettings.Abstraction;
 
 namespace Web
 {
@@ -38,9 +36,12 @@ namespace Web
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
 
             //App Identity
-            services.AddScoped<IAppUserManager<ApplicationUser>,UserManagerAdapter>();
-            services.AddScoped<IAppSignInManager<ApplicationUser>,SignInManagerAdapter>();
-            services.AddScoped<IAccountService<ApplicationUser>,AccountService>();
+            services.AddScoped<IAppUserManager<ApplicationUser>, UserManagerAdapter>();
+            services.AddScoped<IAppSignInManager<ApplicationUser>, SignInManagerAdapter>();
+            services.AddScoped<IAccountService<ApplicationUser>, AccountService>();
+
+            //ClientSettings
+            services.AddScoped<IClientSettingsModelFactory, ClientSettingsModelFactory>();
 
             //Extend Service
             services.AddTransient<IEmailSender, EmailSender>();
@@ -75,7 +76,8 @@ namespace Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.ConfigureApplicationCookie(o => {
+            services.ConfigureApplicationCookie(o =>
+            {
                 o.ExpireTimeSpan = TimeSpan.FromDays(5);
                 o.SlidingExpiration = true;
             });
@@ -98,7 +100,7 @@ namespace Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
-            
+
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>
