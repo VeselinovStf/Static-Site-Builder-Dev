@@ -32,14 +32,16 @@ namespace ApplicationCore.Interfaces
 
         Task<T> FindByEmailAsync(string email);
 
-        Task<bool> ConfirmCangePasswordAsync(string code);
+        Task<bool> ConfirmCangePasswordAsync(string userId, string code);
 
         Task<bool> ResetPasswordAsync(string userName, string password, string confirmPassword, string token);
 
         Task<bool> UpdateUserName(T user, string newUserName);
 
-        Task DeleteUser(T user);
+        Task<bool> DeleteUser(T user);
 
         Task<T> GetPaymentsAsync(T user);
+
+        Task<bool> ChangeEmailAsync(T user, string userName, string emailUpdateConfirmationCode);
     }
 }

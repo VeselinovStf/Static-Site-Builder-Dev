@@ -40,12 +40,24 @@ namespace Infrastructure.Identity
         }
 
         //TODO: Add Custom Db Search or validation
-        public async Task<bool> ConfirmCangePasswordAsync(string code)
+        public async Task<bool> ConfirmCangePasswordAsync(string userId, string code)
         {
+            Validator.StringIsNullOrEmpty(
+            userId, $"{nameof(AccountService)} : {nameof(ConfirmCangePasswordAsync)} : {nameof(userId)} : is null/empty");
+
             Validator.StringIsNullOrEmpty(
              code, $"{nameof(AccountService)} : {nameof(ConfirmCangePasswordAsync)} : {nameof(code)} : is null/empty");
 
-            return true;
+            try
+            {
+                var user = await this.userManager.FindByIdAsync(userId);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new AccountServiceConfirmCangePasswordException($"{nameof(AccountServiceConfirmCangePasswordException)}: Can't confirm user password : {ex.Message}");
+            }
         }
 
         public async Task<bool> ConfirmEmailAsync(string userId, string code)
@@ -144,9 +156,19 @@ namespace Infrastructure.Identity
             Validator.ObjectIsNull(
                user, $"{nameof(AccountService)} : {nameof(UpdateUserName)} : {nameof(user)} : object is null");
 
+            Validator.StringIsNullOrEmpty(
+                newUserName, $"{nameof(AccountService)} : {nameof(UpdateUserName)} : {nameof(newUserName)} : is null/empty");
+
+            if (user.UserName.Equals(newUserName))
+            {
+                return true;
+            }
+
             try
             {
-                if (this.userManager.ChangeUserNameAsync(user, newUserName).IsCompletedSuccessfully)
+                var callResult = await this.userManager.ChangeUserNameAsync(user, newUserName);
+
+                if (callResult.Succeeded)
                 {
                     return true;
                 }
@@ -326,14 +348,21 @@ namespace Infrastructure.Identity
             await this.signInManager.SignOutAsync();
         }
 
-        public async Task DeleteUser(ApplicationUser user)
+        public async Task<bool> DeleteUser(ApplicationUser user)
         {
             Validator.ObjectIsNull(
                user, $"{nameof(AccountService)} : {nameof(DeleteUser)} : {nameof(user)} : object is null");
 
             try
             {
-                await this.userManager.DeleteClient(user.Id);
+                var deleteCall = await this.userManager.DeleteClient(user.Id);
+
+                if (deleteCall.Succeeded)
+                {
+                    return true;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {
@@ -354,6 +383,34 @@ namespace Infrastructure.Identity
             catch (Exception ex)
             {
                 throw new AccountServiceGetPaymentsException($"{nameof(AccountServiceGetPaymentsException)} : Can't Get User Payments : {ex.Message}");
+            }
+        }
+
+        public async Task<bool> ChangeEmailAsync(ApplicationUser user, string newEmail, string emailUpdateConfirmationCode)
+        {
+            Validator.ObjectIsNull(
+               user, $"{nameof(AccountService)} : {nameof(ChangeEmailAsync)} : {nameof(user)} : object is null");
+
+            Validator.StringIsNullOrEmpty(
+               newEmail, $"{nameof(AccountService)} : {nameof(ChangeEmailAsync)} : {nameof(newEmail)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+               emailUpdateConfirmationCode, $"{nameof(AccountService)} : {nameof(ChangeEmailAsync)} : {nameof(emailUpdateConfirmationCode)} : is null/empty");
+
+            try
+            {
+                var result = await this.userManager.ChangeEmailNameAsync(user, newEmail, emailUpdateConfirmationCode);
+
+                if (result.Succeeded)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new AccountServiceGetPaymentsException($"{nameof(AccountServiceGetPaymentsException)} : Can't Change User Email : {ex.Message}");
             }
         }
     }

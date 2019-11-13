@@ -75,20 +75,26 @@ namespace Infrastructure.Identity
 
         public async Task<IdentityResult> ChangeEmailNameAsync(ApplicationUser user, string newEmail, string token)
         {
-            return await this.userManager.ChangeEmailAsync(user, newEmail, token);
+            user.Email = newEmail;
+
+            return await this.userManager.ConfirmEmailAsync(user, token);
         }
 
         public async Task<IdentityResult> ChangeUserNameAsync(ApplicationUser user, string userName)
         {
-            return await this.userManager.SetUserNameAsync(user, userName);
+            user.UserName = userName;
+
+            return await this.userManager.UpdateAsync(user);
         }
 
         //TODO: Test This
-        public async Task DeleteClient(string userId)
+        public async Task<IdentityResult> DeleteClient(string userId)
         {
             var user = await this.userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
             user.IsDeleted = true;
+
+            return await this.userManager.UpdateAsync(user);
         }
 
         public async Task<ApplicationUser> FindByNameAsync(string userName)

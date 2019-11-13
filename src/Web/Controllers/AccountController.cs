@@ -197,6 +197,63 @@ namespace Web.Controllers
 
         [AllowAnonymous]
         [HttpGet]
+        public async Task<IActionResult> ConfirmUserInformation(string userId, string code, bool EmailConfig)
+        {
+            try
+            {
+                var serviceCallResultUser = await this.accountService.FindByIdAsync(userId);
+
+                this.logger.LogInformation($"{nameof(AccountController)} : {nameof(ConfirmUserInformation)} : User Found.");
+
+                if (EmailConfig)
+                {
+                    var changeEmailCall = await this.accountService.ConfirmEmailAsync(userId, code);
+
+                    if (changeEmailCall)
+                    {
+                        return View();
+                    }
+                    else
+                    {
+                        this.logger.LogWarning($"{nameof(AccountController)} : {nameof(ConfirmEmail)} : User Email Confirmation Problem");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(AccountController)} : {nameof(ConfirmEmail)} : Exception - {ex.Message}");
+            }
+
+            return RedirectToAction("Error", "Home", new { message = "Can't Confirm Email. Contact support" });
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> ConfirmPasswordChange(string userId, string code)
+        {
+            try
+            {
+                var passwordChangeCall = await this.accountService.ConfirmCangePasswordAsync(userId, code);
+
+                if (passwordChangeCall)
+                {
+                    return View();
+                }
+                else
+                {
+                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(ConfirmEmail)} : User Password Confirmation Problem");
+                }
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(AccountController)} : {nameof(ConfirmEmail)} : Exception - {ex.Message}");
+            }
+
+            return RedirectToAction("Error", "Home", new { message = "Can't Confirm Password. Contact support" });
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
         public IActionResult SucceededRegistration()
         {
             return View();
@@ -238,7 +295,11 @@ namespace Web.Controllers
 
                     var callBackUrl = Url.Action(
                         "ChangePassword", "Account",
-                       new { code = confirmationCode },
+                       new
+                       {
+                           userId = serviceCallResultUser.Id,
+                           code = confirmationCode
+                       },
                         protocol: Request.Scheme
                         );
 
@@ -272,11 +333,11 @@ namespace Web.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> ChangePassword(string code)
+        public async Task<IActionResult> ChangePassword(string userId, string code)
         {
             try
             {
-                if (await this.accountService.ConfirmCangePasswordAsync(code))
+                if (await this.accountService.ConfirmCangePasswordAsync(userId, code))
                 {
                     var model = new AccountPasswordResetTokenViewModel()
                     {

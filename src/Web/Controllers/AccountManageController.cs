@@ -16,13 +16,13 @@ namespace Web.Controllers
         private readonly IAccountService<ApplicationUser> accountService;
         private readonly IAccountManageModelFactory modelFactory;
         private readonly IEmailSender emailSender;
-        private readonly IAppLogger<AccountController> logger;
+        private readonly IAppLogger<AccountManageController> logger;
 
         public AccountManageController(
             IAccountService<ApplicationUser> accountService,
             IAccountManageModelFactory modelFactory,
             IEmailSender emailSender,
-            IAppLogger<AccountController> logger)
+            IAppLogger<AccountManageController> logger)
         {
             this.accountService = accountService ?? throw new System.ArgumentNullException(nameof(accountService));
             this.modelFactory = modelFactory ?? throw new System.ArgumentNullException(nameof(modelFactory));
@@ -38,17 +38,17 @@ namespace Web.Controllers
 
                 var model = this.modelFactory.Create(serviceModel);
 
-                this.logger.LogInformation($"{nameof(ClientSettingsController)} : {nameof(ChangeAccountInformation)} : Showing user Settings account information");
+                this.logger.LogInformation($"{nameof(AccountManageController)} : {nameof(ChangeAccountInformation)} : Showing user Settings account information");
 
                 return View(model);
             }
             catch (AccountServiceFindByIdException ex)
             {
-                this.logger.LogWarning($"{nameof(ClientSettingsController)} : {nameof(ChangeAccountInformation)} : Exception - {ex.Message}");
+                this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(ChangeAccountInformation)} : Exception - {ex.Message}");
             }
             catch (Exception ex)
             {
-                this.logger.LogWarning($"{nameof(ClientSettingsController)} : {nameof(ChangeAccountInformation)} : Exception - {ex.Message}");
+                this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(ChangeAccountInformation)} : Exception - {ex.Message}");
             }
 
             return RedirectToAction("Error", "Home", new { message = "Can't get to the User Setting. Contact support" });
@@ -64,48 +64,78 @@ namespace Web.Controllers
                 {
                     var serviceCallResultUser = await this.accountService.FindByIdAsync(model.UserId);
 
-                    this.logger.LogInformation($"{nameof(AccountController)} : {nameof(UpdateUserInformation)} : User Found.");
+                    this.logger.LogInformation($"{nameof(AccountManageController)} : {nameof(UpdateUserInformation)} : User Found.");
 
+                    //UserName
                     var userUpdate = await this.accountService.UpdateUserName(serviceCallResultUser, model.UserName);
 
-                    var passwordUpdateConfirmationCode = await this.accountService.GeneratePasswordResetTokenAsync(serviceCallResultUser);
+                    if (!userUpdate)
+                    {
+                        this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(ChangeAccountInformation)} : Can't Change User Name");
 
-                    var callBackUrl = Url.Action(
-                        "ConfirmEmail", "Account",
-                       new
-                       {
-                           userId = serviceCallResultUser.Id,
-                           code = passwordUpdateConfirmationCode
-                       },
-                                protocol: Request.Scheme
-                        );
+                        return RedirectToAction("Error", "Home", new { message = "Can't Update User Name. Contact support" });
+                    }
 
-                    this.logger.LogInformation($"{nameof(AccountController)} : {nameof(UpdateUserInformation)} : Sending Email to user");
+                    //Email
+                    if (serviceCallResultUser.Email.Equals(model.Email))
+                    {
+                        this.logger.LogInformation($"{nameof(AccountManageController)} : {nameof(UpdateUserInformation)} : Changing User Information Done");
 
-                    await this.emailSender.SendEmailAsync(serviceCallResultUser.Email, "Sonic Site Builder - Change Password",
-                        $"Hello, from SSB. This is your request for password change <a href='{callBackUrl}'>Click Here</a>.");
+                        return RedirectToAction("ChangeAccountInformation", "AccountManage", new { clientId = model.UserId });
+                    }
+                    else
+                    {
+                        var emailUpdateConfirmationCode = await this.accountService.GenerateEmailConfirmationTokenAsync(serviceCallResultUser);
 
-                    this.logger.LogInformation($"{nameof(AccountController)} : {nameof(UpdateUserInformation)} : Sucess - Sending Password Reset Link logged in");
+                        var changeEmailCall = await this.accountService.ChangeEmailAsync(serviceCallResultUser, model.Email, emailUpdateConfirmationCode);
 
-                    await this.accountService.SignOutAsync();
+                        if (changeEmailCall)
+                        {
+                            var callBackUrl = Url.Action(
+                                     "ConfirmUserInformation", "Account",
+                                    new
+                                    {
+                                        userId = serviceCallResultUser.Id,
+                                        code = emailUpdateConfirmationCode,
+                                        EmailConfig = true
+                                    },
+                                             protocol: Request.Scheme
+                                     );
 
-                    return RedirectToAction("Index", "Home");
+                            this.logger.LogInformation($"{nameof(AccountController)} : {nameof(UpdateUserInformation)} : Sending Email to user");
+
+                            await this.emailSender.SendEmailAsync(serviceCallResultUser.Email, "Sonic Site Builder - Change Password",
+                                $"Hello, from SSB. This is your request for User informacion change <a href='{callBackUrl}'>Click Here</a>.");
+
+                            this.logger.LogInformation($"{nameof(AccountManageController)} : {nameof(UpdateUserInformation)} : Sucess - Sending User Information Reset Link logged in");
+
+                            await this.accountService.SignOutAsync();
+
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            this.logger.LogWarning($"{nameof(AccountController)} : {nameof(UpdateUserInformation)} : User Information Confirmation Problem");
+
+                            return RedirectToAction("Error", "Home", new { message = "Can't Update User Indormation. Contact support" });
+                        }
+                    }
                 }
                 catch (AccountServiceFindByIdException ex)
                 {
-                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(UpdateUserInformation)} : Exception - {ex.Message}");
+                    this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(UpdateUserInformation)} : Exception - {ex.Message}");
                 }
                 catch (AccountServiceUpdateUserNameException ex)
                 {
-                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(UpdateUserInformation)} : Exception - {ex.Message}");
+                    this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(UpdateUserInformation)} : Exception - {ex.Message}");
                 }
                 catch (AccountServiceGeneratePasswordConfirmationTokenException ex)
                 {
-                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(UpdateUserInformation)} : Exception - {ex.Message}");
+                    this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(UpdateUserInformation)} : Exception - {ex.Message}");
                 }
                 catch (Exception ex)
                 {
-                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(UpdateUserInformation)} : Exception - {ex.Message}");
+                    this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(UpdateUserInformation)} : Exception - {ex.Message}");
                 }
             }
 
@@ -122,12 +152,18 @@ namespace Web.Controllers
                 {
                     var serviceCallResultUser = await this.accountService.FindByIdAsync(model.UserId);
 
-                    this.logger.LogInformation($"{nameof(AccountController)} : {nameof(UpdatePassword)} : User Found.");
+                    this.logger.LogInformation($"{nameof(AccountManageController)} : {nameof(UpdatePassword)} : User Found.");
 
                     var confirmationCode = await this.accountService.GeneratePasswordResetTokenAsync(serviceCallResultUser);
 
-                    var callBackUrl = Url.Action(
-                        "ConfirmEmail", "Account",
+                    var passwordChangeCall = await this.accountService.ResetPasswordAsync(serviceCallResultUser.UserName, model.Password, model.ConfirmPassword, confirmationCode);
+
+                    if (passwordChangeCall)
+                    {
+                        this.logger.LogInformation($"{nameof(AccountManageController)} : {nameof(UpdatePassword)} : Sending Email to user");
+
+                        var callBackUrl = Url.Action(
+                        "ConfirmPasswordChange", "Account",
                        new
                        {
                            userId = serviceCallResultUser.Id,
@@ -136,28 +172,33 @@ namespace Web.Controllers
                                 protocol: Request.Scheme
                         );
 
-                    this.logger.LogInformation($"{nameof(AccountController)} : {nameof(UpdatePassword)} : Sending Email to user");
+                        await this.emailSender.SendEmailAsync(serviceCallResultUser.Email, "Sonic Site Builder - Change Password",
+                            $"Hello, from SSB. This is your request for password change <a href='{callBackUrl}'>Click Here</a>.");
 
-                    await this.emailSender.SendEmailAsync(serviceCallResultUser.Email, "Sonic Site Builder - Change Password",
-                        $"Hello, from SSB. This is your request for password change <a href='{callBackUrl}'>Click Here</a>.");
+                        this.logger.LogInformation($"{nameof(AccountManageController)} : {nameof(UpdatePassword)} : Sucess - Sending Password Reset Link logged in");
 
-                    this.logger.LogInformation($"{nameof(AccountController)} : {nameof(UpdatePassword)} : Sucess - Sending Password Reset Link logged in");
+                        await this.accountService.SignOutAsync();
 
-                    await this.accountService.SignOutAsync();
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        this.logger.LogWarning($"{nameof(AccountController)} : {nameof(UpdatePassword)} : User Password Change Problem");
 
-                    return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Error", "Home", new { message = "Can't Update Password. Contact support" });
+                    }
                 }
                 catch (AccountServiceFindByIdException ex)
                 {
-                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(UpdatePassword)} : Exception - {ex.Message}");
+                    this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(UpdatePassword)} : Exception - {ex.Message}");
                 }
                 catch (AccountServiceGeneratePasswordConfirmationTokenException ex)
                 {
-                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(UpdatePassword)} : Exception - {ex.Message}");
+                    this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(UpdatePassword)} : Exception - {ex.Message}");
                 }
                 catch (Exception ex)
                 {
-                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(UpdatePassword)} : Exception - {ex.Message}");
+                    this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(UpdatePassword)} : Exception - {ex.Message}");
                 }
             }
 
@@ -174,9 +215,21 @@ namespace Web.Controllers
                 {
                     var serviceCallResultUser = await this.accountService.FindByIdAsync(model.UserId);
 
-                    this.logger.LogInformation($"{nameof(AccountController)} : {nameof(DeleteAccount)} : User Found.");
+                    this.logger.LogInformation($"{nameof(AccountManageController)} : {nameof(DeleteAccount)} : User Found.");
 
-                    await this.accountService.DeleteUser(serviceCallResultUser);
+                    var deleteCallResult = await this.accountService.DeleteUser(serviceCallResultUser);
+
+                    if (deleteCallResult)
+                    {
+                        this.logger.LogInformation(
+                            $"{nameof(AccountManageController)} : {nameof(DeleteAccount)} : USER -- {model.UserId} -- {serviceCallResultUser.Email} -- {serviceCallResultUser.UserName} -- WAS DELETED!!");
+                    }
+                    else
+                    {
+                        this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(DeleteAccount)} : Can't Delete User");
+
+                        return RedirectToAction("Error", "Home", new { message = "Can't Delete Account. Contact support" });
+                    }
 
                     await this.accountService.SignOutAsync();
 
@@ -184,15 +237,15 @@ namespace Web.Controllers
                 }
                 catch (AccountServiceFindByIdException ex)
                 {
-                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(DeleteAccount)} : Exception - {ex.Message}");
+                    this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(DeleteAccount)} : Exception - {ex.Message}");
                 }
                 catch (AccountServiceDeleteUserException ex)
                 {
-                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(DeleteAccount)} : Exception - {ex.Message}");
+                    this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(DeleteAccount)} : Exception - {ex.Message}");
                 }
                 catch (Exception ex)
                 {
-                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(DeleteAccount)} : Exception - {ex.Message}");
+                    this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(DeleteAccount)} : Exception - {ex.Message}");
                 }
             }
 
@@ -209,21 +262,21 @@ namespace Web.Controllers
                 {
                     var serviceCallResultUser = await this.accountService.FindByIdAsync(model.UserId);
 
-                    this.logger.LogInformation($"{nameof(AccountController)} : {nameof(Payments)} : User Found.");
+                    this.logger.LogInformation($"{nameof(AccountManageController)} : {nameof(Payments)} : User Found.");
 
                     var confirmationCode = await this.accountService.GetPaymentsAsync(serviceCallResultUser);
                 }
                 catch (AccountServiceFindByIdException ex)
                 {
-                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(Payments)} : Exception - {ex.Message}");
+                    this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(Payments)} : Exception - {ex.Message}");
                 }
                 catch (AccountServiceGetPaymentsException ex)
                 {
-                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(Payments)} : Exception - {ex.Message}");
+                    this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(Payments)} : Exception - {ex.Message}");
                 }
                 catch (Exception ex)
                 {
-                    this.logger.LogWarning($"{nameof(AccountController)} : {nameof(Payments)} : Exception - {ex.Message}");
+                    this.logger.LogWarning($"{nameof(AccountManageController)} : {nameof(Payments)} : Exception - {ex.Message}");
                 }
             }
 

@@ -33,7 +33,7 @@ namespace ApplicationCore.Interfaces
 
         Task<IdentityResult> ChangeUserNameAsync(T user, string userName);
 
-        Task DeleteClient(string userId);
+        Task<IdentityResult> DeleteClient(string userId);
 
         Task<T> FindByNameAsync(string userName);
     }
