@@ -1,12 +1,11 @@
-﻿using ApplicationCore.Interfaces;
+﻿using ApplicationCore.Entities.MessageAggregate;
+using ApplicationCore.Interfaces;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,18 +13,18 @@ namespace Infrastructure.Data
 {
     public class SSBDbContext : IdentityDbContext<ApplicationUser>
     {
-       
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<MailBox> MailBoxes { get; set; }
+
         public SSBDbContext(DbContextOptions<SSBDbContext> options)
             : base(options)
         {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {         
+        {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-
         }
 
         public override int SaveChanges()

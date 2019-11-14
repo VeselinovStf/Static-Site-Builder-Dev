@@ -1,7 +1,10 @@
 ﻿using ApplicationCore.Interfaces;
+using ApplicationCore.Services;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Infrastructure.Logging;
+using Infrastructure.Messages;
+using Infrastructure.Messages.DTOs;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -52,6 +55,9 @@ namespace Web
 
             //Messages
             services.AddScoped<IMessagesModelFactory, MessagesModelFactory>();
+            services.AddScoped<IMailBoxService<MailBoxDTO>, MessagesService>();
+            services.AddScoped<IAppMailBoxService, AppMailBoxService>();
+            services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
 
             //Extend Service
             services.AddTransient<IEmailSender, EmailSender>();

@@ -1,6 +1,6 @@
 ﻿namespace ApplicationCore.Interfaces
 {
-    public interface IAppMessageService
+    public interface IAggregateRoot
     {
     }
 }

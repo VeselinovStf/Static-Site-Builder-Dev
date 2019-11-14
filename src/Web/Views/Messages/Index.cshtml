@@ -34,6 +34,14 @@
                                                 </a>
                                             </li>
                                             <li class="nav-item">
+                                                <a onclick="openCity(event, 'sent')" class="media services border">
+                                                    <i class="far fa-envelope"></i>
+                                                    <div class="mt-1 media-body media-body-2">
+                                                        <p>Sent</p>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
                                                 <a onclick="openCity(event, 'draft')" class="media services border">
                                                     <i class="far fa-envelope"></i>
                                                     <div class="mt-1 media-body media-body-2">
@@ -68,7 +76,12 @@
                                     @await Component.InvokeAsync("MessageCompose")
                                     <!-- /.card -->
                                 </div>
-                                <!--Draft-->
+                                <!--Sent-->
+                                <div id="sent" class="tabcontent">
+                                    @await Component.InvokeAsync("MessageSent", Model.Sent)
+
+                                    <!-- /.card -->
+                                </div>
                                 <!--Draft-->
                                 <div id="draft" class="tabcontent">
                                     @await Component.InvokeAsync("MessageDrafts", Model.Drafts)

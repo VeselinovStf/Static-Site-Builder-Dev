@@ -11,7 +11,7 @@ namespace Infrastructure.Data
     public class SSBDbContextSeed
     {
         public static async Task SeedAsync(
-            SSBDbContext ssbDbContext,            
+            SSBDbContext ssbDbContext,
             ILoggerFactory loggerFactory,
             int? retry = 0)
         {
@@ -31,7 +31,6 @@ namespace Infrastructure.Data
 
                 if (!ssbDbContext.Users.Any())
                 {
-
                     ssbDbContext.Users.Add(
                         GetPreconfiguredAdmin(ssbDbContext));
 
@@ -40,7 +39,6 @@ namespace Infrastructure.Data
 
                     await ssbDbContext.SaveChangesAsync();
                 }
-               
             }
             catch (Exception ex)
             {
@@ -64,12 +62,22 @@ namespace Infrastructure.Data
 
         private static ApplicationUser GetPreconfiguredClient(SSBDbContext dbContext)
         {
+            var clientId = Guid.NewGuid().ToString();
+
+            var mailBox = new ApplicationCore.Entities.MessageAggregate.MailBox()
+            {
+                Id = Guid.NewGuid().ToString(),
+                ClientId = clientId,
+                CreatedOn = DateTime.Now,
+                ModifiedOn = DateTime.Now,
+                IsDeleted = false
+            };
 
             var clientUser = new ApplicationUser()
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = clientId,
                 UserName = "Client",
-                NormalizedUserName = "client@mail.com".ToUpper(),
+                NormalizedUserName = "CLIENT".ToUpper(),
                 Email = "client@mail.com",
                 TwoFactorEnabled = false,
                 NormalizedEmail = "client@mail.com".ToUpper(),
@@ -79,7 +87,7 @@ namespace Infrastructure.Data
                 SecurityStamp = Guid.NewGuid().ToString("D"),
                 AccessFailedCount = 0,
                 LockoutEnabled = false,
-
+                MailBox = mailBox
             };
 
             var hashePass = new PasswordHasher<ApplicationUser>().HashPassword(clientUser, "!Aa12345678");
@@ -89,20 +97,30 @@ namespace Infrastructure.Data
             {
                 RoleId = 2.ToString(),
                 UserId = clientUser.Id
-            }).Wait();          
+            }).Wait();
+
+            dbContext.MailBoxes.AddAsync(mailBox);
 
             return clientUser;
-
         }
 
         private static ApplicationUser GetPreconfiguredAdmin(SSBDbContext dbContext)
         {
+            var adminId = Guid.NewGuid().ToString();
 
-            var adminUser = new ApplicationUser()
+            var mailBox = new ApplicationCore.Entities.MessageAggregate.MailBox()
             {
                 Id = Guid.NewGuid().ToString(),
+                ClientId = adminId,
+                CreatedOn = DateTime.Now,
+                ModifiedOn = DateTime.Now,
+                IsDeleted = false
+            };
+            var adminUser = new ApplicationUser()
+            {
+                Id = adminId,
                 UserName = "Admin",
-                NormalizedUserName = "admin@mail.com".ToUpper(),
+                NormalizedUserName = "ADMIN".ToUpper(),
                 Email = "admin@mail.com",
                 TwoFactorEnabled = false,
                 NormalizedEmail = "admin@mail.com".ToUpper(),
@@ -111,7 +129,8 @@ namespace Infrastructure.Data
                 PhoneNumberConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString("D"),
                 AccessFailedCount = 0,
-                LockoutEnabled = false
+                LockoutEnabled = false,
+                MailBox = mailBox
             };
 
             var hashePass = new PasswordHasher<ApplicationUser>().HashPassword(adminUser, "!Aa12345678");
@@ -122,6 +141,8 @@ namespace Infrastructure.Data
                 RoleId = 1.ToString(),
                 UserId = adminUser.Id
             }).Wait();
+
+            dbContext.MailBoxes.AddAsync(mailBox);
 
             return adminUser;
         }

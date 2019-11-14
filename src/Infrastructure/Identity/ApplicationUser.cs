@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Interfaces;
+﻿using ApplicationCore.Entities.MessageAggregate;
+using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
 
@@ -10,5 +11,7 @@ namespace Infrastructure.Identity
         public DateTime? ModifiedOn { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime? DeletedOn { get; set; }
+
+        public MailBox MailBox { get; set; }
     }
 }
