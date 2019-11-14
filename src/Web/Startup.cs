@@ -69,7 +69,8 @@ namespace Web
                 .AddDefaultTokenProviders();
 
             services.Configure<DataProtectionTokenProviderOptions>(o =>
-                o.TokenLifespan = TimeSpan.FromHours(3));
+                o.TokenLifespan = TimeSpan.FromHours(3)
+                );
         }
 
         private void ConfigureAppCookiePolicy(IServiceCollection services)

@@ -1,0 +1,110 @@
+﻿@model MailBoxViewModel
+
+<section class="ftco-section services-section bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 py-5">
+                <h1>Messages</h1>
+            </div>
+            <div class="col-lg-12 py-1">
+                <section class="content">
+                    <div class="">
+                        <div class="row">
+                            <div class="col-md-3">
+
+                                <div class="card">
+
+                                    <div class="card-body p-0">
+                                        <ul class="nav nav-flat flex-column">
+                                            <li class="nav-item ">
+                                                <a onclick="openCity(event, 'inbox')" class="media services border" id="defaultOpen">
+                                                    <i class="fas fa-times "></i>
+                                                    <div class="mt-1 media-body media-body-2">
+                                                        <p>Inbox</p>
+                                                    </div>
+                                                    @*<span class="badge bg-primary float-right">12</span>*@
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a onclick="openCity(event, 'compose')" class="media services border">
+                                                    <i class="far fa-envelope"></i>
+                                                    <div class="mt-1 media-body media-body-2">
+                                                        <p>Send</p>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a onclick="openCity(event, 'draft')" class="media services border">
+                                                    <i class="far fa-envelope"></i>
+                                                    <div class="mt-1 media-body media-body-2">
+                                                        <p>Drafts</p>
+                                                    </div>
+                                                </a>
+                                            </li>
+
+                                            <li class="nav-item">
+                                                <a onclick="openCity(event, 'trash')" class="media services border">
+                                                    <i class="far fa-trash-alt"></i>
+                                                    <div class="mt-1 media-body media-body-2">
+                                                        <p>Trash</p>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-md-9">
+                                <!--Inbox-->
+                                <div id="inbox" class="tabcontent">
+                                    @await Component.InvokeAsync("MessageInbox", Model.Inbox)
+                                    <!-- /.card -->
+                                </div>
+                                <!--Compose-->
+                                <div id="compose" class="tabcontent">
+                                    @await Component.InvokeAsync("MessageCompose")
+                                    <!-- /.card -->
+                                </div>
+                                <!--Draft-->
+                                <!--Draft-->
+                                <div id="draft" class="tabcontent">
+                                    @await Component.InvokeAsync("MessageDrafts", Model.Drafts)
+
+                                    <!-- /.card -->
+                                </div>
+
+                                <!--Trash-->
+                                <div id="trash" class="tabcontent">
+                                    @await Component.InvokeAsync("MessageTrash", Model.Trash)
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+                        </div><!-- /.container-fluid -->
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+</script>
