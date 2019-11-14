@@ -18,5 +18,7 @@ namespace Web.ViewModels.Messages
         public bool IsDraft { get; set; }
 
         public bool IsTrash { get; set; }
+
+        public bool IsNew { get; set; }
     }
 }

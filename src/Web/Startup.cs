@@ -16,6 +16,8 @@ using Web.ModelFatories.AccountManageModelFactory;
 using Web.ModelFatories.AccountManageModelFactory.Abstraction;
 using Web.ModelFatories.ClientSettingsModelFactory;
 using Web.ModelFatories.ClientSettingsModelFactory.Abstraction;
+using Web.ModelFatories.MessagesModelFactory;
+using Web.ModelFatories.MessagesModelFactory.Abstraction;
 
 namespace Web
 {
@@ -47,6 +49,9 @@ namespace Web
 
             //AccountManage
             services.AddScoped<IAccountManageModelFactory, AccountManageModelFactory>();
+
+            //Messages
+            services.AddScoped<IMessagesModelFactory, MessagesModelFactory>();
 
             //Extend Service
             services.AddTransient<IEmailSender, EmailSender>();
