@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Web.ModelFatories.MessagesModelFactory.Abstraction;
+using Web.ViewModels.Messages;
 
 namespace Web.Controllers
 {
@@ -42,6 +43,26 @@ namespace Web.Controllers
                 this.logger.LogWarning($"{nameof(MessagesController)} : {nameof(Index)} : Exception - {ex.Message}");
 
                 return RedirectToAction("Error", "Home", new { message = "Can't Display User Messages. Contact support" });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendNewMessage([Bind("ClientOwnerId", "To", "Subject", "Text")]MessageViewModel model)
+        {
+            try
+            {
+                await this.messageService.SendClientNewMessage(model.ClientOwnerId, model.To, model.Subject, model.Text);
+
+                this.logger.LogInformation($"{nameof(MessagesController)} : {nameof(SendNewMessage)} : Success in sending user messages");
+
+                return RedirectToAction(nameof(Index), "Messages", new { clientId = model.ClientOwnerId });
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(MessagesController)} : {nameof(SendNewMessage)} : Exception - {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { message = "Can't Send User Messages. Contact support" });
             }
         }
     }

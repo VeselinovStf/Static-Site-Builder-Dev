@@ -6,10 +6,8 @@ namespace Web.Views.ViewComponents.MessagesMailBoxViewComponents
 {
     public class MessageComposeViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(MessageViewModel model)
         {
-            var model = new MessageViewModel();
-
             return View("MessageCompose", model);
         }
     }

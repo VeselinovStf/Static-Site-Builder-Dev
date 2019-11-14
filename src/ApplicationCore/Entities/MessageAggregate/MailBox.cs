@@ -26,7 +26,7 @@ namespace ApplicationCore.Entities.MessageAggregate
                 SendDate = sendDate,
                 IsDraft = isDraft,
                 IsTrash = isTrash,
-                IsNew = isNew
+                IsNew = isNew,
             });
         }
     }

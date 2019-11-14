@@ -12,8 +12,10 @@ namespace Web.ModelFatories.MessagesModelFactory
         {
             return new MailBoxViewModel()
             {
+                ClientId = inputModel.ClientId,
                 Inbox = inputModel.Inbox != null ? new List<MessageViewModel>(inputModel.Inbox.Select(m => new MessageViewModel()
                 {
+                    Id = m.Id,
                     ClientOwnerId = m.ClientOwnerId,
                     From = m.From,
                     IsDraft = m.IsDraft,
@@ -26,6 +28,7 @@ namespace Web.ModelFatories.MessagesModelFactory
                 })) : new List<MessageViewModel>(),
                 Drafts = inputModel.Drafts != null ? new List<MessageViewModel>(inputModel.Drafts.Select(m => new MessageViewModel()
                 {
+                    Id = m.Id,
                     ClientOwnerId = m.ClientOwnerId,
                     From = m.From,
                     IsDraft = m.IsDraft,
@@ -38,6 +41,7 @@ namespace Web.ModelFatories.MessagesModelFactory
                 })) : new List<MessageViewModel>(),
                 Sent = inputModel.Sent != null ? new List<MessageViewModel>(inputModel.Sent.Select(m => new MessageViewModel()
                 {
+                    Id = m.Id,
                     ClientOwnerId = m.ClientOwnerId,
                     From = m.From,
                     IsDraft = m.IsDraft,
@@ -50,6 +54,7 @@ namespace Web.ModelFatories.MessagesModelFactory
                 })) : new List<MessageViewModel>(),
                 Trash = inputModel.Trash != null ? new List<MessageViewModel>(inputModel.Trash.Select(m => new MessageViewModel()
                 {
+                    Id = m.Id,
                     ClientOwnerId = m.ClientOwnerId,
                     From = m.From,
                     IsDraft = m.IsDraft,

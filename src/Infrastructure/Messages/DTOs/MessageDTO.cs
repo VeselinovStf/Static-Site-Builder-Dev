@@ -4,6 +4,7 @@ namespace Infrastructure.Messages.DTOs
 {
     public class MessageDTO
     {
+        public string Id { get; set; }
         public string ClientOwnerId { get; set; }
         public string From { get; set; }
 

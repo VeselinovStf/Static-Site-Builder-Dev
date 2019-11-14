@@ -8,95 +8,95 @@
             </div>
             <div class="col-lg-12 py-1">
                 <section class="content">
-                    <div class="">
-                        <div class="row">
-                            <div class="col-md-3">
 
-                                <div class="card">
+                    <div class="row">
+                        <div class="col-md-3">
 
-                                    <div class="card-body p-0">
-                                        <ul class="nav nav-flat flex-column">
-                                            <li class="nav-item ">
-                                                <a onclick="openCity(event, 'inbox')" class="media services border" id="defaultOpen">
-                                                    <i class="fas fa-times "></i>
-                                                    <div class="mt-1 media-body media-body-2">
-                                                        <p>Inbox</p>
-                                                    </div>
-                                                    @*<span class="badge bg-primary float-right">12</span>*@
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a onclick="openCity(event, 'compose')" class="media services border">
-                                                    <i class="far fa-envelope"></i>
-                                                    <div class="mt-1 media-body media-body-2">
-                                                        <p>Send</p>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a onclick="openCity(event, 'sent')" class="media services border">
-                                                    <i class="far fa-envelope"></i>
-                                                    <div class="mt-1 media-body media-body-2">
-                                                        <p>Sent</p>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a onclick="openCity(event, 'draft')" class="media services border">
-                                                    <i class="far fa-envelope"></i>
-                                                    <div class="mt-1 media-body media-body-2">
-                                                        <p>Drafts</p>
-                                                    </div>
-                                                </a>
-                                            </li>
+                            <div class="card">
 
-                                            <li class="nav-item">
-                                                <a onclick="openCity(event, 'trash')" class="media services border">
-                                                    <i class="far fa-trash-alt"></i>
-                                                    <div class="mt-1 media-body media-body-2">
-                                                        <p>Trash</p>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <!-- /.card-body -->
+                                <div class="card-body p-0">
+                                    <ul class="nav nav-flat flex-column">
+                                        <li class="nav-item ">
+                                            <a onclick="openCity(event, 'inbox')" class="media services border" id="defaultOpen">
+                                                <i class="fas fa-times "></i>
+                                                <div class="mt-1 media-body media-body-2">
+                                                    <p>Inbox</p>
+                                                </div>
+                                                @*<span class="badge bg-primary float-right">12</span>*@
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a onclick="openCity(event, 'compose')" class="media services border">
+                                                <i class="far fa-envelope"></i>
+                                                <div class="mt-1 media-body media-body-2">
+                                                    <p>Send</p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a onclick="openCity(event, 'sent')" class="media services border">
+                                                <i class="far fa-envelope"></i>
+                                                <div class="mt-1 media-body media-body-2">
+                                                    <p>Sent</p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a onclick="openCity(event, 'draft')" class="media services border">
+                                                <i class="far fa-envelope"></i>
+                                                <div class="mt-1 media-body media-body-2">
+                                                    <p>Drafts</p>
+                                                </div>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a onclick="openCity(event, 'trash')" class="media services border">
+                                                <i class="far fa-trash-alt"></i>
+                                                <div class="mt-1 media-body media-body-2">
+                                                    <p>Trash</p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-9">
+                            <!--Inbox-->
+                            <div id="inbox" class="tabcontent">
+                                @await Component.InvokeAsync("MessageInbox", Model.Inbox)
                                 <!-- /.card -->
                             </div>
-                            <!-- /.col -->
-                            <div class="col-md-9">
-                                <!--Inbox-->
-                                <div id="inbox" class="tabcontent">
-                                    @await Component.InvokeAsync("MessageInbox", Model.Inbox)
-                                    <!-- /.card -->
-                                </div>
-                                <!--Compose-->
-                                <div id="compose" class="tabcontent">
-                                    @await Component.InvokeAsync("MessageCompose")
-                                    <!-- /.card -->
-                                </div>
-                                <!--Sent-->
-                                <div id="sent" class="tabcontent">
-                                    @await Component.InvokeAsync("MessageSent", Model.Sent)
-
-                                    <!-- /.card -->
-                                </div>
-                                <!--Draft-->
-                                <div id="draft" class="tabcontent">
-                                    @await Component.InvokeAsync("MessageDrafts", Model.Drafts)
-
-                                    <!-- /.card -->
-                                </div>
-
-                                <!--Trash-->
-                                <div id="trash" class="tabcontent">
-                                    @await Component.InvokeAsync("MessageTrash", Model.Trash)
-                                </div>
-                                <!-- /.col -->
+                            <!--Compose-->
+                            <div id="compose" class="tabcontent">
+                                @await Component.InvokeAsync("MessageCompose", new MessageViewModel() { ClientOwnerId = Model.ClientId })
+                                <!-- /.card -->
                             </div>
-                            <!-- /.row -->
-                        </div><!-- /.container-fluid -->
+                            <!--Sent-->
+                            <div id="sent" class="tabcontent">
+                                @await Component.InvokeAsync("MessageSent", Model.Sent)
+
+                                <!-- /.card -->
+                            </div>
+                            <!--Draft-->
+                            <div id="draft" class="tabcontent">
+                                @await Component.InvokeAsync("MessageDrafts", Model.Drafts)
+
+                                <!-- /.card -->
+                            </div>
+
+                            <!--Trash-->
+                            <div id="trash" class="tabcontent">
+                                @await Component.InvokeAsync("MessageTrash", Model.Trash)
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                    </div><!-- /.container-fluid -->
                 </section>
             </div>
         </div>
