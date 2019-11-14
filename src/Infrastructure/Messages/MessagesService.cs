@@ -125,7 +125,7 @@ namespace Infrastructure.Messages
                 Validator.ObjectIsNull(
                    currentUser, $"{nameof(MessagesService)} : {nameof(SendClientNewMessage)} : {nameof(currentUser)} : Can't find user with this id");
 
-                await this.mailBox.SendClientMessage(clientOwnerId, currentUser.UserName, false, true, false, DateTime.Now, subject, text, to);
+                await this.mailBox.SendClientMessage(clientOwnerId, currentUser.UserName, true, false, false, DateTime.Now, subject, text, to);
             }
             catch (Exception ex)
             {

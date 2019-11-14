@@ -4,14 +4,16 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SSBDbContext))]
-    partial class SSBDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191114151136_Adding Configuration For MailBox")]
+    partial class AddingConfigurationForMailBox
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -252,7 +254,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("ApplicationCore.Entities.MessageAggregate.Message", b =>
                 {
-                    b.HasOne("ApplicationCore.Entities.MessageAggregate.MailBox", "MailBox")
+                    b.HasOne("ApplicationCore.Entities.MessageAggregate.MailBox")
                         .WithMany("Messages")
                         .HasForeignKey("MailBoxId");
                 });

@@ -8,7 +8,13 @@ namespace ApplicationCore.Entities.MessageAggregate
     {
         private readonly List<Message> _messages = new List<Message>();
 
-        public IReadOnlyCollection<Message> Messages => _messages.AsReadOnly();
+        public ICollection<Message> Messages
+        {
+            get
+            {
+                return new List<Message>(_messages);
+            }
+        }
 
         public string ClientId { get; set; }
 
