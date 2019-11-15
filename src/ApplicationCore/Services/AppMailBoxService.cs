@@ -26,6 +26,11 @@ namespace ApplicationCore.Services
             return this.mailBoxRepository.GetSingleBySpec(clientMailBoxSpec);
         }
 
+        public async Task<Message> GetMessage(string clientId, string messageId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task SendClientMessage(string clientOwnerId,
             string from, bool IsNew, bool IsDraft, bool IsTrash, bool isSent,
             DateTime sendDate, string subject, string text, string to)

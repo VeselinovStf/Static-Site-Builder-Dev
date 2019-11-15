@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Messages
 {
-    public class MessagesService : IMailBoxService<MailBoxDTO>
+    public class MailBoxService : IMailBoxService<MailBoxDTO>, IMailMessageService<MessageDTO>
     {
         private readonly IAppMailBoxService mailBox;
         private readonly IAccountService<ApplicationUser> accountService;
 
-        public MessagesService(
+        public MailBoxService(
             IAppMailBoxService mailBox,
              IAccountService<ApplicationUser> accountService)
         {
@@ -26,7 +26,7 @@ namespace Infrastructure.Messages
         public async Task<MailBoxDTO> GetClientMailBox(string clientId)
         {
             Validator.StringIsNullOrEmpty(
-             clientId, $"{nameof(MessagesService)} : {nameof(GetClientMailBox)} : {nameof(clientId)} : is null/empty");
+             clientId, $"{nameof(MailBoxService)} : {nameof(GetClientMailBox)} : {nameof(clientId)} : is null/empty");
 
             var call = await this.mailBox.GetClientMailBox(clientId);
 
@@ -104,19 +104,28 @@ namespace Infrastructure.Messages
             };
         }
 
+        public async Task<MessageDTO> GetMessage(string clientId, string messageId)
+        {
+            var call = await this.mailBox.GetMessage(clientId, messageId);
+
+            var model = new MessageDTO();
+
+            return model;
+        }
+
         public async Task SendClientNewMessage(string clientOwnerId, string to, string subject, string text)
         {
             Validator.StringIsNullOrEmpty(
-                clientOwnerId, $"{nameof(MessagesService)} : {nameof(SendClientNewMessage)} : {nameof(clientOwnerId)} : is null/empty");
+                clientOwnerId, $"{nameof(MailBoxService)} : {nameof(SendClientNewMessage)} : {nameof(clientOwnerId)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-               to, $"{nameof(MessagesService)} : {nameof(SendClientNewMessage)} : {nameof(to)} : is null/empty");
+               to, $"{nameof(MailBoxService)} : {nameof(SendClientNewMessage)} : {nameof(to)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-               subject, $"{nameof(MessagesService)} : {nameof(SendClientNewMessage)} : {nameof(subject)} : is null/empty");
+               subject, $"{nameof(MailBoxService)} : {nameof(SendClientNewMessage)} : {nameof(subject)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-               text, $"{nameof(MessagesService)} : {nameof(SendClientNewMessage)} : {nameof(text)} : is null/empty");
+               text, $"{nameof(MailBoxService)} : {nameof(SendClientNewMessage)} : {nameof(text)} : is null/empty");
 
             try
             {
@@ -125,10 +134,10 @@ namespace Infrastructure.Messages
                 var currentToUser = await this.accountService.FindByUserNameAsync(to);
 
                 Validator.ObjectIsNull(
-                   currentFromUser, $"{nameof(MessagesService)} : {nameof(SendClientNewMessage)} : {nameof(currentFromUser)} : Can't find user with this id");
+                   currentFromUser, $"{nameof(MailBoxService)} : {nameof(SendClientNewMessage)} : {nameof(currentFromUser)} : Can't find user with this id");
 
                 Validator.ObjectIsNull(
-                  currentToUser, $"{nameof(MessagesService)} : {nameof(SendClientNewMessage)} : {nameof(currentToUser)} : Can't find user with this id");
+                  currentToUser, $"{nameof(MailBoxService)} : {nameof(SendClientNewMessage)} : {nameof(currentToUser)} : Can't find user with this id");
 
                 await this.mailBox.SendClientMessage(currentFromUser.Id, currentFromUser.UserName, true, false, false, true, DateTime.Now, subject, text, to);
 

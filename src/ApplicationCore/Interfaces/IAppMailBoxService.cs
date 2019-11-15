@@ -12,5 +12,7 @@ namespace ApplicationCore.Interfaces
             string clientOwnerId, string from, bool IsNew,
             bool IsDraft, bool IsTrash, bool isSent, DateTime sendDate,
             string subject, string text, string to);
+
+        Task<Message> GetMessage(string clientId, string messageId);
     }
 }

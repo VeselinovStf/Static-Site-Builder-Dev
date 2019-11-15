@@ -6,5 +6,7 @@ namespace Web.ModelFatories.MessagesModelFactory.Abstraction
     public interface IMessagesModelFactory
     {
         MailBoxViewModel Create(MailBoxDTO inputModel);
+
+        MessageViewModel Create(MessageDTO inputModel);
     }
 }

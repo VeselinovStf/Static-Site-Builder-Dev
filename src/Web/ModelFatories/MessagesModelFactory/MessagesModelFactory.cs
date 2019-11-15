@@ -67,5 +67,10 @@ namespace Web.ModelFatories.MessagesModelFactory
                 })) : new List<MessageViewModel>(),
             };
         }
+
+        public MessageViewModel Create(MessageDTO inputModel)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -1,110 +1,443 @@
 ﻿@model MailBoxViewModel
+@{
+    Layout = "~/Views/Shared/_MailBoxLayout.cshtml";
 
-<section class="ftco-section services-section bg-light">
-    <div class="container">
+}
+<!-- Content Wrapper. Contains page content -->
+<!-- Content Header (Page header) -->
+<div class="container-fluid">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>SSB Message Box</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
         <div class="row">
-            <div class="col-lg-6 py-5">
-                <h1>Messages</h1>
+            <div class="col-md-3">
+                <a onclick="openCity(event, 'compose')" class="btn btn-primary btn-block mb-3">Compose</a>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Folders</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item active">
+                                <a onclick="openCity(event, 'inbox')" class="nav-link" id="defaultOpen">
+                                    <i class="fas fa-inbox"></i> Inbox
+                                    <span class="badge bg-primary float-right">@Model.Inbox.Count()</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a onclick="openCity(event, 'sent')" class="nav-link">
+                                    <i class="far fa-envelope"></i> Sent
+                                    <span class="badge bg-primary float-right">@Model.Sent.Count()</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a onclick="openCity(event, 'drafts')" class="nav-link">
+                                    <i class="far fa-file-alt"></i> Drafts
+                                    <span class="badge bg-primary float-right">@Model.Drafts.Count()</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a onclick="openCity(event, 'trash')" class="nav-link">
+                                    <i class="far fa-trash-alt"></i> Trash
+                                    <span class="badge bg-primary float-right">@Model.Trash.Count()</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <div class="card">
+                </div>
+                <!-- /.card -->
             </div>
-            <div class="col-lg-12 py-1">
-                <section class="content">
-
-                    <div class="row">
-                        <div class="col-md-3">
-
-                            <div class="card">
-
-                                <div class="card-body p-0">
-                                    <ul class="nav nav-flat flex-column">
-                                        <li class="nav-item ">
-                                            <a onclick="openCity(event, 'inbox')" class="media services border" id="defaultOpen">
-                                                <i class="fas fa-times "></i>
-                                                <div class="mt-1 media-body media-body-2">
-                                                    <p>Inbox</p>
-                                                </div>
-                                                @*<span class="badge bg-primary float-right">12</span>*@
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a onclick="openCity(event, 'compose')" class="media services border">
-                                                <i class="far fa-envelope"></i>
-                                                <div class="mt-1 media-body media-body-2">
-                                                    <p>Compose</p>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a onclick="openCity(event, 'sent')" class="media services border">
-                                                <i class="far fa-envelope"></i>
-                                                <div class="mt-1 media-body media-body-2">
-                                                    <p>Sent</p>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a onclick="openCity(event, 'draft')" class="media services border">
-                                                <i class="far fa-envelope"></i>
-                                                <div class="mt-1 media-body media-body-2">
-                                                    <p>Drafts</p>
-                                                </div>
-                                            </a>
-                                        </li>
-
-                                        <li class="nav-item">
-                                            <a onclick="openCity(event, 'trash')" class="media services border">
-                                                <i class="far fa-trash-alt"></i>
-                                                <div class="mt-1 media-body media-body-2">
-                                                    <p>Trash</p>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
+            <!-- /.col -->
+            <div class="col-md-9">
+                <!--Inbox-->
+                <div class="card card-primary card-outline tabcontent" id="inbox">
+                    <div class="card-header">
+                        <h3 class="card-title">Inbox</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="mailbox-controls">
+                            <!-- Check all button -->
+                            <!-- /.btn-group -->
+                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-sync-alt"></i></button>
+                            <div class="float-right">
+                                1-50/200
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-left"></i></button>
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-right"></i></button>
                                 </div>
-                                <!-- /.card-body -->
+                                <!-- /.btn-group -->
                             </div>
-                            <!-- /.card -->
+                            <!-- /.float-right -->
                         </div>
-                        <!-- /.col -->
-                        <div class="col-md-9">
-                            <!--Inbox-->
-                            <div id="inbox" class="tabcontent">
-                                @await Component.InvokeAsync("MessageInbox", Model.Inbox)
-                                <!-- /.card -->
-                            </div>
-                            <!--Compose-->
-                            <div id="compose" class="tabcontent">
-                                @await Component.InvokeAsync("MessageCompose", new MessageViewModel() { ClientOwnerId = Model.ClientId })
-                                <!-- /.card -->
-                            </div>
-                            <!--Sent-->
-                            <div id="sent" class="tabcontent">
-                                @await Component.InvokeAsync("MessageSent", Model.Sent)
+                        <div class="table-responsive mailbox-messages">
+                            <table class="table table-hover table-striped">
+                                <tbody>
+                                    @if (!Model.Inbox.Any())
+                                    {
+                                        <tr>
+                                            <td>
+                                                <p>Mail Box is Empty</p>
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        @foreach (var mail in Model.Inbox)
+                                        {
+                                            <tr>
 
-                                <!-- /.card -->
-                            </div>
-                            <!--Draft-->
-                            <div id="draft" class="tabcontent">
-                                @await Component.InvokeAsync("MessageDrafts", Model.Drafts)
-
-                                <!-- /.card -->
-                            </div>
-
-                            <!--Trash-->
-                            <div id="trash" class="tabcontent">
-                                @await Component.InvokeAsync("MessageTrash", Model.Trash)
-                            </div>
-                            <!-- /.col -->
+                                                <td>
+                                                    <div class="icheck-primary">
+                                                        <input type="checkbox" value="" id="check1">
+                                                        <label for="check1"></label>
+                                                    </div>
+                                                </td>
+                                                <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
+                                                <td class="mailbox-name"><a href="read-mail.html">@mail.From</a></td>
+                                                <td class="mailbox-subject">
+                                                    <b>@mail.Subject</b>
+                                                </td>
+                                                <td class="mailbox-attachment"></td>
+                                                <td class="mailbox-date">@mail.SendDate</td>
+                                                @{
+                                                    ViewData["MessageInbox"] = mail;
+                                                }
+                                                <td class="mailbox-date"><a href="#" onclick="openCity(event, 'messageInbox')">Read</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                            <!-- /.table -->
                         </div>
-                        <!-- /.row -->
-                    </div><!-- /.container-fluid -->
-                </section>
+                        <!-- /.mail-box-messages -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer p-0">
+                        <div class="mailbox-controls">
+                            <!-- Check all button -->
+                            <!-- /.btn-group -->
+                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-sync-alt"></i></button>
+                            <div class="float-right">
+                                1-50/200
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-left"></i></button>
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                                <!-- /.btn-group -->
+                            </div>
+                            <!-- /.float-right -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+                <!--Sent-->
+                <div class="card card-primary card-outline tabcontent" id="sent">
+                    <div class="card-header">
+                        <h3 class="card-title">Inbox</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="mailbox-controls">
+                            <!-- Check all button -->
+                            <!-- /.btn-group -->
+                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-sync-alt"></i></button>
+                            <div class="float-right">
+                                1-50/200
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-left"></i></button>
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                                <!-- /.btn-group -->
+                            </div>
+                            <!-- /.float-right -->
+                        </div>
+                        <div class="table-responsive mailbox-messages">
+                            <table class="table table-hover table-striped">
+                                <tbody>
+                                    @if (!Model.Sent.Any())
+                                    {
+                                        <tr>
+                                            <td>
+                                                <p>Mail Box is Empty</p>
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        @foreach (var mail in Model.Sent)
+                                        {
+                                            <tr>
+
+                                                <td>
+                                                    <div class="icheck-primary">
+                                                        <input type="checkbox" value="" id="check1">
+                                                        <label for="check1"></label>
+                                                    </div>
+                                                </td>
+                                                <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
+                                                <td class="mailbox-name"><a href="read-mail.html">@mail.To</a></td>
+                                                <td class="mailbox-subject">
+                                                    <b>@mail.Subject</b>
+                                                </td>
+                                                <td class="mailbox-attachment"></td>
+                                                <td class="mailbox-date">@mail.SendDate</td>
+                                                @{
+                                                    ViewData["MessageSent"] = mail;
+                                                }
+                                                <td class="mailbox-date"><a href="#" onclick="openCity(event, 'messageSent')">Read</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                            <!-- /.table -->
+                        </div>
+                        <!-- /.mail-box-messages -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer p-0">
+                        <div class="mailbox-controls">
+                            <!-- Check all button -->
+                            <!-- /.btn-group -->
+                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-sync-alt"></i></button>
+                            <div class="float-right">
+                                1-50/200
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-left"></i></button>
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                                <!-- /.btn-group -->
+                            </div>
+                            <!-- /.float-right -->
+                        </div>
+                    </div>
+                </div>
+                <!--Drafts-->
+                <div class="card card-primary card-outline tabcontent" id="drafts">
+                    <div class="card-header">
+                        <h3 class="card-title">Inbox</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="mailbox-controls">
+                            <!-- Check all button -->
+                            <!-- /.btn-group -->
+                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-sync-alt"></i></button>
+                            <div class="float-right">
+                                1-50/200
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-left"></i></button>
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                                <!-- /.btn-group -->
+                            </div>
+                            <!-- /.float-right -->
+                        </div>
+                        <div class="table-responsive mailbox-messages">
+                            <table class="table table-hover table-striped">
+                                <tbody>
+                                    @if (!Model.Drafts.Any())
+                                    {
+                                        <tr>
+                                            <td>
+                                                <p>Mail Box is Empty</p>
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        @foreach (var mail in Model.Drafts)
+                                        {
+                                            <tr>
+
+                                                <td>
+                                                    <div class="icheck-primary">
+                                                        <input type="checkbox" value="" id="check1">
+                                                        <label for="check1"></label>
+                                                    </div>
+                                                </td>
+                                                <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
+                                                <td class="mailbox-name"><a href="read-mail.html">@mail.To</a></td>
+                                                <td class="mailbox-subject">
+                                                    <b>@mail.Subject</b>
+                                                </td>
+                                                <td class="mailbox-attachment"></td>
+                                                <td class="mailbox-date">@mail.SendDate</td>
+                                                @{
+                                                    ViewData["MessageDrafts"] = mail;
+                                                }
+                                                <td class="mailbox-date"><a href="#" onclick="openCity(event, 'messageDrafts')">Read</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                            <!-- /.table -->
+                        </div>
+                        <!-- /.mail-box-messages -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer p-0">
+                        <div class="mailbox-controls">
+                            <!-- Check all button -->
+                            <!-- /.btn-group -->
+                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-sync-alt"></i></button>
+                            <div class="float-right">
+                                1-50/200
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-left"></i></button>
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                                <!-- /.btn-group -->
+                            </div>
+                            <!-- /.float-right -->
+                        </div>
+                    </div>
+                </div>
+                <!--Trash-->
+                <div class="card card-primary card-outline tabcontent" id="trash">
+                    <div class="card-header">
+                        <h3 class="card-title">Inbox</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <div class="mailbox-controls">
+                            <!-- Check all button -->
+                            <!-- /.btn-group -->
+                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-sync-alt"></i></button>
+                            <div class="float-right">
+                                1-50/200
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-left"></i></button>
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                                <!-- /.btn-group -->
+                            </div>
+                            <!-- /.float-right -->
+                        </div>
+                        <div class="table-responsive mailbox-messages">
+                            <table class="table table-hover table-striped">
+                                <tbody>
+                                    @if (!Model.Trash.Any())
+                                    {
+                                        <tr>
+                                            <td>
+                                                <p>Mail Box is Empty</p>
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        @foreach (var mail in Model.Trash)
+                                        {
+                                            <tr>
+
+                                                <td>
+                                                    <div class="icheck-primary">
+                                                        <input type="checkbox" value="" id="check1">
+                                                        <label for="check1"></label>
+                                                    </div>
+                                                </td>
+                                                <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
+                                                <td class="mailbox-name"><a href="read-mail.html">@mail.To</a></td>
+                                                <td class="mailbox-subject">
+                                                    <b>@mail.Subject</b>
+                                                </td>
+                                                <td class="mailbox-attachment"></td>
+                                                <td class="mailbox-date">@mail.SendDate</td>
+                                                @{
+                                                    ViewData["MessageTrash"] = mail;
+                                                }
+                                                <td class="mailbox-date"><a href="#" onclick="openCity(event, 'messageTrash')">Read</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                            <!-- /.table -->
+                        </div>
+                        <!-- /.mail-box-messages -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer p-0">
+                        <div class="mailbox-controls">
+                            <!-- Check all button -->
+                            <!-- /.btn-group -->
+                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-sync-alt"></i></button>
+                            <div class="float-right">
+                                1-50/200
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-left"></i></button>
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                                <!-- /.btn-group -->
+                            </div>
+                            <!-- /.float-right -->
+                        </div>
+                    </div>
+                </div>
+                <!--Compose-->
+                <div id="compose" class="tabcontent">
+                    @await Component.InvokeAsync("MessageCompose", new MessageViewModel() { ClientOwnerId = Model.ClientId })
+                    <!-- /.card -->
+                </div>
+                <!--Trash-->
+                <div class=" tabcontent" id="messageInbox">
+                    @if (ViewData["MessageInbox"] != null)
+                    {
+                        @await Component.InvokeAsync("MessageRead", ViewData["MessageInbox"])
+                    }
+                </div>
+                <div class=" tabcontent" id="messageSent">
+                    @if (ViewData["MessageSent"] != null)
+                    {
+                        @await Component.InvokeAsync("MessageRead", ViewData["MessageSent"])
+                    }
+                </div>
+                <div class=" tabcontent" id="messageDrafts">
+                    @if (ViewData["MessageDrafts"] != null)
+                    {
+                        @await Component.InvokeAsync("MessageRead", ViewData["MessageDrafts"])
+                    }
+                </div>
+                <div class=" tabcontent" id="messageTrash">
+                    @if (ViewData["MessageTrash"] != null)
+                    {
+                        @await Component.InvokeAsync("MessageRead", ViewData["MessageTrash"])
+                    }
+                </div>
             </div>
+            <!-- /.col -->
         </div>
-    </div>
-</section>
-
+        <!-- /.row -->
+    </section>
+</div>
 <script>
-    function openCity(evt, cityName) {
+
+    function openCity(evt, cityName, ) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
@@ -114,10 +447,35 @@
         for (i = 0; i < tablinks.length; i++) {
             tablinks[i].className = tablinks[i].className.replace(" active", "");
         }
+
         document.getElementById(cityName).style.display = "block";
-        evt.currentTarget.className += " active";
+        evt.currentTarget.className += " ";
     }
 
     // Get the element with id="defaultOpen" and click on it
     document.getElementById("defaultOpen").click();
+    $(function () {
+
+        //Handle starring for glyphicon and font awesome
+        $('.mailbox-star').click(function (e) {
+            e.preventDefault()
+            //detect type
+            var $this = $(this).find('a > i')
+            var glyph = $this.hasClass('glyphicon')
+            var fa = $this.hasClass('fa')
+
+            //Switch states
+            if (glyph) {
+                $this.toggleClass('glyphicon-star')
+                $this.toggleClass('glyphicon-star-empty')
+            }
+
+            if (fa) {
+                $this.toggleClass('fa-star')
+                $this.toggleClass('fa-star-o')
+            }
+        })
+    })
 </script>
+<!-- AdminLTE for demo purposes -->
+<script src="~/adminSite/js/demo.js"></script>

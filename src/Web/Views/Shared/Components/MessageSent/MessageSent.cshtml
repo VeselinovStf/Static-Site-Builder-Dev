@@ -39,7 +39,7 @@
                                     </td>
                                     <td class="mailbox-attachment"></td>
                                     <td class="mailbox-date">@mail.SendDate</td>
-                                    <td class="mailbox-date"><a asp-controller="Messages" asp-action="Read" asp-route-clientId="@mail.ClientOwnerId" asp-route-mailId="@mail.Id">Read</a></td>
+                                    <td class="mailbox-date"><a onclick="window.open('@Url.Content("~/Messages/Read?clientId=" + mail.ClientOwnerId + "&" + mail.Id)',target = '_blank', width='500px', height='800px');">Read</a></td>
                                 </tr>
                             }
                         </tbody>

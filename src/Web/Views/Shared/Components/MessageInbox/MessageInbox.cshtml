@@ -39,8 +39,9 @@
                                     </td>
                                     <td class="mailbox-attachment"></td>
                                     <td class="mailbox-date">@mail.SendDate</td>
-                                    <td class="mailbox-date"><a asp-controller="Messages" asp-action="Read" asp-route-clientId="@mail.ClientOwnerId" asp-route-mailId="@mail.Id">Read</a></td>
+                                    <td class="mailbox-date"><a href="#" onclick="openCity(event, 'read')">Read</a></td>
                                 </tr>
+
                             }
                         </tbody>
                     </table>

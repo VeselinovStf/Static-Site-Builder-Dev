@@ -55,7 +55,8 @@ namespace Web
 
             //Messages
             services.AddScoped<IMessagesModelFactory, MessagesModelFactory>();
-            services.AddScoped<IMailBoxService<MailBoxDTO>, MessagesService>();
+            services.AddScoped<IMailBoxService<MailBoxDTO>, MailBoxService>();
+            services.AddScoped<IMailMessageService<MessageDTO>, MailBoxService>();
             services.AddScoped<IAppMailBoxService, AppMailBoxService>();
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
 
