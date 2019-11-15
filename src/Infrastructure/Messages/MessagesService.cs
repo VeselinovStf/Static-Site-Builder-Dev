@@ -35,7 +35,7 @@ namespace Infrastructure.Messages
                 ClientId = call.ClientId,
                 Inbox = call.Messages != null ? new List<MessageDTO>(
                     call.Messages
-                    .Where(m => m.IsNew && !m.IsDeleted && !m.IsTrash && !m.IsDraft)
+                    .Where(m => m.IsNew && !m.IsDeleted && !m.IsTrash && !m.IsDraft && !m.IsSent)
                     .ToList()
                     .Select(nm => new MessageDTO()
                     {
@@ -69,7 +69,7 @@ namespace Infrastructure.Messages
                     })) : new List<MessageDTO>(),
                 Sent = call.Messages != null ? new List<MessageDTO>(
                     call.Messages
-                    .Where(m => !m.IsDeleted && !m.IsTrash && !m.IsDraft && m.From == clientId)
+                    .Where(m => !m.IsDeleted && !m.IsTrash && !m.IsDraft && m.IsSent)
                     .ToList()
                     .Select(nm => new MessageDTO()
                     {
@@ -120,12 +120,19 @@ namespace Infrastructure.Messages
 
             try
             {
-                var currentUser = await this.accountService.FindByIdAsync(clientOwnerId);
+                var currentFromUser = await this.accountService.FindByIdAsync(clientOwnerId);
+
+                var currentToUser = await this.accountService.FindByUserNameAsync(to);
 
                 Validator.ObjectIsNull(
-                   currentUser, $"{nameof(MessagesService)} : {nameof(SendClientNewMessage)} : {nameof(currentUser)} : Can't find user with this id");
+                   currentFromUser, $"{nameof(MessagesService)} : {nameof(SendClientNewMessage)} : {nameof(currentFromUser)} : Can't find user with this id");
 
-                await this.mailBox.SendClientMessage(clientOwnerId, currentUser.UserName, true, false, false, DateTime.Now, subject, text, to);
+                Validator.ObjectIsNull(
+                  currentToUser, $"{nameof(MessagesService)} : {nameof(SendClientNewMessage)} : {nameof(currentToUser)} : Can't find user with this id");
+
+                await this.mailBox.SendClientMessage(currentFromUser.Id, currentFromUser.UserName, true, false, false, true, DateTime.Now, subject, text, to);
+
+                await this.mailBox.SendClientMessage(currentToUser.Id, currentFromUser.UserName, true, false, false, false, DateTime.Now, subject, text, to);
             }
             catch (Exception ex)
             {

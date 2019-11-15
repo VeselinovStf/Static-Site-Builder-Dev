@@ -20,6 +20,8 @@ namespace ApplicationCore.Entities.MessageAggregate
 
         public bool IsNew { get; set; }
 
+        public bool IsSent { get; set; }
+
         public string MailBoxId { get; private set; }
 
         public MailBox MailBox { get; set; }

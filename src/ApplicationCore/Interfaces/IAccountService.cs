@@ -43,5 +43,7 @@ namespace ApplicationCore.Interfaces
         Task<T> GetPaymentsAsync(T user);
 
         Task<bool> ChangeEmailAsync(T user, string userName, string emailUpdateConfirmationCode);
+
+        Task<T> FindByUserNameAsync(string to);
     }
 }

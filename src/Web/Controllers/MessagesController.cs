@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Interfaces;
+using Infrastructure.Identity.Exceptions;
 using Infrastructure.Messages.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -58,12 +59,24 @@ namespace Web.Controllers
 
                 return RedirectToAction(nameof(Index), "Messages", new { clientId = model.ClientOwnerId });
             }
-            catch (Exception ex)
+            catch (AccountServiceFindByIdException ex)
+            {
+                this.logger.LogWarning($"{nameof(MessagesController)} : {nameof(SendNewMessage)} : Exception - {ex.Message}");
+            }
+            catch (AccountServiceFindByUserNameException ex)
             {
                 this.logger.LogWarning($"{nameof(MessagesController)} : {nameof(SendNewMessage)} : Exception - {ex.Message}");
 
-                return RedirectToAction("Error", "Home", new { message = "Can't Send User Messages. Contact support" });
+                ViewData["Error"] = "Can't find user to send message to..";
+
+                return View(model.ClientOwnerId);
             }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(MessagesController)} : {nameof(SendNewMessage)} : Exception - {ex.Message}");
+            }
+
+            return RedirectToAction("Error", "Home", new { message = "Can't Send User Messages. Contact support" });
         }
     }
 }

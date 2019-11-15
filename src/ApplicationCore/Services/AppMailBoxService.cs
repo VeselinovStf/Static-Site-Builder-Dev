@@ -26,13 +26,15 @@ namespace ApplicationCore.Services
             return this.mailBoxRepository.GetSingleBySpec(clientMailBoxSpec);
         }
 
-        public async Task SendClientMessage(string clientOwnerId, string from, bool IsNew, bool IsDraft, bool IsTrash, DateTime sendDate, string subject, string text, string to)
+        public async Task SendClientMessage(string clientOwnerId,
+            string from, bool IsNew, bool IsDraft, bool IsTrash, bool isSent,
+            DateTime sendDate, string subject, string text, string to)
         {
             var clientMailBoxSpec = new MailBoxWithMessagesSpecification(clientOwnerId);
 
             var mailBox = this.mailBoxRepository.GetSingleBySpec(clientMailBoxSpec);
 
-            mailBox.AddItem(from, to, subject, text, sendDate, IsDraft, IsTrash, IsNew);
+            mailBox.AddItem(from, to, subject, text, sendDate, IsDraft, IsTrash, IsNew, isSent);
 
             await this.mailBoxRepository.UpdateAsync(mailBox);
         }

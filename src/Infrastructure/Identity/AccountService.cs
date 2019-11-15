@@ -121,6 +121,23 @@ namespace Infrastructure.Identity
             }
         }
 
+        public async Task<ApplicationUser> FindByUserNameAsync(string userName)
+        {
+            Validator.StringIsNullOrEmpty(
+                userName, $"{nameof(AccountService)} : {nameof(FindByIdAsync)} : {nameof(userName)} : is null/empty");
+
+            try
+            {
+                var user = await this.userManager.FindByNameAsync(userName);
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new AccountServiceFindByUserNameException($"{nameof(AccountServiceFindByUserNameException)}Can't find user with provided id : {ex.Message}");
+            }
+        }
+
         public async Task<string> GenerateEmailConfirmationTokenAsync(ApplicationUser user)
         {
             Validator.ObjectIsNull(

@@ -21,7 +21,7 @@ namespace ApplicationCore.Entities.MessageAggregate
         public void AddItem(
             string from, string to, string subject,
             string text, DateTime sendDate,
-            bool isDraft = false, bool isTrash = false, bool isNew = true)
+            bool isDraft = false, bool isTrash = false, bool isNew = true, bool isSent = false)
         {
             _messages.Add(new Message()
             {
@@ -33,6 +33,7 @@ namespace ApplicationCore.Entities.MessageAggregate
                 IsDraft = isDraft,
                 IsTrash = isTrash,
                 IsNew = isNew,
+                IsSent = isSent
             });
         }
     }
