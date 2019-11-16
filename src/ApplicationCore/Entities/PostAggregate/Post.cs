@@ -16,6 +16,9 @@ namespace ApplicationCore.Entities.PostAggregate
 
         public string AuthorId { get; set; }
 
+        //TODO: Take note about this
+        public string AuthorName { get; set; }
+
         private List<Comment> _comments = new List<Comment>();
 
         public IEnumerable<Comment> Comments
@@ -26,7 +29,7 @@ namespace ApplicationCore.Entities.PostAggregate
             }
         }
 
-        public void AddComment(string authorId,
+        public void AddComment(string authorId, string authorName,
             DateTime pubDate, string content)
         {
             this._comments.Add(new Comment()

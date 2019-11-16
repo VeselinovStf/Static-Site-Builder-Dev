@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Messages
 {
+    /// <summary>
+    /// User Infrastructure Service to apply any bussiness rules, use Core Service for actual action
+    /// </summary>
     public class MailBoxService : IMailBoxService<MailBoxDTO>, IMessageService<MessageDTO>
     {
         private readonly IAppMailBoxService mailBox;
