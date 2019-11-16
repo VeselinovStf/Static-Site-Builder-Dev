@@ -1,7 +1,9 @@
 ﻿using ApplicationCore.Entities.MessageAggregate;
+using ApplicationCore.Entities.PostAggregate;
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 
 namespace Infrastructure.Identity
 {
@@ -13,5 +15,8 @@ namespace Infrastructure.Identity
         public DateTime? DeletedOn { get; set; }
 
         public MailBox MailBox { get; set; }
+
+        public ICollection<Post> Posts { get; set; }
+        public ICollection<Comment> Comments { get; set; }
     }
 }

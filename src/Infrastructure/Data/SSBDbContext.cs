@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities.MessageAggregate;
+using ApplicationCore.Entities.PostAggregate;
 using ApplicationCore.Interfaces;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -15,6 +16,8 @@ namespace Infrastructure.Data
     {
         public DbSet<Message> Messages { get; set; }
         public DbSet<MailBox> MailBoxes { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         public SSBDbContext(DbContextOptions<SSBDbContext> options)
             : base(options)
