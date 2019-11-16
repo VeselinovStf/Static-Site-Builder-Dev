@@ -104,6 +104,29 @@ namespace Infrastructure.Messages
             };
         }
 
+        public async Task MarkMessageAsDeletedAsync(string clientId, string messageId)
+        {
+            Validator.StringIsNullOrEmpty(
+              clientId, $"{nameof(MailBoxService)} : {nameof(MarkMessageAsDeletedAsync)} : {nameof(clientId)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+                messageId, $"{nameof(MailBoxService)} : {nameof(MarkMessageAsDeletedAsync)} : {nameof(messageId)} : is null/empty");
+
+            try
+            {
+                var currentFromUser = await this.accountService.FindByIdAsync(clientId);
+
+                Validator.ObjectIsNull(
+                   currentFromUser, $"{nameof(MailBoxService)} : {nameof(MarkMessageAsDeletedAsync)} : {nameof(currentFromUser)} : Can't find user with this id");
+
+                await this.mailBox.DeleteMessage(clientId, messageId);
+            }
+            catch (Exception ex)
+            {
+                throw new MessageServiceMarkMessageAsDeletedAsyncException($"{nameof(MessageServiceMarkMessageAsDeletedAsyncException)} : Can't delete message : {ex.Message}");
+            }
+        }
+
         public async Task<MessageDTO> MarkMessageAsReadedAsync(string clientOwnerId, string messageId)
         {
             Validator.StringIsNullOrEmpty(
@@ -143,6 +166,29 @@ namespace Infrastructure.Messages
             catch (Exception ex)
             {
                 throw new MessageServiceMarkMessageAsReadedException($"{nameof(MessageServiceMarkMessageAsReadedException)} : Can't set message to be readed : {ex.Message}");
+            }
+        }
+
+        public async Task MarkMessageAsTrashedAsync(string clientId, string messageId)
+        {
+            Validator.StringIsNullOrEmpty(
+                clientId, $"{nameof(MailBoxService)} : {nameof(MarkMessageAsTrashedAsync)} : {nameof(clientId)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+                messageId, $"{nameof(MailBoxService)} : {nameof(MarkMessageAsTrashedAsync)} : {nameof(messageId)} : is null/empty");
+
+            try
+            {
+                var currentFromUser = await this.accountService.FindByIdAsync(clientId);
+
+                Validator.ObjectIsNull(
+                   currentFromUser, $"{nameof(MailBoxService)} : {nameof(SendClientNewMessage)} : {nameof(currentFromUser)} : Can't find user with this id");
+
+                await this.mailBox.TrashMessage(clientId, messageId);
+            }
+            catch (Exception ex)
+            {
+                throw new MessageServiceMarkMessageTrashedException($"{nameof(MessageServiceMarkMessageTrashedException)} : Can't trash message : {ex.Message}");
             }
         }
 

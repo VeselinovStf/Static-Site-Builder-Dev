@@ -14,5 +14,9 @@ namespace ApplicationCore.Interfaces
             string subject, string text, string to);
 
         Task<Message> ReadMessage(string clientOwnerId, string messageId);
+
+        Task TrashMessage(string clientId, string messageId);
+
+        Task DeleteMessage(string clientId, string messageId);
     }
 }
