@@ -65,7 +65,8 @@ namespace Web
 
             //BlogPost
             services.AddScoped<IAppBlogPostService, AppBlogPostService>();
-            services.AddScoped<IBlogPostService<PublicPostDTO>, BlogPostService>();
+            services.AddScoped<IPublicBlogPostService<PublicPostDTO>, BlogPostService>();
+            services.AddScoped<IAdministratedBlogPostService<AdministratedPostDTO>, BlogPostService>();
             services.AddScoped<IBlogModelFactory, BlogModelFactory>();
 
             services.AddScoped<IAppMailBoxService, AppMailBoxService>();

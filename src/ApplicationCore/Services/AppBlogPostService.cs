@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Entities.PostAggregate;
 using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,7 +20,14 @@ namespace ApplicationCore.Services
             this.blogPostRepository = blogPostRepository ?? throw new ArgumentNullException(nameof(blogPostRepository));
         }
 
-        public async Task<IEnumerable<Post>> GetAllWithAuthor()
+        public async Task<IEnumerable<Post>> GetAllAdminWithCommentsAsync(string clientId)
+        {
+            var clientMailBoxSpec = new BlogPostWithCommentsSpecification(clientId);
+
+            return await this.blogPostRepository.ListAsync(clientMailBoxSpec);
+        }
+
+        public async Task<IEnumerable<Post>> GetAllPublicWithAuthorAsync()
         {
             return await this.blogPostRepository.ListAllAsync();
         }

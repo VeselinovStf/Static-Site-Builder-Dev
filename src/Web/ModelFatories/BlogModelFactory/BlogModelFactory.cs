@@ -20,5 +20,25 @@ namespace Web.ModelFatories.BlogModelFactory
                 PostId = p.PostId
             })) : new List<PublicPostViewModel>();
         }
+
+        public IEnumerable<AdministratedPostViewModel> Create(IEnumerable<AdministratedPostDTO> inputModel)
+        {
+            return inputModel.Count() > 0 ? new List<AdministratedPostViewModel>(inputModel.Select(p => new AdministratedPostViewModel()
+            {
+                Header = p.Header,
+                Image = p.Image,
+                PubDate = p.PubDate,
+                AuthorName = p.AuthorName,
+                Content = p.Content,
+                PostId = p.PostId,
+                Comments = p.Content.Count() > 0 ? new List<AdministratedCommentsViewModel>(p.Comments.Select(c => new AdministratedCommentsViewModel()
+                {
+                    AuthorName = c.AuthorName,
+                    AuthorId = c.AuthorId,
+                    Content = c.Content,
+                    PubDate = c.PubDate
+                })) : new List<AdministratedCommentsViewModel>()
+            })) : new List<AdministratedPostViewModel>();
+        }
     }
 }

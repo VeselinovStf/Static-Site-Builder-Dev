@@ -1,0 +1,66 @@
+﻿@model IEnumerable<AdministratedPostViewModel>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<section class="ftco-section services-section bg-light">
+    <section class="ftco-section ftco-counter img" id="section-counter">
+        <div class="container">
+            <div class="row justify-content-center mb-1">
+                <div class="col-md-3 text-center heading-section heading-section-white ftco-animate">
+                    <h1>Projects</h1>
+                    <a asp-action="Create" asp-controller="Blog" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Create</a>
+                </div>
+                <table class="table table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Header
+                            </th>
+                            <th>
+                                Pub Date
+                            </th>
+                            <th>
+                                Author Name
+                            </th>
+                            <th>
+                                Coments
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Header)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PubDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AuthorName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Comments.Count())
+                                </td>
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.SiteType)
+                                    </td>
+                                    <td>
+                                        @await Component.InvokeAsync("IndexActions", item.Id)
+                                    </td>*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</section>

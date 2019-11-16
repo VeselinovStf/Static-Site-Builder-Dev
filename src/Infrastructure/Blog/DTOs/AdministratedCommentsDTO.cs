@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace ApplicationCore.Entities.PostAggregate
+namespace Infrastructure.Blog.DTOs
 {
-    public class Comment : BaseEntity
+    public class AdministratedCommentsDTO
     {
-        public string PostId { get; set; }
-
         public string AuthorId { get; set; }
+
         public string AuthorName { get; set; }
 
         public DateTime PubDate { get; set; }

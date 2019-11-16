@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Interfaces
 {
-    public interface IBlogPostService<T>
+    public interface IAdministratedBlogPostService<T>
     {
-        Task<IEnumerable<T>> GetAllPublicPosts();
+        Task<IEnumerable<T>> GetAllAdminPosts(string clientId);
     }
 }

@@ -6,6 +6,8 @@ namespace ApplicationCore.Interfaces
 {
     public interface IAppBlogPostService
     {
-        Task<IEnumerable<Post>> GetAllWithAuthor();
+        Task<IEnumerable<Post>> GetAllPublicWithAuthorAsync();
+
+        Task<IEnumerable<Post>> GetAllAdminWithCommentsAsync(string clientId);
     }
 }
