@@ -70,7 +70,19 @@ namespace Web.ModelFatories.MessagesModelFactory
 
         public MessageViewModel Create(MessageDTO inputModel)
         {
-            throw new System.NotImplementedException();
+            return new MessageViewModel()
+            {
+                Id = inputModel.Id,
+                ClientOwnerId = inputModel.ClientOwnerId,
+                From = inputModel.From,
+                IsDraft = inputModel.IsDraft,
+                IsNew = inputModel.IsNew,
+                IsTrash = inputModel.IsTrash,
+                SendDate = inputModel.SendDate,
+                Subject = inputModel.Subject,
+                Text = inputModel.Text,
+                To = inputModel.To
+            };
         }
     }
 }

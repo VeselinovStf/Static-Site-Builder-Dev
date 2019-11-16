@@ -6,6 +6,6 @@ namespace ApplicationCore.Interfaces
     {
         Task<T> GetClientMailBox(string clientId);
 
-        Task SendClientNewMessage(string clientOwnerId, string to, string subject, string text);
+        Task SendClientNewMessage(string clientOwnerId, string to, string subject, string text, bool isDraft);
     }
 }

@@ -13,6 +13,6 @@ namespace ApplicationCore.Interfaces
             bool IsDraft, bool IsTrash, bool isSent, DateTime sendDate,
             string subject, string text, string to);
 
-        Task<Message> GetMessage(string clientId, string messageId);
+        Task<Message> ReadMessage(string clientOwnerId, string messageId);
     }
 }

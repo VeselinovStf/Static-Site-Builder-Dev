@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Messages
 {
-    public class MailBoxService : IMailBoxService<MailBoxDTO>, IMailMessageService<MessageDTO>
+    public class MailBoxService : IMailBoxService<MailBoxDTO>, IMessageService<MessageDTO>
     {
         private readonly IAppMailBoxService mailBox;
         private readonly IAccountService<ApplicationUser> accountService;
@@ -52,7 +52,7 @@ namespace Infrastructure.Messages
                     })) : new List<MessageDTO>(),
                 Drafts = call.Messages != null ? new List<MessageDTO>(
                     call.Messages
-                    .Where(m => !m.IsDeleted && !m.IsTrash && m.IsDraft)
+                    .Where(m => !m.IsDeleted && !m.IsTrash && m.IsDraft && !m.IsSent)
                     .ToList()
                     .Select(nm => new MessageDTO()
                     {
@@ -104,16 +104,49 @@ namespace Infrastructure.Messages
             };
         }
 
-        public async Task<MessageDTO> GetMessage(string clientId, string messageId)
+        public async Task<MessageDTO> MarkMessageAsReadedAsync(string clientOwnerId, string messageId)
         {
-            var call = await this.mailBox.GetMessage(clientId, messageId);
+            Validator.StringIsNullOrEmpty(
+               clientOwnerId, $"{nameof(MailBoxService)} : {nameof(MarkMessageAsReadedAsync)} : {nameof(clientOwnerId)} : is null/empty");
 
-            var model = new MessageDTO();
+            Validator.StringIsNullOrEmpty(
+               messageId, $"{nameof(MailBoxService)} : {nameof(MarkMessageAsReadedAsync)} : {nameof(messageId)} : is null/empty");
 
-            return model;
+            try
+            {
+                var userMessage = await this.accountService.FindByIdAsync(clientOwnerId);
+
+                Validator.ObjectIsNull(
+                   userMessage, $"{nameof(MailBoxService)} : {nameof(MarkMessageAsReadedAsync)} : {nameof(userMessage)} : Can't find user with this id");
+
+                var resultCall = await this.mailBox.ReadMessage(clientOwnerId, messageId);
+
+                Validator.ObjectIsNull(
+                   resultCall, $"{nameof(MailBoxService)} : {nameof(MarkMessageAsReadedAsync)} : {nameof(resultCall)} : Can't read message");
+
+                var returnModel = new MessageDTO()
+                {
+                    Id = resultCall.Id,
+                    ClientOwnerId = clientOwnerId,
+                    From = resultCall.From,
+                    IsDraft = resultCall.IsDraft,
+                    IsNew = resultCall.IsNew,
+                    IsTrash = resultCall.IsTrash,
+                    SendDate = resultCall.SendDate,
+                    Subject = resultCall.Subject,
+                    Text = resultCall.Text,
+                    To = resultCall.To
+                };
+
+                return returnModel;
+            }
+            catch (Exception ex)
+            {
+                throw new MessageServiceMarkMessageAsReadedException($"{nameof(MessageServiceMarkMessageAsReadedException)} : Can't set message to be readed : {ex.Message}");
+            }
         }
 
-        public async Task SendClientNewMessage(string clientOwnerId, string to, string subject, string text)
+        public async Task SendClientNewMessage(string clientOwnerId, string to, string subject, string text, bool isDraft)
         {
             Validator.StringIsNullOrEmpty(
                 clientOwnerId, $"{nameof(MailBoxService)} : {nameof(SendClientNewMessage)} : {nameof(clientOwnerId)} : is null/empty");
@@ -139,9 +172,16 @@ namespace Infrastructure.Messages
                 Validator.ObjectIsNull(
                   currentToUser, $"{nameof(MailBoxService)} : {nameof(SendClientNewMessage)} : {nameof(currentToUser)} : Can't find user with this id");
 
-                await this.mailBox.SendClientMessage(currentFromUser.Id, currentFromUser.UserName, true, false, false, true, DateTime.Now, subject, text, to);
+                if (isDraft)
+                {
+                    await this.mailBox.SendClientMessage(currentFromUser.Id, currentFromUser.UserName, true, true, false, false, DateTime.Now, subject, text, to);
+                }
+                else
+                {
+                    await this.mailBox.SendClientMessage(currentFromUser.Id, currentFromUser.UserName, true, false, false, true, DateTime.Now, subject, text, to);
 
-                await this.mailBox.SendClientMessage(currentToUser.Id, currentFromUser.UserName, true, false, false, false, DateTime.Now, subject, text, to);
+                    await this.mailBox.SendClientMessage(currentToUser.Id, currentFromUser.UserName, true, false, false, false, DateTime.Now, subject, text, to);
+                }
             }
             catch (Exception ex)
             {

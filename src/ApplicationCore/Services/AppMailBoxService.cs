@@ -2,6 +2,7 @@
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ApplicationCore.Services
@@ -9,14 +10,12 @@ namespace ApplicationCore.Services
     public class AppMailBoxService : IAppMailBoxService
     {
         private readonly IAsyncRepository<MailBox> mailBoxRepository;
-        private readonly IAppLogger<AppMailBoxService> logger;
 
         public AppMailBoxService(
-            IAsyncRepository<MailBox> mailBoxRepository,
-            IAppLogger<AppMailBoxService> logger)
+            IAsyncRepository<MailBox> mailBoxRepository
+           )
         {
             this.mailBoxRepository = mailBoxRepository ?? throw new System.ArgumentNullException(nameof(mailBoxRepository));
-            this.logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
         }
 
         public async Task<MailBox> GetClientMailBox(string clientId)
@@ -26,9 +25,19 @@ namespace ApplicationCore.Services
             return this.mailBoxRepository.GetSingleBySpec(clientMailBoxSpec);
         }
 
-        public async Task<Message> GetMessage(string clientId, string messageId)
+        public async Task<Message> ReadMessage(string clientOwnerId, string messageId)
         {
-            throw new NotImplementedException();
+            var clientMailBoxSpec = new MailBoxWithMessagesSpecification(clientOwnerId);
+
+            var mailBox = this.mailBoxRepository.GetSingleBySpec(clientMailBoxSpec);
+
+            var message = mailBox.Messages.ToList().FirstOrDefault(m => m.Id == messageId);
+
+            message.IsNew = false;
+
+            await this.mailBoxRepository.UpdateAsync(mailBox);
+
+            return message;
         }
 
         public async Task SendClientMessage(string clientOwnerId,
