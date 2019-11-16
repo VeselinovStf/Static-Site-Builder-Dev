@@ -23,7 +23,7 @@
             <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Settings">Blog/Forum</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index" asp-route-clientId="@Model.ClientId">Messages</a>
+            <a class="nav-link text-dark" href="#" onclick="window.open('@Url.Content("~/Messages/Index?clientId=" + Model.ClientId)',target = '_blank', width='500px', height='800px');">Messages</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Settings">Global Settings</a>
