@@ -69,6 +69,101 @@ namespace Infrastructure.Blog
             }
         }
 
+        public async Task<string> DeletePost(string postId, string authorName)
+        {
+            Validator.StringIsNullOrEmpty(
+              postId, $"{nameof(BlogPostService)} : {nameof(DeletePost)} : {nameof(postId)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+              authorName, $"{nameof(BlogPostService)} : {nameof(DeletePost)} : {nameof(authorName)} : is null/empty");
+
+            try
+            {
+                var client = await this.accountService.FindByUserNameAsync(authorName);
+
+                Validator.ObjectIsNull(
+                    client, $"{nameof(BlogPostService)} : {nameof(Create)} : {nameof(client)} : Can't find any client with this id");
+
+                var roles = await this.accountService.GetRolesAsync(client);
+
+                if (roles.Contains("Administrator"))
+                {
+                    await this.appBlogPostService.RemovePost(postId, client.Id);
+
+                    return client.Id;
+                }
+                else
+                {
+                    throw new InvalidOperationException($"{nameof(BlogPostService)} : {nameof(Create)} : -- CRYTICAL -- ADMINISTRATION USER EXCEPTION! : USER : {authorName}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new BlogPostServiceCreatePostException($"{nameof(BlogPostServiceCreatePostException)} : Can't Create Posts {ex.Message}");
+            }
+        }
+
+        public async Task<AdministratedPostDTO> EditPost(string postId, string authorName, string header, string image, string content)
+        {
+            Validator.StringIsNullOrEmpty(
+                postId, $"{nameof(BlogPostService)} : {nameof(EditPost)} : {nameof(postId)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+                authorName, $"{nameof(BlogPostService)} : {nameof(EditPost)} : {nameof(authorName)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+                header, $"{nameof(BlogPostService)} : {nameof(EditPost)} : {nameof(header)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+                image, $"{nameof(BlogPostService)} : {nameof(EditPost)} : {nameof(image)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+                content, $"{nameof(BlogPostService)} : {nameof(EditPost)} : {nameof(content)} : is null/empty");
+
+            try
+            {
+                var client = await this.accountService.FindByUserNameAsync(authorName);
+
+                Validator.ObjectIsNull(
+                    client, $"{nameof(BlogPostService)} : {nameof(EditPost)} : {nameof(client)} : Can't find any client with this id");
+
+                var roles = await this.accountService.GetRolesAsync(client);
+
+                if (roles.Contains("Administrator"))
+                {
+                    var postEditCall = await this.appBlogPostService.EditPostAsync(client.Id, postId, header, image, content);
+
+                    Validator.ObjectIsNull(
+                        postEditCall, $"{nameof(BlogPostService)} : {nameof(EditPost)} : {nameof(postEditCall)} : Can't edit post with this credidentials.");
+
+                    return new AdministratedPostDTO()
+                    {
+                        AuthorName = postEditCall.AuthorName,
+                        Comments = postEditCall.Comments.Select(c => new AdministratedCommentsDTO()
+                        {
+                            AuthorId = c.AuthorId,
+                            PubDate = c.PubDate,
+                            AuthorName = c.AuthorName,
+                            Content = c.Content
+                        }),
+                        Content = postEditCall.Content,
+                        Header = postEditCall.Header,
+                        Image = postEditCall.Image,
+                        PostId = postEditCall.Id,
+                        PubDate = postEditCall.PubDate
+                    };
+                }
+                else
+                {
+                    throw new InvalidOperationException($"{nameof(BlogPostService)} : {nameof(EditPost)} : -- CRYTICAL -- ADMINISTRATION USER EXCEPTION! : USER : {authorName}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new BlogPostServiceEditPostException($"{nameof(BlogPostServiceEditPostException)} : Can't Edit Post {ex.Message}");
+            }
+        }
+
         public async Task<IEnumerable<AdministratedPostDTO>> GetAllAdminPosts(string clientId)
         {
             Validator.StringIsNullOrEmpty(
@@ -144,6 +239,58 @@ namespace Infrastructure.Blog
             catch (Exception ex)
             {
                 throw new BlogPostServiceGetAllPublicPostsException($"{nameof(BlogPostServiceGetAllPublicPostsException)} : Can't get public post : {ex.Message}");
+            }
+        }
+
+        public async Task<AdministratedPostDTO> GetSinglePost(string postId, string authorName)
+        {
+            Validator.StringIsNullOrEmpty(
+            postId, $"{nameof(BlogPostService)} : {nameof(GetSinglePost)} : {nameof(postId)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+             authorName, $"{nameof(BlogPostService)} : {nameof(GetSinglePost)} : {nameof(authorName)} : is null/empty");
+
+            try
+            {
+                var client = await this.accountService.FindByUserNameAsync(authorName);
+
+                Validator.ObjectIsNull(
+                    client, $"{nameof(BlogPostService)} : {nameof(GetSinglePost)} : {nameof(client)} : Can't find any client with this id");
+
+                var roles = await this.accountService.GetRolesAsync(client);
+
+                if (roles.Contains("Administrator"))
+                {
+                    var postCall = this.appBlogPostService.GetSingleAsync(client.Id, postId);
+
+                    Validator.ObjectIsNull(
+                        postCall, $"{nameof(BlogPostService)} : {nameof(GetSinglePost)} : {nameof(postCall)} : Can't get post with this credidentials.");
+
+                    return new AdministratedPostDTO()
+                    {
+                        AuthorName = postCall.AuthorName,
+                        Comments = postCall.Comments.Select(c => new AdministratedCommentsDTO()
+                        {
+                            AuthorId = c.AuthorId,
+                            PubDate = c.PubDate,
+                            AuthorName = c.AuthorName,
+                            Content = c.Content
+                        }),
+                        Content = postCall.Content,
+                        Header = postCall.Header,
+                        Image = postCall.Image,
+                        PostId = postCall.Id,
+                        PubDate = postCall.PubDate
+                    };
+                }
+                else
+                {
+                    throw new InvalidOperationException($"{nameof(BlogPostService)} : {nameof(GetSinglePost)} : -- CRYTICAL -- ADMINISTRATION USER EXCEPTION! : USER : {authorName}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new BlogPostServiceGetSinglePostException($"{nameof(BlogPostServiceGetSinglePostException)} : Can't Get Post {ex.Message}");
             }
         }
     }

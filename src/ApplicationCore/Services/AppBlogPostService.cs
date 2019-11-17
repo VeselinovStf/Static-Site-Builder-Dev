@@ -37,6 +37,21 @@ namespace ApplicationCore.Services
             return addedPost;
         }
 
+        public async Task<Post> EditPostAsync(string clientId, string postId, string header, string image, string content)
+        {
+            var clientMailBoxSpec = new BlogPostWithCommentsSpecification(clientId);
+
+            var post = this.blogPostRepository.GetSingleBySpec(clientMailBoxSpec);
+
+            post.Header = header;
+            post.Image = image;
+            post.Content = content;
+
+            await this.blogPostRepository.UpdateAsync(post);
+
+            return post;
+        }
+
         public async Task<IEnumerable<Post>> GetAllAdminWithCommentsAsync(string clientId)
         {
             var clientMailBoxSpec = new BlogPostWithCommentsSpecification(clientId);
@@ -47,6 +62,25 @@ namespace ApplicationCore.Services
         public async Task<IEnumerable<Post>> GetAllPublicWithAuthorAsync()
         {
             return await this.blogPostRepository.ListAllAsync();
+        }
+
+        //TODO: Update this getter
+        public Post GetSingleAsync(string clientId, string postId)
+        {
+            var clientMailBoxSpec = new BlogPostWithCommentsSpecification(clientId);
+
+            return this.blogPostRepository.GetSingleBySpec(clientMailBoxSpec);
+        }
+
+        public async Task RemovePost(string postId, string id)
+        {
+            var clientMailBoxSpec = new BlogPostWithCommentsSpecification(id);
+
+            var post = this.blogPostRepository.GetSingleBySpec(clientMailBoxSpec);
+
+            post.IsDeleted = true;
+
+            await this.blogPostRepository.UpdateAsync(post);
         }
     }
 }

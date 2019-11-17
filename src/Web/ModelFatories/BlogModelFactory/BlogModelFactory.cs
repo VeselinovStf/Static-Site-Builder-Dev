@@ -40,5 +40,25 @@ namespace Web.ModelFatories.BlogModelFactory
                 })) : new List<AdministratedCommentsViewModel>()
             })) : new List<AdministratedPostViewModel>();
         }
+
+        public AdministratedPostViewModel Create(AdministratedPostDTO inputModel)
+        {
+            return new AdministratedPostViewModel()
+            {
+                AuthorName = inputModel.AuthorName,
+                Comments = inputModel.Comments.Select(c => new AdministratedCommentsViewModel()
+                {
+                    AuthorId = c.AuthorId,
+                    PubDate = c.PubDate,
+                    AuthorName = c.AuthorName,
+                    Content = c.Content
+                }),
+                Content = inputModel.Content,
+                Header = inputModel.Header,
+                Image = inputModel.Image,
+                PostId = inputModel.PostId,
+                PubDate = inputModel.PubDate
+            };
+        }
     }
 }

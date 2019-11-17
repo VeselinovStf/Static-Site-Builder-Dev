@@ -23,7 +23,7 @@ namespace Infrastructure.Data
 
         public T GetSingleBySpec(ISpecification<T> spec)
         {
-            return List(spec).FirstOrDefault();
+            return List(spec).Where(e => !e.IsDeleted).FirstOrDefault();
         }
 
         public virtual async Task<T> GetByIdAsync(string id)
@@ -33,32 +33,32 @@ namespace Infrastructure.Data
 
         public IEnumerable<T> ListAll()
         {
-            return _dbContext.Set<T>().AsEnumerable();
+            return _dbContext.Set<T>().Where(e => !e.IsDeleted).AsEnumerable();
         }
 
         public async Task<IReadOnlyList<T>> ListAllAsync()
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            return await _dbContext.Set<T>().Where(e => !e.IsDeleted).ToListAsync();
         }
 
         public IEnumerable<T> List(ISpecification<T> spec)
         {
-            return ApplySpecification(spec).AsEnumerable();
+            return ApplySpecification(spec).Where(e => !e.IsDeleted).AsEnumerable();
         }
 
         public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
         {
-            return await ApplySpecification(spec).ToListAsync();
+            return await ApplySpecification(spec).Where(e => !e.IsDeleted).ToListAsync();
         }
 
         public int Count(ISpecification<T> spec)
         {
-            return ApplySpecification(spec).Count();
+            return ApplySpecification(spec).Where(e => !e.IsDeleted).Count();
         }
 
         public async Task<int> CountAsync(ISpecification<T> spec)
         {
-            return await ApplySpecification(spec).CountAsync();
+            return await ApplySpecification(spec).Where(e => !e.IsDeleted).CountAsync();
         }
 
         public T Add(T entity)

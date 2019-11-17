@@ -111,5 +111,93 @@ namespace Web.Controllers
 
             return View(model);
         }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet]
+        public async Task<IActionResult> EditPost(string postId, string authorName)
+        {
+            try
+            {
+                var serviceCall = await this.administratedBlogPostService.GetSinglePost(postId, authorName);
+
+                this.logger.LogInformation($"{nameof(BlogController)} : {nameof(EditPost)} : Getting single blog post done.");
+
+                var model = this.modelFactory.Create(serviceCall);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(BlogController)} : {nameof(EditPost)} : Can't create posts : {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { AdminBlog = "Sorry but we have problem with Blog System, please try later or contact support for more info." });
+            }
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPost([Bind("Header", "Image", "Content", "AuthorName", "PostId")]AdministratedPostViewModel model)
+        {
+            try
+            {
+                var serviceCall = await this.administratedBlogPostService.EditPost(model.PostId, model.AuthorName, model.Header, model.Image, model.Content);
+
+                this.logger.LogInformation($"{nameof(BlogController)} : {nameof(EditPost)} : Editing single blog post done.");
+
+                var returnModel = this.modelFactory.Create(serviceCall);
+
+                return View(returnModel);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(BlogController)} : {nameof(EditPost)} : Can't edit posts : {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { AdminBlog = "Sorry but we have problem with Blog System, please try later or contact support for more info." });
+            }
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet]
+        public async Task<IActionResult> DeletePost(string postId, string authorName)
+        {
+            try
+            {
+                var serviceCall = await this.administratedBlogPostService.GetSinglePost(postId, authorName);
+
+                this.logger.LogInformation($"{nameof(BlogController)} : {nameof(EditPost)} : Getting single blog post done.");
+
+                var model = this.modelFactory.Create(serviceCall);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(BlogController)} : {nameof(EditPost)} : Can't create posts : {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { AdminBlog = "Sorry but we have problem with Blog System, please try later or contact support for more info." });
+            }
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePost([Bind("AuthorName", "PostId")]AdministratedPostViewModel model)
+        {
+            try
+            {
+                var serviceCallClientId = await this.administratedBlogPostService.DeletePost(model.PostId, model.AuthorName);
+
+                this.logger.LogInformation($"{nameof(BlogController)} : {nameof(DeletePost)} : Deleting single blog post done.");
+
+                return RedirectToAction("AdminBlog", "Blog", new { clientId = serviceCallClientId });
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(BlogController)} : {nameof(DeletePost)} : Can't delete posts : {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { AdminBlog = "Sorry but we have problem with Blog System, please try later or contact support for more info." });
+            }
+        }
     }
 }

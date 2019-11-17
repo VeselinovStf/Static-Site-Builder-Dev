@@ -11,5 +11,11 @@ namespace ApplicationCore.Interfaces
         Task<IEnumerable<Post>> GetAllAdminWithCommentsAsync(string clientId);
 
         Task<Post> CreatePost(string header, string image, string content, string authorName, string id);
+
+        Post GetSingleAsync(string id, string postId);
+
+        Task<Post> EditPostAsync(string id, string postId, string header, string image, string content);
+
+        Task RemovePost(string postId, string id);
     }
 }

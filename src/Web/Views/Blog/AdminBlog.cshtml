@@ -50,12 +50,12 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Comments)
                                 </td>
-                                @*<td>
-                                        @Html.DisplayFor(modelItem => item.SiteType)
-                                    </td>
-                                    <td>
-                                        @await Component.InvokeAsync("IndexActions", item.Id)
-                                    </td>*@
+                                <td>
+
+                                <td>
+                                    <a class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white" asp-controller="Blog" asp-action="EditPost" asp-route-postId="@item.PostId" asp-route-authorName="@item.AuthorName">Edit</a>
+                                    <a class="btn btn-danger d-block px-3 py-3 mb-4 btn-outline-white" asp-controller="Blog" asp-action="DeletePost" asp-route-postId="@item.PostId" asp-route-authorName="@item.AuthorName">Delete</a>
+                                </td>
                             </tr>
                         }
                     </tbody>

@@ -1,0 +1,44 @@
+﻿@model AdministratedPostViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<section class="signup ftco-section">
+    <div class="container">
+        <div class="signup-content">
+            <div class="signup-form">
+                <h2 class="form-title">Edit Post</h2>
+                <form method="post" class="register-form" id="register-form">
+                    <input type="hidden" asp-for="AuthorName" />
+                    <input type="hidden" asp-for="PostId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label for="Header"><i class="zmdi zmdi-email"></i></label>
+                        <input asp-for="Header" type="text" />
+                        <span asp-validation-for="Header" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="image"><i class="zmdi zmdi-email"></i></label>
+                        <input asp-for="Image" type="text" />
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Content"><i class="zmdi zmdi-lock-outline"></i></label>
+                        <textarea asp-for="Content" style="height: 300px" cols="50" rows="10"></textarea>
+                        <span asp-validation-for="Content" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-button">
+                        <input type="submit" name="signup" id="signup" class="form-submit" value="Edit" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
