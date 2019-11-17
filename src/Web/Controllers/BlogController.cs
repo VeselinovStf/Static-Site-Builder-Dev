@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Web.ModelFatories.BlogModelFactory.Abstraction;
+using Web.ViewModels.Blog;
 
 namespace Web.Controllers
 {
@@ -69,6 +70,46 @@ namespace Web.Controllers
 
                 return RedirectToAction("Error", "Home", new { AdminBlog = "Sorry but we have problem with Blog System, please try later or contact support for more info." });
             }
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            var currentUser = User.Identity.Name;
+
+            var model = new CreatePostViewModel()
+            {
+                AuthorName = currentUser
+            };
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Header", "Image", "Content", "AuthorName")]CreatePostViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var serviceCallClientId = await this.administratedBlogPostService.Create(model.Header, model.Image, model.Content, model.AuthorName);
+
+                    this.logger.LogInformation($"{nameof(BlogController)} : {nameof(Create)} : Blog post created.");
+
+                    return RedirectToAction("AdminBlog", "Blog", new { clientId = serviceCallClientId });
+                }
+                catch (Exception ex)
+                {
+                    this.logger.LogWarning($"{nameof(BlogController)} : {nameof(Create)} : Can't create posts : {ex.Message}");
+
+                    return RedirectToAction("Error", "Home", new { AdminBlog = "Sorry but we have problem with Blog System, please try later or contact support for more info." });
+                }
+            }
+
+            return View(model);
         }
     }
 }

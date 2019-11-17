@@ -20,6 +20,23 @@ namespace ApplicationCore.Services
             this.blogPostRepository = blogPostRepository ?? throw new ArgumentNullException(nameof(blogPostRepository));
         }
 
+        public async Task<Post> CreatePost(string header, string image, string content, string authorName, string id)
+        {
+            var newPost = new Post()
+            {
+                AuthorId = id,
+                AuthorName = authorName,
+                Content = content,
+                Header = header,
+                Image = image,
+                PubDate = DateTime.Now
+            };
+
+            var addedPost = await this.blogPostRepository.AddAsync(newPost);
+
+            return addedPost;
+        }
+
         public async Task<IEnumerable<Post>> GetAllAdminWithCommentsAsync(string clientId)
         {
             var clientMailBoxSpec = new BlogPostWithCommentsSpecification(clientId);

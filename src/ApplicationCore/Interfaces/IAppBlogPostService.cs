@@ -9,5 +9,7 @@ namespace ApplicationCore.Interfaces
         Task<IEnumerable<Post>> GetAllPublicWithAuthorAsync();
 
         Task<IEnumerable<Post>> GetAllAdminWithCommentsAsync(string clientId);
+
+        Task<Post> CreatePost(string header, string image, string content, string authorName, string id);
     }
 }

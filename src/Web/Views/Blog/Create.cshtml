@@ -1,0 +1,39 @@
+﻿@model CreatePostViewModel
+
+<section class="signup ftco-section">
+    <div class="container">
+        <div class="signup-content">
+            <div class="signup-form">
+                <h2 class="form-title">Create Post</h2>
+                <form method="post" class="register-form" id="register-form">
+                    <input type="hidden" asp-for="AuthorName" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label for="Header"><i class="zmdi zmdi-email"></i></label>
+                        <input asp-for="Header" type="text" name="header" placeholder="Post Header" />
+                        <span asp-validation-for="Header" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="image"><i class="zmdi zmdi-email"></i></label>
+                        <input asp-for="Image" type="text" name="image" id="image" placeholder="Post Image" />
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Content"><i class="zmdi zmdi-lock-outline"></i></label>
+                        <textarea asp-for="Content" name="Content" id="compose-textarea" placeholder="Post Content" style="height: 300px" cols="50" rows="10"></textarea>
+                        <span asp-validation-for="Content" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-button">
+                        <input type="submit" name="signup" id="signup" class="form-submit" value="Create" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
