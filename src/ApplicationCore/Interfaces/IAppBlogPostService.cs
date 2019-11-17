@@ -17,5 +17,7 @@ namespace ApplicationCore.Interfaces
         Task<Post> EditPostAsync(string id, string postId, string header, string image, string content);
 
         Task RemovePost(string postId, string id);
+
+        Task<Post> GetSinglePublicAsync(string postId);
     }
 }

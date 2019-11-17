@@ -13,12 +13,12 @@
                 {
                     <div class="col-md-4 ftco-animate">
                         <div class="blog-entry">
-                            <a href="blog-single.html" class="block-20" style="background-image: url('/mainSite/images/image_1.jpg');">
+                            <a asp-controller="Blog" asp-action="Post" asp-route-postId="@post.PostId" class="block-20" style="background-image: url('/mainSite/images/image_1.jpg');">
                             </a>
                             <div class="text d-flex py-4">
                                 <div class="meta mb-3">
-                                    <div><a href="#">@post.PubDate</a></div>
-                                    <div><a href="#">@post.AuthorName</a></div>
+                                    <div><a>@post.PubDate</a></div>
+                                    <div><a>@post.AuthorName</a></div>
                                 </div>
                                 <div class="desc pl-3">
                                     <h3 class="heading"><a href="#">@post.Header</a></h3>

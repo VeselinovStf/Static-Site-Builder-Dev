@@ -11,5 +11,7 @@ namespace Web.ModelFatories.BlogModelFactory.Abstraction
         IEnumerable<AdministratedPostViewModel> Create(IEnumerable<AdministratedPostDTO> inputModel);
 
         AdministratedPostViewModel Create(AdministratedPostDTO inputModel);
+
+        PublicPostViewModel Create(PublicPostDTO inputModel);
     }
 }

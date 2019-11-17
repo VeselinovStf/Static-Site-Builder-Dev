@@ -199,5 +199,27 @@ namespace Web.Controllers
                 return RedirectToAction("Error", "Home", new { AdminBlog = "Sorry but we have problem with Blog System, please try later or contact support for more info." });
             }
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Post(string postId)
+        {
+            try
+            {
+                var serviceCall = await this.publicBlogPostService.GetSinglePublicPost(postId);
+
+                this.logger.LogInformation($"{nameof(BlogController)} : {nameof(Post)} : Getting single blog post done.");
+
+                var model = this.modelFactory.Create(serviceCall);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(BlogController)} : {nameof(EditPost)} : Can't get posts : {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { AdminBlog = "Sorry but we have problem with Blog System, please try later or contact support for more info." });
+            }
+        }
     }
 }

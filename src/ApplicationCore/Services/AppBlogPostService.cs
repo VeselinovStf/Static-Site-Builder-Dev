@@ -72,6 +72,11 @@ namespace ApplicationCore.Services
             return this.blogPostRepository.GetSingleBySpec(clientMailBoxSpec);
         }
 
+        public async Task<Post> GetSinglePublicAsync(string postId)
+        {
+            return await this.blogPostRepository.GetByIdAsync(postId);
+        }
+
         public async Task RemovePost(string postId, string id)
         {
             var clientMailBoxSpec = new BlogPostWithCommentsSpecification(id);

@@ -60,5 +60,18 @@ namespace Web.ModelFatories.BlogModelFactory
                 PubDate = inputModel.PubDate
             };
         }
+
+        public PublicPostViewModel Create(PublicPostDTO inputModel)
+        {
+            return new PublicPostViewModel()
+            {
+                AuthorName = inputModel.AuthorName,
+                Content = inputModel.Content,
+                Header = inputModel.Header,
+                Image = inputModel.Image,
+                PostId = inputModel.PostId,
+                PubDate = inputModel.PubDate
+            };
+        }
     }
 }

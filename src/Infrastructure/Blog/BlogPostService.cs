@@ -293,5 +293,33 @@ namespace Infrastructure.Blog
                 throw new BlogPostServiceGetSinglePostException($"{nameof(BlogPostServiceGetSinglePostException)} : Can't Get Post {ex.Message}");
             }
         }
+
+        public async Task<PublicPostDTO> GetSinglePublicPost(string postId)
+        {
+            Validator.StringIsNullOrEmpty(
+           postId, $"{nameof(BlogPostService)} : {nameof(GetSinglePublicPost)} : {nameof(postId)} : is null/empty");
+
+            try
+            {
+                var postCall = await this.appBlogPostService.GetSinglePublicAsync(postId);
+
+                Validator.ObjectIsNull(
+                    postCall, $"{nameof(BlogPostService)} : {nameof(GetSinglePost)} : {nameof(postCall)} : Can't get post with this credidentials.");
+
+                return new PublicPostDTO()
+                {
+                    AuthorName = postCall.AuthorName,
+                    Content = postCall.Content,
+                    Header = postCall.Header,
+                    Image = postCall.Image,
+                    PostId = postCall.Id,
+                    PubDate = postCall.PubDate
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new BlogPostServiceGetSinglePublicPostException($"{nameof(BlogPostServiceGetSinglePublicPostException)} : Can't Get Post {ex.Message}");
+            }
+        }
     }
 }
