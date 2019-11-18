@@ -1,7 +1,7 @@
 ﻿using ApplicationCore.Interfaces;
 using System;
 
-namespace ApplicationCore.Entities
+namespace ApplicationCore.Entities.BaseEntities
 {
     public class BaseEntity : IDeletable, IModifiable
     {

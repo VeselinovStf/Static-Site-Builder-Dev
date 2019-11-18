@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApplicationCore.Entities.BaseEntities;
+using System;
 
 namespace ApplicationCore.Entities.PostAggregate
 {
