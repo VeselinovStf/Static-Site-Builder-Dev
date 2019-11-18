@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Web.ModelFatories.BlogModelFactory.Abstraction;
 using Web.ViewModels.Blog;
+using Web.ViewModels.ViewComponentModels;
 
 namespace Web.Controllers
 {
@@ -13,17 +14,20 @@ namespace Web.Controllers
     {
         private readonly IPublicBlogPostService<PublicPostDTO> publicBlogPostService;
         private readonly IAdministratedBlogPostService<AdministratedPostDTO> administratedBlogPostService;
+        private readonly IClientBlogPostService<ClientPostDTO> clientBlogPostService;
         private readonly IBlogModelFactory modelFactory;
         private readonly IAppLogger<BlogController> logger;
 
         public BlogController(
             IPublicBlogPostService<PublicPostDTO> publicBlogPostService,
             IAdministratedBlogPostService<AdministratedPostDTO> administratedBlogPostService,
+            IClientBlogPostService<ClientPostDTO> clientBlogPostService,
             IBlogModelFactory modelFactory,
             IAppLogger<BlogController> logger)
         {
             this.publicBlogPostService = publicBlogPostService ?? throw new System.ArgumentNullException(nameof(publicBlogPostService));
             this.administratedBlogPostService = administratedBlogPostService ?? throw new ArgumentNullException(nameof(administratedBlogPostService));
+            this.clientBlogPostService = clientBlogPostService ?? throw new ArgumentNullException(nameof(clientBlogPostService));
             this.modelFactory = modelFactory ?? throw new System.ArgumentNullException(nameof(modelFactory));
             this.logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
         }
@@ -216,10 +220,58 @@ namespace Web.Controllers
             }
             catch (Exception ex)
             {
-                this.logger.LogWarning($"{nameof(BlogController)} : {nameof(EditPost)} : Can't get posts : {ex.Message}");
+                this.logger.LogWarning($"{nameof(BlogController)} : {nameof(Post)} : Can't get posts : {ex.Message}");
 
                 return RedirectToAction("Error", "Home", new { AdminBlog = "Sorry but we have problem with Blog System, please try later or contact support for more info." });
             }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> PostComment(string postId)
+        {
+            try
+            {
+                var serviceCall = await this.clientBlogPostService.GetPrivatePostWithComments(postId);
+
+                this.logger.LogInformation($"{nameof(BlogController)} : {nameof(PostComment)} : Getting single client blog post done.");
+
+                var model = this.modelFactory.Create(serviceCall);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(BlogController)} : {nameof(PostComment)} : Can't get posts : {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { AdminBlog = "Sorry but we have problem with Blog System, please try later or contact support for more info." });
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PostComment([Bind("PostId", "AuthorId", "AuthorName", "Content")]CreateBlogPostCommentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await this.clientBlogPostService.CreateCommentAsync(model.PostId, model.AuthorId, model.AuthorName, model.Content);
+
+                    this.logger.LogInformation($"{nameof(BlogController)} : {nameof(PostComment)} : Creating post comment done.");
+
+                    return RedirectToAction("PostComment", "Blog", new { postId = model.PostId });
+                }
+                catch (Exception ex)
+                {
+                    this.logger.LogWarning($"{nameof(BlogController)} : {nameof(PostComment)} : Can't create post comment posts : {ex.Message}");
+
+                    return RedirectToAction("Error", "Home", new { AdminBlog = "Sorry but we have problem with Blog System, please try later or contact support for more info." });
+                }
+            }
+
+            return ViewComponent("CreateBlogPostComment", new { postId = model.PostId });
         }
     }
 }

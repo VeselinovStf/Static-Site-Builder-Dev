@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Infrastructure.Blog.DTOs
+namespace Web.ViewModels.Blog
 {
-    public class ClientPostDTO
+    public class ClientPostViewModel
     {
         public string PostId { get; set; }
         public string Header { get; set; }
@@ -16,6 +16,6 @@ namespace Infrastructure.Blog.DTOs
 
         public string AuthorName { get; set; }
 
-        public IEnumerable<ClientCommentsDTO> Comments { get; set; }
+        public IEnumerable<ClientCommentViewModel> Comments { get; set; }
     }
 }

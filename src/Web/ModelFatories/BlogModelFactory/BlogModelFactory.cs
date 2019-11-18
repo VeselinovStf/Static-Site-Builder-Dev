@@ -73,5 +73,25 @@ namespace Web.ModelFatories.BlogModelFactory
                 PubDate = inputModel.PubDate
             };
         }
+
+        public ClientPostViewModel Create(ClientPostDTO serviceCall)
+        {
+            return new ClientPostViewModel()
+            {
+                AuthorName = serviceCall.AuthorName,
+                Comments = serviceCall.Comments.Select(c => new ClientCommentViewModel()
+                {
+                    AuthorId = c.AuthorId,
+                    PubDate = c.PubDate,
+                    AuthorName = c.AuthorName,
+                    Content = c.Content
+                }),
+                Content = serviceCall.Content,
+                Header = serviceCall.Header,
+                Image = serviceCall.Image,
+                PostId = serviceCall.PostId,
+                PubDate = serviceCall.PubDate
+            };
+        }
     }
 }

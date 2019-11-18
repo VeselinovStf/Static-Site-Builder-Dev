@@ -1,0 +1,15 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<section class="sign-in ftco-section">
+    <div class="container">
+        <div class="signin-content">
+            <div class="signin-image">
+                <h1 class="text-danger">@Model.Message</h1>
+                <h2 class="text-danger">An error occurred while processing your request.</h2>
+            </div>
+        </div>
+    </div>
+</section>

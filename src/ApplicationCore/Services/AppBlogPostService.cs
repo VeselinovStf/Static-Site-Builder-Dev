@@ -20,6 +20,17 @@ namespace ApplicationCore.Services
             this.blogPostRepository = blogPostRepository ?? throw new ArgumentNullException(nameof(blogPostRepository));
         }
 
+        public async Task AddCommentAsync(string postId, string authorId, string authorName, string content, DateTime pubDate)
+        {
+            var postMessagesSpec = new SingleBlogPostWithCommentsSpecification(postId);
+
+            var post = this.blogPostRepository.GetSingleBySpec(postMessagesSpec);
+
+            post.AddComment(post.Id, authorId, authorName, pubDate, content);
+
+            await this.blogPostRepository.UpdateAsync(post);
+        }
+
         public async Task<Post> CreatePost(string header, string image, string content, string authorName, string id)
         {
             var newPost = new Post()
@@ -70,7 +81,7 @@ namespace ApplicationCore.Services
         }
 
         //TODO: Update this getter
-        public Post GetSingleAsync(string clientId, string postId)
+        public async Task<Post> GetSingleAsync(string clientId, string postId)
         {
             var clientMailBoxSpec = new BlogPostWithCommentsSpecification(clientId);
 
@@ -80,6 +91,13 @@ namespace ApplicationCore.Services
         public async Task<Post> GetSinglePublicAsync(string postId)
         {
             return await this.blogPostRepository.GetByIdAsync(postId);
+        }
+
+        public async Task<Post> GetSingleWithComments(string postId)
+        {
+            var postMessagesSpec = new SingleBlogPostWithCommentsSpecification(postId);
+
+            return this.blogPostRepository.GetSingleBySpec(postMessagesSpec);
         }
 
         public async Task RemovePost(string postId, string id)

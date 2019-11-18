@@ -72,11 +72,7 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
 
-<section class="ftco-section bg-light">
-    <div class="container">
         <div class="row">
             @if (Model.HomePosts.Count() == 0)
             {
@@ -88,7 +84,7 @@
                 {
                     <div class="col-md-4 ftco-animate">
                         <div class="blog-entry">
-                            <a asp-controller="Blog" asp-action="Post" asp-route-postId="@post.PostId" class="block-20" style="background-image: url('/mainSite/images/image_1.jpg');">
+                            <a asp-controller="Blog" asp-action="PostComment" asp-route-postId="@post.PostId" class="block-20" style="background-image: url('/mainSite/images/image_1.jpg');">
                             </a>
                             <div class="text d-flex py-4">
                                 <div class="meta mb-3">

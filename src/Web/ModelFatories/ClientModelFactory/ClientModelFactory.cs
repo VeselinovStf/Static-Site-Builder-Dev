@@ -16,7 +16,7 @@ namespace Web.ModelFatories.ClientModelFactory
                 HomePosts = new List<HomeAreaPostsViewModel>(serviceCall.Select(p => new HomeAreaPostsViewModel()
                 {
                     AuthorName = p.AuthorName,
-                    CommentsCount = p.CommentsCount,
+                    CommentsCount = p.Comments.Count(),
                     Content = p.Content,
                     Header = p.Header,
                     Image = p.Image,

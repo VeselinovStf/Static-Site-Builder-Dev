@@ -13,5 +13,7 @@ namespace Web.ModelFatories.BlogModelFactory.Abstraction
         AdministratedPostViewModel Create(AdministratedPostDTO inputModel);
 
         PublicPostViewModel Create(PublicPostDTO inputModel);
+
+        ClientPostViewModel Create(ClientPostDTO serviceCall);
     }
 }

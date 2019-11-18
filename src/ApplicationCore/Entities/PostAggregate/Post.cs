@@ -25,16 +25,18 @@ namespace ApplicationCore.Entities.PostAggregate
         {
             get
             {
-                return _comments.AsReadOnly();
+                return new List<Comment>(_comments);
             }
         }
 
-        public void AddComment(string authorId, string authorName,
+        public void AddComment(string postId, string authorId, string authorName,
             DateTime pubDate, string content)
         {
             this._comments.Add(new Comment()
             {
+                PostId = postId,
                 AuthorId = authorId,
+                AuthorName = authorName,
                 PubDate = pubDate,
                 Content = content
             });
