@@ -27,7 +27,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string clientId)
+        public async Task<IActionResult> Index(string clientId, bool walktry = false)
         {
             try
             {

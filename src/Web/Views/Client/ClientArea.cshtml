@@ -33,7 +33,7 @@
                         </a>
                     </div>
                     <div class="col-md-6 ftco-animate">
-                        <a asp-controller="Contact" asp-action="Index">
+                        <a asp-controller="Widjets" asp-action="Index" asp-route-clientId="@Model.ClientId" asp-route-walktry="@true">
                             <div class="media block-6 services border text-center">
                                 <div class="icon d-flex align-items-center justify-content-center">
                                     <span class="flaticon-cloud"></span>
@@ -46,7 +46,7 @@
                         </a>
                     </div>
                     <div class="col-md-6 ftco-animate">
-                        <a asp-controller="Contact" asp-action="Index">
+                        <a asp-controller="SiteSelling" asp-action="Index" asp-route-clientId="@Model.ClientId" asp-route-walktry="@true">
                             <div class="media block-6 services border text-center">
                                 <div class="icon d-flex align-items-center justify-content-center">
                                     <span class="flaticon-server"></span>
@@ -59,7 +59,7 @@
                         </a>
                     </div>
                     <div class="col-md-6 ftco-animate">
-                        <a asp-controller="Contact" asp-action="Index">
+                        <a asp-controller="ClientSettings" asp-action="Index" asp-route-clientId="@Model.ClientId" asp-route-walktry="@true">
                             <div class="media block-6 services border text-center">
                                 <div class="icon d-flex align-items-center justify-content-center">
                                     <span class="flaticon-database"></span>

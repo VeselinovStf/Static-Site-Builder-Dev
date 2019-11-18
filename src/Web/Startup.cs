@@ -29,6 +29,8 @@ using Web.ModelFatories.ClientSettingsModelFactory;
 using Web.ModelFatories.ClientSettingsModelFactory.Abstraction;
 using Web.ModelFatories.MessagesModelFactory;
 using Web.ModelFatories.MessagesModelFactory.Abstraction;
+using Web.ModelFatories.ProjectsModelFactory;
+using Web.ModelFatories.ProjectsModelFactory.Abstraction;
 
 namespace Web
 {
@@ -73,6 +75,9 @@ namespace Web
             services.AddScoped<IAdministratedBlogPostService<AdministratedPostDTO>, AdministratedBlogPostService>();
             services.AddScoped<IClientBlogPostService<ClientPostDTO>, ClientBlogPostService>();
             services.AddScoped<IBlogModelFactory, BlogModelFactory>();
+
+            //Projects
+            services.AddScoped<IProjectsModelFactory, ProjectsModelFactory>();
 
             //Client
             services.AddScoped<IClientModelFactory, ClientModelFactory>();
