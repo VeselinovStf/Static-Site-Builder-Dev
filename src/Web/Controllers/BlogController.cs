@@ -34,7 +34,7 @@ namespace Web.Controllers
         {
             try
             {
-                var serviceCall = await this.publicBlogPostService.GetAllPublicPosts();
+                var serviceCall = await this.publicBlogPostService.GetAllPublicPostsAsync();
 
                 this.logger.LogInformation($"{nameof(BlogController)} : {nameof(Index)} : Geting public blog posts done.");
 
@@ -56,7 +56,7 @@ namespace Web.Controllers
         {
             try
             {
-                var serviceCall = await this.administratedBlogPostService.GetAllAdminPosts(clientId);
+                var serviceCall = await this.administratedBlogPostService.GetAllAdminPostsAsync(clientId);
 
                 this.logger.LogInformation($"{nameof(BlogController)} : {nameof(Index)} : Geting public blog posts done.");
 
@@ -95,7 +95,7 @@ namespace Web.Controllers
             {
                 try
                 {
-                    var serviceCallClientId = await this.administratedBlogPostService.Create(model.Header, model.Image, model.Content, model.AuthorName);
+                    var serviceCallClientId = await this.administratedBlogPostService.CreateAsync(model.Header, model.Image, model.Content, model.AuthorName);
 
                     this.logger.LogInformation($"{nameof(BlogController)} : {nameof(Create)} : Blog post created.");
 
@@ -118,7 +118,7 @@ namespace Web.Controllers
         {
             try
             {
-                var serviceCall = await this.administratedBlogPostService.GetSinglePost(postId, authorName);
+                var serviceCall = await this.administratedBlogPostService.GetSinglePostAsync(postId, authorName);
 
                 this.logger.LogInformation($"{nameof(BlogController)} : {nameof(EditPost)} : Getting single blog post done.");
 
@@ -141,7 +141,7 @@ namespace Web.Controllers
         {
             try
             {
-                var serviceCall = await this.administratedBlogPostService.EditPost(model.PostId, model.AuthorName, model.Header, model.Image, model.Content);
+                var serviceCall = await this.administratedBlogPostService.EditPostAsync(model.PostId, model.AuthorName, model.Header, model.Image, model.Content);
 
                 this.logger.LogInformation($"{nameof(BlogController)} : {nameof(EditPost)} : Editing single blog post done.");
 
@@ -163,7 +163,7 @@ namespace Web.Controllers
         {
             try
             {
-                var serviceCall = await this.administratedBlogPostService.GetSinglePost(postId, authorName);
+                var serviceCall = await this.administratedBlogPostService.GetSinglePostAsync(postId, authorName);
 
                 this.logger.LogInformation($"{nameof(BlogController)} : {nameof(EditPost)} : Getting single blog post done.");
 
@@ -186,7 +186,7 @@ namespace Web.Controllers
         {
             try
             {
-                var serviceCallClientId = await this.administratedBlogPostService.DeletePost(model.PostId, model.AuthorName);
+                var serviceCallClientId = await this.administratedBlogPostService.DeletePostAsync(model.PostId, model.AuthorName);
 
                 this.logger.LogInformation($"{nameof(BlogController)} : {nameof(DeletePost)} : Deleting single blog post done.");
 
@@ -206,7 +206,7 @@ namespace Web.Controllers
         {
             try
             {
-                var serviceCall = await this.publicBlogPostService.GetSinglePublicPost(postId);
+                var serviceCall = await this.publicBlogPostService.GetSinglePublicPostAsync(postId);
 
                 this.logger.LogInformation($"{nameof(BlogController)} : {nameof(Post)} : Getting single blog post done.");
 

@@ -5,8 +5,8 @@ namespace ApplicationCore.Interfaces
 {
     public interface IPublicBlogPostService<T>
     {
-        Task<IEnumerable<T>> GetAllPublicPosts();
+        Task<IEnumerable<T>> GetAllPublicPostsAsync();
 
-        Task<T> GetSinglePublicPost(string postId);
+        Task<T> GetSinglePublicPostAsync(string postId);
     }
 }

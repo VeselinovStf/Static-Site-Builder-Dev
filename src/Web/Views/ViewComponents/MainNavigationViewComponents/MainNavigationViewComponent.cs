@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Web.Models;
 using Web.ViewModels.ViewComponentModels;
 
 namespace Web.Views.ViewComponents.MainNavigationViewComponents
@@ -27,36 +28,50 @@ namespace Web.Views.ViewComponents.MainNavigationViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var user = this.httpContext.HttpContext.User;
-
-            if (this.accountService.IsSignedIn(user))
+            try
             {
-                var client = await this.accountService.RetrieveUserAsync(user);
-                var role = await this.accountService.GetRolesAsync(client);
+                var user = this.httpContext.HttpContext.User;
 
-                var clientViewModel = new ClientViewComponentViewModel()
+                if (this.accountService.IsSignedIn(user))
                 {
-                    ClientId = client.Id
-                };
+                    var client = await this.accountService.RetrieveUserAsync(user);
+                    var role = await this.accountService.GetRolesAsync(client);
 
-                if (role.Contains("Client"))
-                {
-                    return View("ClientMenu", clientViewModel);
+                    var clientViewModel = new MainNavigationComponentViewModel()
+                    {
+                        ClientId = client.Id
+                    };
+
+                    if (role.Contains("Client"))
+                    {
+                        return View("ClientMenu", clientViewModel);
+                    }
+                    else
+                    {
+                        if (role.Contains("Administrator"))
+                        {
+                            return View("AdministratorMenu", clientViewModel);
+                        }
+                    }
                 }
                 else
                 {
-                    if (role.Contains("Administrator"))
-                    {
-                        return View("AdministratorMenu", clientViewModel);
-                    }
+                    return View("GuestMenu");
                 }
-            }
-            else
-            {
-                return View("GuestMenu");
-            }
 
-            return View();
+                return View();
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(MainNavigationViewComponent)} : {nameof(InvokeAsync)} : Exception : {ex.Message}");
+
+                var model = new ErrorViewModel()
+                {
+                    Message = "Some error accure.. Please contact site support for help."
+                };
+
+                return View("DefaultError", model);
+            }
         }
     }
 }

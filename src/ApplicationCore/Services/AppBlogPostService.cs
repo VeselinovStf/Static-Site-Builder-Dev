@@ -59,6 +59,11 @@ namespace ApplicationCore.Services
             return await this.blogPostRepository.ListAsync(clientMailBoxSpec);
         }
 
+        public async Task<IEnumerable<Post>> GetAllClientPostsAsync()
+        {
+            return await this.blogPostRepository.ListAllAsync();
+        }
+
         public async Task<IEnumerable<Post>> GetAllPublicWithAuthorAsync()
         {
             return await this.blogPostRepository.ListAllAsync();

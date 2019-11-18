@@ -19,5 +19,7 @@ namespace ApplicationCore.Interfaces
         Task RemovePost(string postId, string id);
 
         Task<Post> GetSinglePublicAsync(string postId);
+
+        Task<IEnumerable<Post>> GetAllClientPostsAsync();
     }
 }

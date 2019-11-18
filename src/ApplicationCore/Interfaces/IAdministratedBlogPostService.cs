@@ -5,14 +5,14 @@ namespace ApplicationCore.Interfaces
 {
     public interface IAdministratedBlogPostService<T>
     {
-        Task<IEnumerable<T>> GetAllAdminPosts(string clientId);
+        Task<IEnumerable<T>> GetAllAdminPostsAsync(string clientId);
 
-        Task<string> Create(string header, string image, string content, string authorName);
+        Task<string> CreateAsync(string header, string image, string content, string authorName);
 
-        Task<T> GetSinglePost(string postId, string authorName);
+        Task<T> GetSinglePostAsync(string postId, string authorName);
 
-        Task<T> EditPost(string postId, string authorName, string header, string image, string content);
+        Task<T> EditPostAsync(string postId, string authorName, string header, string image, string content);
 
-        Task<string> DeletePost(string postId, string authorName);
+        Task<string> DeletePostAsync(string postId, string authorName);
     }
 }

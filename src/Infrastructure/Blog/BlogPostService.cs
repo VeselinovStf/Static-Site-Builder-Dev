@@ -13,7 +13,10 @@ namespace Infrastructure.Blog
     /// <summary>
     /// User Infrastructure Service to apply any bussiness rules, use Core Service for actual action
     /// </summary>
-    public class BlogPostService : IPublicBlogPostService<PublicPostDTO>, IAdministratedBlogPostService<AdministratedPostDTO>
+    public class BlogPostService :
+        IPublicBlogPostService<PublicPostDTO>,
+        IAdministratedBlogPostService<AdministratedPostDTO>,
+        IClientBlogPostService<ClientPostDTO>
     {
         private readonly IAppBlogPostService appBlogPostService;
         private readonly IAccountService<ApplicationUser> accountService;
@@ -26,26 +29,26 @@ namespace Infrastructure.Blog
             this.accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
         }
 
-        public async Task<string> Create(string header, string image, string content, string authorName)
+        public async Task<string> CreateAsync(string header, string image, string content, string authorName)
         {
             Validator.StringIsNullOrEmpty(
-              header, $"{nameof(BlogPostService)} : {nameof(Create)} : {nameof(header)} : is null/empty");
+              header, $"{nameof(BlogPostService)} : {nameof(CreateAsync)} : {nameof(header)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-              image, $"{nameof(BlogPostService)} : {nameof(Create)} : {nameof(image)} : is null/empty");
+              image, $"{nameof(BlogPostService)} : {nameof(CreateAsync)} : {nameof(image)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-              content, $"{nameof(BlogPostService)} : {nameof(Create)} : {nameof(content)} : is null/empty");
+              content, $"{nameof(BlogPostService)} : {nameof(CreateAsync)} : {nameof(content)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-              authorName, $"{nameof(BlogPostService)} : {nameof(Create)} : {nameof(authorName)} : is null/empty");
+              authorName, $"{nameof(BlogPostService)} : {nameof(CreateAsync)} : {nameof(authorName)} : is null/empty");
 
             try
             {
                 var client = await this.accountService.FindByUserNameAsync(authorName);
 
                 Validator.ObjectIsNull(
-                    client, $"{nameof(BlogPostService)} : {nameof(Create)} : {nameof(client)} : Can't find any client with this id");
+                    client, $"{nameof(BlogPostService)} : {nameof(CreateAsync)} : {nameof(client)} : Can't find any client with this id");
 
                 var roles = await this.accountService.GetRolesAsync(client);
 
@@ -54,13 +57,13 @@ namespace Infrastructure.Blog
                     var createCall = await this.appBlogPostService.CreatePost(header, image, content, authorName, client.Id);
 
                     Validator.ObjectIsNull(
-                        createCall, $"{nameof(BlogPostService)} : {nameof(Create)} : {nameof(createCall)} : Can't create new post");
+                        createCall, $"{nameof(BlogPostService)} : {nameof(CreateAsync)} : {nameof(createCall)} : Can't create new post");
 
                     return createCall.AuthorId;
                 }
                 else
                 {
-                    throw new InvalidOperationException($"{nameof(BlogPostService)} : {nameof(Create)} : -- CRYTICAL -- ADMINISTRATION USER EXCEPTION! : USER : {authorName}");
+                    throw new InvalidOperationException($"{nameof(BlogPostService)} : {nameof(CreateAsync)} : -- CRYTICAL -- ADMINISTRATION USER EXCEPTION! : USER : {authorName}");
                 }
             }
             catch (Exception ex)
@@ -69,20 +72,20 @@ namespace Infrastructure.Blog
             }
         }
 
-        public async Task<string> DeletePost(string postId, string authorName)
+        public async Task<string> DeletePostAsync(string postId, string authorName)
         {
             Validator.StringIsNullOrEmpty(
-              postId, $"{nameof(BlogPostService)} : {nameof(DeletePost)} : {nameof(postId)} : is null/empty");
+              postId, $"{nameof(BlogPostService)} : {nameof(DeletePostAsync)} : {nameof(postId)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-              authorName, $"{nameof(BlogPostService)} : {nameof(DeletePost)} : {nameof(authorName)} : is null/empty");
+              authorName, $"{nameof(BlogPostService)} : {nameof(DeletePostAsync)} : {nameof(authorName)} : is null/empty");
 
             try
             {
                 var client = await this.accountService.FindByUserNameAsync(authorName);
 
                 Validator.ObjectIsNull(
-                    client, $"{nameof(BlogPostService)} : {nameof(Create)} : {nameof(client)} : Can't find any client with this id");
+                    client, $"{nameof(BlogPostService)} : {nameof(CreateAsync)} : {nameof(client)} : Can't find any client with this id");
 
                 var roles = await this.accountService.GetRolesAsync(client);
 
@@ -94,7 +97,7 @@ namespace Infrastructure.Blog
                 }
                 else
                 {
-                    throw new InvalidOperationException($"{nameof(BlogPostService)} : {nameof(Create)} : -- CRYTICAL -- ADMINISTRATION USER EXCEPTION! : USER : {authorName}");
+                    throw new InvalidOperationException($"{nameof(BlogPostService)} : {nameof(CreateAsync)} : -- CRYTICAL -- ADMINISTRATION USER EXCEPTION! : USER : {authorName}");
                 }
             }
             catch (Exception ex)
@@ -103,29 +106,29 @@ namespace Infrastructure.Blog
             }
         }
 
-        public async Task<AdministratedPostDTO> EditPost(string postId, string authorName, string header, string image, string content)
+        public async Task<AdministratedPostDTO> EditPostAsync(string postId, string authorName, string header, string image, string content)
         {
             Validator.StringIsNullOrEmpty(
-                postId, $"{nameof(BlogPostService)} : {nameof(EditPost)} : {nameof(postId)} : is null/empty");
+                postId, $"{nameof(BlogPostService)} : {nameof(EditPostAsync)} : {nameof(postId)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-                authorName, $"{nameof(BlogPostService)} : {nameof(EditPost)} : {nameof(authorName)} : is null/empty");
+                authorName, $"{nameof(BlogPostService)} : {nameof(EditPostAsync)} : {nameof(authorName)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-                header, $"{nameof(BlogPostService)} : {nameof(EditPost)} : {nameof(header)} : is null/empty");
+                header, $"{nameof(BlogPostService)} : {nameof(EditPostAsync)} : {nameof(header)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-                image, $"{nameof(BlogPostService)} : {nameof(EditPost)} : {nameof(image)} : is null/empty");
+                image, $"{nameof(BlogPostService)} : {nameof(EditPostAsync)} : {nameof(image)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-                content, $"{nameof(BlogPostService)} : {nameof(EditPost)} : {nameof(content)} : is null/empty");
+                content, $"{nameof(BlogPostService)} : {nameof(EditPostAsync)} : {nameof(content)} : is null/empty");
 
             try
             {
                 var client = await this.accountService.FindByUserNameAsync(authorName);
 
                 Validator.ObjectIsNull(
-                    client, $"{nameof(BlogPostService)} : {nameof(EditPost)} : {nameof(client)} : Can't find any client with this id");
+                    client, $"{nameof(BlogPostService)} : {nameof(EditPostAsync)} : {nameof(client)} : Can't find any client with this id");
 
                 var roles = await this.accountService.GetRolesAsync(client);
 
@@ -134,7 +137,7 @@ namespace Infrastructure.Blog
                     var postEditCall = await this.appBlogPostService.EditPostAsync(client.Id, postId, header, image, content);
 
                     Validator.ObjectIsNull(
-                        postEditCall, $"{nameof(BlogPostService)} : {nameof(EditPost)} : {nameof(postEditCall)} : Can't edit post with this credidentials.");
+                        postEditCall, $"{nameof(BlogPostService)} : {nameof(EditPostAsync)} : {nameof(postEditCall)} : Can't edit post with this credidentials.");
 
                     return new AdministratedPostDTO()
                     {
@@ -155,7 +158,7 @@ namespace Infrastructure.Blog
                 }
                 else
                 {
-                    throw new InvalidOperationException($"{nameof(BlogPostService)} : {nameof(EditPost)} : -- CRYTICAL -- ADMINISTRATION USER EXCEPTION! : USER : {authorName}");
+                    throw new InvalidOperationException($"{nameof(BlogPostService)} : {nameof(EditPostAsync)} : -- CRYTICAL -- ADMINISTRATION USER EXCEPTION! : USER : {authorName}");
                 }
             }
             catch (Exception ex)
@@ -164,17 +167,17 @@ namespace Infrastructure.Blog
             }
         }
 
-        public async Task<IEnumerable<AdministratedPostDTO>> GetAllAdminPosts(string clientId)
+        public async Task<IEnumerable<AdministratedPostDTO>> GetAllAdminPostsAsync(string clientId)
         {
             Validator.StringIsNullOrEmpty(
-                clientId, $"{nameof(BlogPostService)} : {nameof(GetAllAdminPosts)} : {nameof(clientId)} : is null/empty");
+                clientId, $"{nameof(BlogPostService)} : {nameof(GetAllAdminPostsAsync)} : {nameof(clientId)} : is null/empty");
 
             try
             {
                 var client = await this.accountService.FindByIdAsync(clientId);
 
                 Validator.ObjectIsNull(
-                client, $"{nameof(BlogPostService)} : {nameof(GetAllAdminPosts)} : {nameof(client)} : Can't find any client with this id");
+                client, $"{nameof(BlogPostService)} : {nameof(GetAllAdminPostsAsync)} : {nameof(client)} : Can't find any client with this id");
 
                 var roles = await this.accountService.GetRolesAsync(client);
 
@@ -183,7 +186,7 @@ namespace Infrastructure.Blog
                     var publicPostCall = await this.appBlogPostService.GetAllAdminWithCommentsAsync(clientId);
 
                     Validator.ObjectIsNull(
-                      publicPostCall, $"{nameof(BlogPostService)} : {nameof(GetAllAdminPosts)} : {nameof(publicPostCall)} : Can't find any posts");
+                      publicPostCall, $"{nameof(BlogPostService)} : {nameof(GetAllAdminPostsAsync)} : {nameof(publicPostCall)} : Can't find any posts");
 
                     var serviceModel = publicPostCall.Count() > 0 ? new List<AdministratedPostDTO>(publicPostCall.Select(p => new AdministratedPostDTO()
                     {
@@ -193,7 +196,7 @@ namespace Infrastructure.Blog
                         AuthorName = p.AuthorName,
                         Content = p.Content,
                         PostId = p.Id,
-                        Comments = p.Content.Count() > 0 ? new List<AdministratedCommentsDTO>(p.Comments.Select(c => new AdministratedCommentsDTO()
+                        Comments = p.Comments.Count() > 0 ? new List<AdministratedCommentsDTO>(p.Comments.Select(c => new AdministratedCommentsDTO()
                         {
                             AuthorName = c.AuthorName,
                             AuthorId = c.AuthorId,
@@ -206,7 +209,7 @@ namespace Infrastructure.Blog
                 }
                 else
                 {
-                    throw new InvalidOperationException($"{nameof(BlogPostService)} : {nameof(GetAllAdminPosts)} : -- CRYTICAL -- ADMINISTRATION USER EXCEPTION! : USER : {clientId}");
+                    throw new InvalidOperationException($"{nameof(BlogPostService)} : {nameof(GetAllAdminPostsAsync)} : -- CRYTICAL -- ADMINISTRATION USER EXCEPTION! : USER : {clientId}");
                 }
             }
             catch (Exception ex)
@@ -215,14 +218,59 @@ namespace Infrastructure.Blog
             }
         }
 
-        public async Task<IEnumerable<PublicPostDTO>> GetAllPublicPosts()
+        public async Task<IEnumerable<ClientPostDTO>> GetAllClientPostsWithCommentsAsync(string clientId)
+        {
+            Validator.StringIsNullOrEmpty(
+                clientId, $"{nameof(BlogPostService)} : {nameof(GetAllClientPostsWithCommentsAsync)} : {nameof(clientId)} : is null/empty");
+
+            try
+            {
+                var client = await this.accountService.FindByIdAsync(clientId);
+
+                Validator.ObjectIsNull(
+                client, $"{nameof(BlogPostService)} : {nameof(GetAllClientPostsWithCommentsAsync)} : {nameof(client)} : Can't find any client with this id");
+
+                var roles = await this.accountService.GetRolesAsync(client);
+
+                if (roles.Contains("Client"))
+                {
+                    var publicPostCall = await this.appBlogPostService.GetAllClientPostsAsync();
+
+                    Validator.ObjectIsNull(
+                      publicPostCall, $"{nameof(BlogPostService)} : {nameof(GetAllClientPostsWithCommentsAsync)} : {nameof(publicPostCall)} : Can't find any posts");
+
+                    var serviceModel = publicPostCall.Count() > 0 ? new List<ClientPostDTO>(publicPostCall.Select(p => new ClientPostDTO()
+                    {
+                        Header = p.Header,
+                        Image = p.Image,
+                        PubDate = p.PubDate,
+                        AuthorName = p.AuthorName,
+                        Content = p.Content,
+                        PostId = p.Id,
+                        CommentsCount = p.Comments.Count()
+                    })) : new List<ClientPostDTO>();
+
+                    return serviceModel;
+                }
+                else
+                {
+                    throw new InvalidOperationException($"{nameof(BlogPostService)} : {nameof(GetAllClientPostsWithCommentsAsync)} : -- CRYTICAL -- CLIENT USER EXCEPTION! : USER : {clientId}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new BlogPostServiceGetAllClientPostsWithCommentsException($"{nameof(BlogPostServiceGetAllClientPostsWithCommentsException)} : Can't get Client posts {ex.Message}");
+            }
+        }
+
+        public async Task<IEnumerable<PublicPostDTO>> GetAllPublicPostsAsync()
         {
             try
             {
                 var publicPostCall = await this.appBlogPostService.GetAllPublicWithAuthorAsync();
 
                 Validator.ObjectIsNull(
-                  publicPostCall, $"{nameof(BlogPostService)} : {nameof(GetAllPublicPosts)} : {nameof(publicPostCall)} : Can't find any posts");
+                  publicPostCall, $"{nameof(BlogPostService)} : {nameof(GetAllPublicPostsAsync)} : {nameof(publicPostCall)} : Can't find any posts");
 
                 var serviceModel = publicPostCall.Count() > 0 ? new List<PublicPostDTO>(publicPostCall.Select(p => new PublicPostDTO()
                 {
@@ -242,20 +290,20 @@ namespace Infrastructure.Blog
             }
         }
 
-        public async Task<AdministratedPostDTO> GetSinglePost(string postId, string authorName)
+        public async Task<AdministratedPostDTO> GetSinglePostAsync(string postId, string authorName)
         {
             Validator.StringIsNullOrEmpty(
-            postId, $"{nameof(BlogPostService)} : {nameof(GetSinglePost)} : {nameof(postId)} : is null/empty");
+            postId, $"{nameof(BlogPostService)} : {nameof(GetSinglePostAsync)} : {nameof(postId)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-             authorName, $"{nameof(BlogPostService)} : {nameof(GetSinglePost)} : {nameof(authorName)} : is null/empty");
+             authorName, $"{nameof(BlogPostService)} : {nameof(GetSinglePostAsync)} : {nameof(authorName)} : is null/empty");
 
             try
             {
                 var client = await this.accountService.FindByUserNameAsync(authorName);
 
                 Validator.ObjectIsNull(
-                    client, $"{nameof(BlogPostService)} : {nameof(GetSinglePost)} : {nameof(client)} : Can't find any client with this id");
+                    client, $"{nameof(BlogPostService)} : {nameof(GetSinglePostAsync)} : {nameof(client)} : Can't find any client with this id");
 
                 var roles = await this.accountService.GetRolesAsync(client);
 
@@ -264,7 +312,7 @@ namespace Infrastructure.Blog
                     var postCall = this.appBlogPostService.GetSingleAsync(client.Id, postId);
 
                     Validator.ObjectIsNull(
-                        postCall, $"{nameof(BlogPostService)} : {nameof(GetSinglePost)} : {nameof(postCall)} : Can't get post with this credidentials.");
+                        postCall, $"{nameof(BlogPostService)} : {nameof(GetSinglePostAsync)} : {nameof(postCall)} : Can't get post with this credidentials.");
 
                     return new AdministratedPostDTO()
                     {
@@ -285,7 +333,7 @@ namespace Infrastructure.Blog
                 }
                 else
                 {
-                    throw new InvalidOperationException($"{nameof(BlogPostService)} : {nameof(GetSinglePost)} : -- CRYTICAL -- ADMINISTRATION USER EXCEPTION! : USER : {authorName}");
+                    throw new InvalidOperationException($"{nameof(BlogPostService)} : {nameof(GetSinglePostAsync)} : -- CRYTICAL -- ADMINISTRATION USER EXCEPTION! : USER : {authorName}");
                 }
             }
             catch (Exception ex)
@@ -294,17 +342,17 @@ namespace Infrastructure.Blog
             }
         }
 
-        public async Task<PublicPostDTO> GetSinglePublicPost(string postId)
+        public async Task<PublicPostDTO> GetSinglePublicPostAsync(string postId)
         {
             Validator.StringIsNullOrEmpty(
-           postId, $"{nameof(BlogPostService)} : {nameof(GetSinglePublicPost)} : {nameof(postId)} : is null/empty");
+           postId, $"{nameof(BlogPostService)} : {nameof(GetSinglePublicPostAsync)} : {nameof(postId)} : is null/empty");
 
             try
             {
                 var postCall = await this.appBlogPostService.GetSinglePublicAsync(postId);
 
                 Validator.ObjectIsNull(
-                    postCall, $"{nameof(BlogPostService)} : {nameof(GetSinglePost)} : {nameof(postCall)} : Can't get post with this credidentials.");
+                    postCall, $"{nameof(BlogPostService)} : {nameof(GetSinglePostAsync)} : {nameof(postCall)} : Can't get post with this credidentials.");
 
                 return new PublicPostDTO()
                 {

@@ -19,8 +19,12 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using Web.ModelFatories.AccountManageModelFactory;
 using Web.ModelFatories.AccountManageModelFactory.Abstraction;
+using Web.ModelFatories.AdminModelFactory;
+using Web.ModelFatories.AdminModelFactory.Abstraction;
 using Web.ModelFatories.BlogModelFactory;
 using Web.ModelFatories.BlogModelFactory.Abstraction;
+using Web.ModelFatories.ClientModelFactory;
+using Web.ModelFatories.ClientModelFactory.Abstraction;
 using Web.ModelFatories.ClientSettingsModelFactory;
 using Web.ModelFatories.ClientSettingsModelFactory.Abstraction;
 using Web.ModelFatories.MessagesModelFactory;
@@ -67,7 +71,14 @@ namespace Web
             services.AddScoped<IAppBlogPostService, AppBlogPostService>();
             services.AddScoped<IPublicBlogPostService<PublicPostDTO>, BlogPostService>();
             services.AddScoped<IAdministratedBlogPostService<AdministratedPostDTO>, BlogPostService>();
+            services.AddScoped<IClientBlogPostService<ClientPostDTO>, BlogPostService>();
             services.AddScoped<IBlogModelFactory, BlogModelFactory>();
+
+            //Client
+            services.AddScoped<IClientModelFactory, ClientModelFactory>();
+
+            //Admin
+            services.AddScoped<IAdminModelFactory, AdminModelFactory>();
 
             services.AddScoped<IAppMailBoxService, AppMailBoxService>();
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
