@@ -2,7 +2,7 @@
 using ApplicationCore.Interfaces;
 using System;
 
-namespace ApplicationCore.Entities.StoreSiteTypeEntities
+namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
 {
     public class Product : DescriptiveEntity, IProductWidjets
     {

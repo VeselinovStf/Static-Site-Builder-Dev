@@ -1,8 +1,7 @@
-﻿using ApplicationCore.Entities.BlogSiteTypeEntities;
-using ApplicationCore.Entities.MessageAggregate;
+﻿using ApplicationCore.Entities.MessageAggregate;
 using ApplicationCore.Entities.PostAggregate;
-using ApplicationCore.Entities.StoreSiteTypeEntities;
-using ApplicationCore.Entities.WidjetsEntity;
+using ApplicationCore.Entities.SiteProjectAggregate;
+using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -22,9 +21,9 @@ namespace Infrastructure.Identity
         public ICollection<Post> Posts { get; set; }
         public ICollection<Comment> Comments { get; set; }
 
-        public ICollection<StoreTypeSite> StoreSites { get; set; }
+        public string ProjectId { get; set; }
 
-        public ICollection<BlogTypeSite> BlogSites { get; set; }
+        public Project Project { get; set; }
 
         public ICollection<ClientWidjet> ClientWidjets { get; set; }
     }

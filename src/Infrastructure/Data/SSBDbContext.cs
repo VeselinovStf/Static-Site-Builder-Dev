@@ -1,5 +1,10 @@
-﻿using ApplicationCore.Entities.MessageAggregate;
+﻿using ApplicationCore.Entities;
+using ApplicationCore.Entities.BlogSiteTypeEntities;
+using ApplicationCore.Entities.BlogTypeSiteEntitiesAggregate;
+using ApplicationCore.Entities.MessageAggregate;
 using ApplicationCore.Entities.PostAggregate;
+using ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate;
+using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -14,9 +19,26 @@ namespace Infrastructure.Data
 {
     public class SSBDbContext : IdentityDbContext<ApplicationUser>
     {
+        //Application Site Building
+        public DbSet<StoreTypeSite> StoreTypeSites { get; set; }
+
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductFrontMatter> ProductsFrontMatters { get; set; }
+        public DbSet<BlogTypeSite> BlogTypeSites { get; set; }
+        public DbSet<BlogPost> BlogPosts { get; set; }
+        public DbSet<BlogPostFrontMatter> BlogPostFrontMatters { get; set; }
+        public DbSet<ClientWidjet> ClientWidjets { get; set; }
+        public DbSet<WidjetElement> WidjetElements { get; set; }
+        public DbSet<LaunchConfig> LaunchConfigs { get; set; }
+
+        //Application Messaging System
         public DbSet<Message> Messages { get; set; }
+
         public DbSet<MailBox> MailBoxes { get; set; }
+
+        //Application Blog System
         public DbSet<Post> Posts { get; set; }
+
         public DbSet<Comment> Comments { get; set; }
 
         public SSBDbContext(DbContextOptions<SSBDbContext> options)

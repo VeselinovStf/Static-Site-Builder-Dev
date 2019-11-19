@@ -1,6 +1,6 @@
 ﻿using ApplicationCore.Entities.BaseEntities;
 
-namespace ApplicationCore.Entities.StoreSiteTypeEntities
+namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
 {
     public class ProductFrontMatter : BaseFrontMatter
     {

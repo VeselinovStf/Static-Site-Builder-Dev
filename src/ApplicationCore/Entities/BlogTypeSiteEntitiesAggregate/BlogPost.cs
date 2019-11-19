@@ -1,9 +1,10 @@
-﻿using ApplicationCore.Entities.BlogSiteTypeEntities;
+﻿using ApplicationCore.Entities.BaseEntities;
+using ApplicationCore.Entities.BlogSiteTypeEntities;
 using System;
 
-namespace ApplicationCore.Entities.BlogTypeSiteEntities
+namespace ApplicationCore.Entities.BlogTypeSiteEntitiesAggregate
 {
-    public class BlogPost
+    public class BlogPost : DescriptiveEntity
     {
         public string Header { get; set; }
 

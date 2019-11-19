@@ -1,6 +1,6 @@
 ﻿using ApplicationCore.Entities.BaseEntities;
 
-namespace ApplicationCore.Entities.BlogTypeSiteEntities
+namespace ApplicationCore.Entities.BlogTypeSiteEntitiesAggregate
 {
     public class BlogPostFrontMatter : BaseFrontMatter
     {
