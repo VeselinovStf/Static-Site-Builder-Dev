@@ -8,13 +8,13 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
     {
         public string ClientId { get; set; }
 
-        private readonly List<WidjetElement> _widjetElements = new List<WidjetElement>();
+        private readonly List<WidjetElement> _clientWidjets = new List<WidjetElement>();
 
         public IReadOnlyCollection<WidjetElement> ClientWidjets
         {
             get
             {
-                return new List<WidjetElement>(_widjetElements.AsReadOnly());
+                return new List<WidjetElement>(_clientWidjets.AsReadOnly());
             }
         }
 
@@ -22,7 +22,7 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
             decimal price, int version, double votes,
            bool isOn, bool isFree)
         {
-            _widjetElements.Add(new WidjetElement()
+            _clientWidjets.Add(new WidjetElement()
             {
                 Name = name,
                 Description = description,

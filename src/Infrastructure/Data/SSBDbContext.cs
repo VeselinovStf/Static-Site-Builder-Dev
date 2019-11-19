@@ -3,6 +3,7 @@ using ApplicationCore.Entities.BlogSiteTypeEntities;
 using ApplicationCore.Entities.BlogTypeSiteEntitiesAggregate;
 using ApplicationCore.Entities.MessageAggregate;
 using ApplicationCore.Entities.PostAggregate;
+using ApplicationCore.Entities.SiteProjectAggregate;
 using ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate;
 using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
@@ -20,8 +21,9 @@ namespace Infrastructure.Data
     public class SSBDbContext : IdentityDbContext<ApplicationUser>
     {
         //Application Site Building
-        public DbSet<StoreTypeSite> StoreTypeSites { get; set; }
+        public DbSet<Project> Projects { get; set; }
 
+        public DbSet<StoreTypeSite> StoreTypeSites { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductFrontMatter> ProductsFrontMatters { get; set; }
         public DbSet<BlogTypeSite> BlogTypeSites { get; set; }

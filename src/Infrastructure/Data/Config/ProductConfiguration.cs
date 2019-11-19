@@ -10,6 +10,9 @@ namespace Infrastructure.Data.Config
         {
             builder.Property(p => p.Price)
                 .HasColumnType("decimal(5, 2)");
+
+            builder.Property(p => p.DiscountProcent)
+              .HasColumnType("decimal(5, 2)");
         }
     }
 }

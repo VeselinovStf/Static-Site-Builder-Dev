@@ -14,6 +14,8 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
 
         public bool IsOn { get; set; }
 
+        public string Key { get; set; }
+
         public bool IsFree { get; set; }
 
         public string ClientWidjetId { get; private set; }
