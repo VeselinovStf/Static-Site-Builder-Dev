@@ -791,7 +791,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("ApplicationCore.Entities.WidjetsEntityAggregate.WidjetElement", b =>
                 {
-                    b.HasOne("ApplicationCore.Entities.BaseEntities.BaseSiteProject", "AvailibleSiteWidjet")
+                    b.HasOne("ApplicationCore.Entities.SiteProjectAggregate.Project", "AvailibleSiteWidjet")
                         .WithMany("AvailibleWidjets")
                         .HasForeignKey("AvailibleSiteWidjetId");
 
@@ -799,7 +799,7 @@ namespace Infrastructure.Migrations
                         .WithMany("ClientWidjets")
                         .HasForeignKey("ClientWidjetId");
 
-                    b.HasOne("ApplicationCore.Entities.BaseEntities.BaseSiteProject", "UsedSiteWidjet")
+                    b.HasOne("ApplicationCore.Entities.SiteProjectAggregate.Project", "UsedSiteWidjet")
                         .WithMany("UsedWidjets")
                         .HasForeignKey("UsedSiteWidjetId");
                 });

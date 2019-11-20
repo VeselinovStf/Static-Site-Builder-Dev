@@ -1,6 +1,4 @@
-﻿using ApplicationCore.Entities.WidjetsEntityAggregate;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ApplicationCore.Entities.BaseEntities
 {
@@ -19,9 +17,5 @@ namespace ApplicationCore.Entities.BaseEntities
         public string ClientId { get; set; }
 
         public LaunchConfig LaunchingConfig { get; set; }
-
-        public ICollection<WidjetElement> AvailibleWidjets { get; set; }
-
-        public ICollection<WidjetElement> UsedWidjets { get; set; }
     }
 }

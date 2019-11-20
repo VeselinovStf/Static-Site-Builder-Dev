@@ -1,7 +1,6 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ProjectsListViewModel
 @{
+
 }
 <section class="ftco-section services-section bg-light">
     <section class="ftco-section ftco-counter img" id="section-counter">
@@ -9,31 +8,66 @@
             <div class="row justify-content-center mb-1">
                 <div class="col-md-3 text-center heading-section heading-section-white ftco-animate">
                     <h1>Projects</h1>
-                    <a asp-action="Create" asp-controller="Projects" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Create</a>
+                    @if (Model.WalkTry.IsWalktry)
+                    {
+                        <partial name="_WalkTryPartial.cshtml" />
+                    }
+                    <a asp-action="Create" asp-controller="Projects" asp-route-clientId="@Model.ClientId" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Create</a>
                 </div>
                 <table class="table table">
                     <thead>
                         <tr>
                             <th>
-                                Header
+                                Name
                             </th>
                             <th>
-                                Pub Date
+                                Description
                             </th>
                             <th>
-                                Author Name
+                                Created
                             </th>
                             <th>
-                                Coments
+                                Last Modified
                             </th>
-
+                            <th>
+                                Site Type
+                            </th>
+                            <th>
+                                Added Items
+                            </th>
                             <th>
                                 Actions
                             </th>
-                            <th></th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                        @foreach (var proj in Model.Projects)
+                        {
+                            <tr>
+                                <th>
+                                    @proj.Name
+                                </th>
+                                <th>
+                                    @proj.Description
+                                </th>
+                                <th>
+                                    @proj.CreatedOn
+                                </th>
+                                <th>
+                                    @proj.ModifiedOn
+                                </th>
+                                <th>
+                                    @proj.ProjectType
+                                </th>
+                                <th>
+                                    @proj.ItemsCount
+                                </th>
+                                <th>
+                                    Actions ---
+                                </th>
+                            </tr>
+                        }
+                    </tbody>
                 </table>
             </div>
         </div>

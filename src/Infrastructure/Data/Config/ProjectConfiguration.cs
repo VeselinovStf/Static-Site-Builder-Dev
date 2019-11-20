@@ -13,6 +13,14 @@ namespace Infrastructure.Data.Config
 
             var navigationBlog = builder.Metadata.FindNavigation(nameof(Project.BlogSiteTypes));
             navigationStore.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+            builder.HasMany(b => b.AvailibleWidjets)
+               .WithOne(w => w.AvailibleSiteWidjet)
+               .HasForeignKey(w => w.AvailibleSiteWidjetId);
+
+            builder.HasMany(b => b.UsedWidjets)
+               .WithOne(w => w.UsedSiteWidjet)
+               .HasForeignKey(w => w.UsedSiteWidjetId);
         }
     }
 }

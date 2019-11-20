@@ -162,6 +162,51 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WidjetElements",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
+                    Description = table.Column<string>(maxLength: 200, nullable: false),
+                    Functionality = table.Column<string>(nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(5, 2)", nullable: false),
+                    Version = table.Column<int>(nullable: false),
+                    Votes = table.Column<double>(nullable: false),
+                    IsOn = table.Column<bool>(nullable: false),
+                    Key = table.Column<string>(nullable: true),
+                    IsFree = table.Column<bool>(nullable: false),
+                    ClientWidjetId = table.Column<string>(nullable: true),
+                    AvailibleSiteWidjetId = table.Column<string>(nullable: true),
+                    UsedSiteWidjetId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WidjetElements", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WidjetElements_Projects_AvailibleSiteWidjetId",
+                        column: x => x.AvailibleSiteWidjetId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_WidjetElements_ClientWidjets_ClientWidjetId",
+                        column: x => x.ClientWidjetId,
+                        principalTable: "ClientWidjets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_WidjetElements_Projects_UsedSiteWidjetId",
+                        column: x => x.UsedSiteWidjetId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BlogPosts",
                 columns: table => new
                 {
@@ -234,51 +279,6 @@ namespace Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_Products_BaseSiteProject_ProjectId",
                         column: x => x.ProjectId,
-                        principalTable: "BaseSiteProject",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WidjetElements",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
-                    ModifiedOn = table.Column<DateTime>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeletedOn = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(maxLength: 100, nullable: false),
-                    Description = table.Column<string>(maxLength: 200, nullable: false),
-                    Functionality = table.Column<string>(nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(5, 2)", nullable: false),
-                    Version = table.Column<int>(nullable: false),
-                    Votes = table.Column<double>(nullable: false),
-                    IsOn = table.Column<bool>(nullable: false),
-                    Key = table.Column<string>(nullable: true),
-                    IsFree = table.Column<bool>(nullable: false),
-                    ClientWidjetId = table.Column<string>(nullable: true),
-                    AvailibleSiteWidjetId = table.Column<string>(nullable: true),
-                    UsedSiteWidjetId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WidjetElements", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_WidjetElements_BaseSiteProject_AvailibleSiteWidjetId",
-                        column: x => x.AvailibleSiteWidjetId,
-                        principalTable: "BaseSiteProject",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_WidjetElements_ClientWidjets_ClientWidjetId",
-                        column: x => x.ClientWidjetId,
-                        principalTable: "ClientWidjets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_WidjetElements_BaseSiteProject_UsedSiteWidjetId",
-                        column: x => x.UsedSiteWidjetId,
                         principalTable: "BaseSiteProject",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);

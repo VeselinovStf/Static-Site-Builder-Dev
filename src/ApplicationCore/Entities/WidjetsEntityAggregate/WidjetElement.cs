@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities.BaseEntities;
+using ApplicationCore.Entities.SiteProjectAggregate;
 
 namespace ApplicationCore.Entities.WidjetsEntityAggregate
 {
@@ -24,10 +25,10 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
 
         public string AvailibleSiteWidjetId { get; private set; }
 
-        public BaseSiteProject AvailibleSiteWidjet { get; set; }
+        public Project AvailibleSiteWidjet { get; set; }
 
         public string UsedSiteWidjetId { get; private set; }
 
-        public BaseSiteProject UsedSiteWidjet { get; set; }
+        public Project UsedSiteWidjet { get; set; }
     }
 }

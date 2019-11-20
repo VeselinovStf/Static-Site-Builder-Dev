@@ -11,6 +11,11 @@ namespace Infrastructure.Identity
 {
     public class ApplicationUser : IdentityUser, IDeletable, IModifiable
     {
+        public ApplicationUser()
+        {
+            this.Project = new Project();
+        }
+
         public DateTime? CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public bool IsDeleted { get; set; }

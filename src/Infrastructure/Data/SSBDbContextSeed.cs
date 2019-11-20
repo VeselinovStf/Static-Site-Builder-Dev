@@ -87,7 +87,11 @@ namespace Infrastructure.Data
                 SecurityStamp = Guid.NewGuid().ToString("D"),
                 AccessFailedCount = 0,
                 LockoutEnabled = false,
-                MailBox = mailBox
+                MailBox = mailBox,
+                Project = new ApplicationCore.Entities.SiteProjectAggregate.Project()
+                {
+                    ClientId = clientId
+                }
             };
 
             var hashePass = new PasswordHasher<ApplicationUser>().HashPassword(clientUser, "!Aa12345678");
@@ -130,7 +134,11 @@ namespace Infrastructure.Data
                 SecurityStamp = Guid.NewGuid().ToString("D"),
                 AccessFailedCount = 0,
                 LockoutEnabled = false,
-                MailBox = mailBox
+                MailBox = mailBox,
+                Project = new ApplicationCore.Entities.SiteProjectAggregate.Project()
+                {
+                    ClientId = adminId
+                }
             };
 
             var hashePass = new PasswordHasher<ApplicationUser>().HashPassword(adminUser, "!Aa12345678");

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SSBDbContext))]
-    [Migration("20191119073353_SiteCreation Models")]
+    [Migration("20191119135037_SiteCreationModels")]
     partial class SiteCreationModels
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -793,7 +793,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("ApplicationCore.Entities.WidjetsEntityAggregate.WidjetElement", b =>
                 {
-                    b.HasOne("ApplicationCore.Entities.BaseEntities.BaseSiteProject", "AvailibleSiteWidjet")
+                    b.HasOne("ApplicationCore.Entities.SiteProjectAggregate.Project", "AvailibleSiteWidjet")
                         .WithMany("AvailibleWidjets")
                         .HasForeignKey("AvailibleSiteWidjetId");
 
@@ -801,7 +801,7 @@ namespace Infrastructure.Migrations
                         .WithMany("ClientWidjets")
                         .HasForeignKey("ClientWidjetId");
 
-                    b.HasOne("ApplicationCore.Entities.BaseEntities.BaseSiteProject", "UsedSiteWidjet")
+                    b.HasOne("ApplicationCore.Entities.SiteProjectAggregate.Project", "UsedSiteWidjet")
                         .WithMany("UsedWidjets")
                         .HasForeignKey("UsedSiteWidjetId");
                 });

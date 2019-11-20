@@ -276,6 +276,7 @@ namespace Infrastructure.Identity
             Validator.StringIsNullOrEmpty(
                 password, $"{nameof(AccountService)} : {nameof(RegisterAccountAsync)} : {nameof(password)} : is null/empty");
 
+            //TODO: DON'T FORGET TO ADD MAIL BOX AND PROJECT TO USER !!!!
             var newUser = new ApplicationUser()
             {
                 UserName = userName,

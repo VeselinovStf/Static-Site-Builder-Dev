@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Entities.BaseEntities;
 using ApplicationCore.Entities.BlogSiteTypeEntities;
 using ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate;
+using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
 using System.Collections.Generic;
 
@@ -11,6 +12,10 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
         private readonly List<StoreTypeSite> _storeSiteTypes = new List<StoreTypeSite>();
 
         private readonly List<BlogTypeSite> _blogSiteTypes = new List<BlogTypeSite>();
+
+        public ICollection<WidjetElement> AvailibleWidjets { get; set; }
+
+        public ICollection<WidjetElement> UsedWidjets { get; set; }
 
         public string ClientId { get; set; }
 
