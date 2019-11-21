@@ -15,62 +15,31 @@
 
                     <a asp-action="SelectSiteType" asp-controller="SiteType" asp-route-clientId="@Model.ClientId" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Create</a>
                 </div>
-                <table class="table table">
-                    <thead>
-                        <tr>
-                            <th>
-                                Name
-                            </th>
-                            <th>
-                                Description
-                            </th>
-                            <th>
-                                Created
-                            </th>
-                            <th>
-                                Last Modified
-                            </th>
-                            <th>
-                                Site Type
-                            </th>
-                            <th>
-                                Added Items
-                            </th>
-                            <th>
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var proj in Model.Projects)
-                        {
-                            <tr>
-                                <th>
-                                    @proj.Name
-                                </th>
-                                <th>
-                                    @proj.Description
-                                </th>
-                                <th>
-                                    @proj.CreatedOn
-                                </th>
-                                <th>
-                                    @proj.ModifiedOn
-                                </th>
-                                <th>
-                                    @proj.ProjectType
-                                </th>
-                                <th>
-                                    @proj.ItemsCount
-                                </th>
-                                <th>
-                                    Actions ---
-                                </th>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
             </div>
         </div>
     </section>
+</section>
+<section>
+    <div class="container">
+        <div class="row">
+            @foreach (var proj in Model.Projects)
+            {
+                <div class="col-md-4 ftco-animate">
+                    <div class="media block-6 services border text-center">
+                        <a asp-controller="Blog" asp-action="Post" asp-route-postId="" class="block-20" style="background-image: url('/mainSite/images/image_1.jpg');">
+                        </a>
+
+                        <div class="mt-3 media-body media-body-2">
+                            <div><p>Site Name: @proj.Name</p></div>
+                            <div><p>Description: @proj.Description</p></div>
+                            <div><p>Site Type: @proj.ProjectType</p></div>
+                            <div><p>Items: @proj.ItemsCount</p></div>
+                            <div><p>Created: @proj.CreatedOn</p></div>
+                            <div><p>Last Modifications: @proj.ModifiedOn</p></div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </section>
