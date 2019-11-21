@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Interfaces;
+﻿using ApplicationCore.Entities.SiteType;
+using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
 using Infrastructure.Blog;
 using Infrastructure.Blog.DTOs;
@@ -10,6 +11,8 @@ using Infrastructure.Logging;
 using Infrastructure.Messages;
 using Infrastructure.Messages.DTOs;
 using Infrastructure.Services;
+using Infrastructure.SiteTypes;
+using Infrastructure.SiteTypes.DTOs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -33,6 +36,8 @@ using Web.ModelFatories.MessagesModelFactory;
 using Web.ModelFatories.MessagesModelFactory.Abstraction;
 using Web.ModelFatories.ProjectsModelFactory;
 using Web.ModelFatories.ProjectsModelFactory.Abstraction;
+using Web.ModelFatories.SiteTypeModelFactory;
+using Web.ModelFatories.SiteTypeModelFactory.Abstraction;
 
 namespace Web
 {
@@ -79,9 +84,13 @@ namespace Web
             services.AddScoped<IBlogModelFactory, BlogModelFactory>();
 
             //Projects
-            // services.AddScoped<IAppSiteProjectsService<Project>, AppSiteProjectsService>();
             services.AddScoped<IClientProjectService<ClientProjectDTO>, ClientProjectService>();
             services.AddScoped<IProjectsModelFactory, ProjectsModelFactory>();
+
+            //SiteTypes
+            services.AddScoped<ISiteTypesService<SiteTypeDTO>, SiteTypesService>();
+            services.AddScoped<ISiteTypeModelFactory, SiteTypeModelFactory>();
+            services.AddScoped<IAppSiteTypesService<SiteType>, AppSiteTypesService>();
 
             //Client
             services.AddScoped<IClientModelFactory, ClientModelFactory>();

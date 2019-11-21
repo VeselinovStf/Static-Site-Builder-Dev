@@ -35,11 +35,11 @@ namespace ApplicationCore.Entities.BlogSiteTypeEntities
         }
 
         //Build in site type config
-        public SiteTypes SiteTypeSpecification
+        public SiteTypesEnum SiteTypeSpecification
         {
             get
             {
-                return SiteTypes.BlogType;
+                return SiteTypesEnum.BlogType;
             }
         }
 

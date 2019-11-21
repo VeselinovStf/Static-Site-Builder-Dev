@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SSBDbContext))]
-    [Migration("20191121054050_SiteCreation")]
+    [Migration("20191121062938_SiteCreation")]
     partial class SiteCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -330,6 +330,34 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("ApplicationCore.Entities.SiteType.SiteType", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("ModifiedOn");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SiteTypes");
                 });
 
             modelBuilder.Entity("ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate.Product", b =>

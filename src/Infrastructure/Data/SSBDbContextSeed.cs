@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities.WidjetsEntityAggregate;
+﻿using ApplicationCore.Entities.SiteType;
+using ApplicationCore.Entities.WidjetsEntityAggregate;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +49,14 @@ namespace Infrastructure.Data
 
                     await ssbDbContext.SaveChangesAsync();
                 }
+
+                if (!ssbDbContext.SiteTypes.Any())
+                {
+                    await ssbDbContext.SiteTypes.AddRangeAsync(
+                        GetPreconfiguredSiteTypes());
+
+                    await ssbDbContext.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -59,6 +68,27 @@ namespace Infrastructure.Data
                     await SeedAsync(ssbDbContext, loggerFactory, retryAvailibility);
                 }
             }
+        }
+
+        private static SiteType[] GetPreconfiguredSiteTypes()
+        {
+            var storeType = new SiteType()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Multipurpose eCommerce Site",
+                Description = "Build you owne eCommersce site, sell one nich or many all depends on you. Use build in Widjets to customize and optimize your new application. Start earning in few hours.",
+                Type = SiteTypesEnum.StoreType
+            };
+
+            var blogType = new SiteType()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Blog Site",
+                Description = "Build you owne blog site. Use build in Widjets to customize and optimize your new application. Create your first posts in minutes. Start posting now.",
+                Type = SiteTypesEnum.BlogType
+            };
+
+            return new SiteType[] { storeType, blogType };
         }
 
         private static Widjet[] GetPreconfiguredWidjets()

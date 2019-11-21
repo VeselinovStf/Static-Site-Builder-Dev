@@ -12,14 +12,11 @@ namespace Infrastructure.ClientProjects
 {
     public class ClientProjectService : IClientProjectService<ClientProjectDTO>
     {
-        //private readonly IAppSiteProjectsService<Project> appSiteProjectService;
         private readonly IAppUserManager<ApplicationUser> userManager;
 
         public ClientProjectService(
-            //IAppSiteProjectsService<Project> appSiteProjectService,
             IAppUserManager<ApplicationUser> userManager)
         {
-            //this.appSiteProjectService = appSiteProjectService ?? throw new ArgumentNullException(nameof(appSiteProjectService));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 

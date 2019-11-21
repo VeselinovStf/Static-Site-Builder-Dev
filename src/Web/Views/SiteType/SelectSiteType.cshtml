@@ -1,4 +1,6 @@
-﻿<section class="ftco-section services-section bg-light">
+﻿@model ClientSiteTypesViewModel
+
+<section class="ftco-section services-section bg-light">
     <section class="ftco-section ftco-counter img" id="section-counter">
         <div class="container">
             <div class="row justify-content-center mb-1">
@@ -9,30 +11,22 @@
                 </div>
 
                 <div class="row col-lg-12 ">
-                    <div class="col-lg-6 col-md-6 ftco-animate fadeInUp ftco-animated">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title text-center">Multipurpose eCommerce Site</h5>
-                                <p class="card-text text-center">Build you owne eCommersce site, sell one nich or many all depends on you. Use build in Widjets to customize and optimize your new application. Start earning in few hours.</p>
+                    @foreach (var type in Model.SiteTypes)
+                    {
+                        <div class="col-lg-6 col-md-6 ftco-animate fadeInUp ftco-animated">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center">@type.Name</h5>
+                                    <p class="card-text text-center">@type.Description</p>
 
-                                <div class="text-center">
-                                    <a class="btn btn-info " asp-controller="SiteType" asp-action="SelectTemplate" @*asp-route-projectId="@Model.ProjectId" asp-route-siteTypeName="@type.Name" *@>Use</a>
+                                    <div class="text-center">
+                                        <a class="btn btn-info " asp-controller="SiteType" asp-action="SelectTemplate" asp-route-siteType="@type.BuildInName" asp-route-clientId="@Model.ClientId">Use</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 ftco-animate fadeInUp ftco-animated">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title text-center">Blog Site</h5>
-                                <p class="card-text text-center">Build you owne blog site. Use build in Widjets to customize and optimize your new application. Create your first posts in minutes. Start posting now.</p>
 
-                                <div class="text-center">
-                                    <a class="btn btn-info " asp-controller="SiteType" asp-action="SelectTemplate" @*asp-route-projectId="@Model.ProjectId" asp-route-siteTypeName="@type.Name" *@>Use</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>

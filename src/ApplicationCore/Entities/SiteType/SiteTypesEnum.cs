@@ -1,6 +1,6 @@
 ﻿namespace ApplicationCore.Entities.SiteType
 {
-    public enum SiteTypes
+    public enum SiteTypesEnum
     {
         StoreType,
         BlogType

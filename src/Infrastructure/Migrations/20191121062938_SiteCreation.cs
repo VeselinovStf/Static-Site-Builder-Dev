@@ -120,6 +120,24 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SiteTypes",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
+                    Description = table.Column<string>(maxLength: 200, nullable: false),
+                    Type = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SiteTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BlogTypeSites",
                 columns: table => new
                 {
@@ -501,6 +519,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductsFrontMatters");
+
+            migrationBuilder.DropTable(
+                name: "SiteTypes");
 
             migrationBuilder.DropTable(
                 name: "Widjets");
