@@ -19,7 +19,7 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ApplicationCore.Entities.BaseEntities.BaseSiteProject", b =>
+            modelBuilder.Entity("ApplicationCore.Entities.BlogSiteTypeEntities.BlogTypeSite", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -33,9 +33,6 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200);
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
 
                     b.Property<bool>("IsDeleted");
 
@@ -51,6 +48,8 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
+                    b.Property<string>("ProjectId");
+
                     b.Property<string>("TemplateLocation")
                         .IsRequired()
                         .HasMaxLength(100);
@@ -59,9 +58,9 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("LaunchingConfigId");
 
-                    b.ToTable("BaseSiteProject");
+                    b.HasIndex("ProjectId");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseSiteProject");
+                    b.ToTable("BlogTypeSites");
                 });
 
             modelBuilder.Entity("ApplicationCore.Entities.BlogTypeSiteEntitiesAggregate.BlogPost", b =>
@@ -445,6 +444,50 @@ namespace Infrastructure.Migrations
                     b.ToTable("ProductsFrontMatters");
                 });
 
+            modelBuilder.Entity("ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate.StoreTypeSite", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ClientId");
+
+                    b.Property<DateTime?>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("LaunchingConfigId");
+
+                    b.Property<DateTime?>("ModifiedOn");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("NewProjectLocation")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("ProjectId");
+
+                    b.Property<string>("TemplateLocation")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LaunchingConfigId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("StoreTypeSites");
+                });
+
             modelBuilder.Entity("ApplicationCore.Entities.WidjetsEntityAggregate.ClientWidjet", b =>
                 {
                     b.Property<string>("Id")
@@ -469,14 +512,12 @@ namespace Infrastructure.Migrations
                     b.ToTable("ClientWidjets");
                 });
 
-            modelBuilder.Entity("ApplicationCore.Entities.WidjetsEntityAggregate.WidjetElement", b =>
+            modelBuilder.Entity("ApplicationCore.Entities.WidjetsEntityAggregate.Widjet", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AvailibleSiteWidjetId");
-
-                    b.Property<string>("ClientWidjetId");
+                    b.Property<string>("BlogTypeSiteId");
 
                     b.Property<DateTime?>("CreatedOn");
 
@@ -505,11 +546,45 @@ namespace Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(5, 2)");
 
-                    b.Property<string>("UsedSiteWidjetId");
+                    b.Property<int>("SiteTypeSpecification");
+
+                    b.Property<string>("StoreTypeSiteId");
 
                     b.Property<int>("Version");
 
                     b.Property<double>("Votes");
+
+                    b.Property<string>("WidjetElementId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlogTypeSiteId");
+
+                    b.HasIndex("StoreTypeSiteId");
+
+                    b.HasIndex("WidjetElementId");
+
+                    b.ToTable("Widjets");
+                });
+
+            modelBuilder.Entity("ApplicationCore.Entities.WidjetsEntityAggregate.WidjetElement", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AvailibleSiteWidjetId");
+
+                    b.Property<string>("ClientWidjetId");
+
+                    b.Property<DateTime?>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("ModifiedOn");
+
+                    b.Property<string>("UsedSiteWidjetId");
 
                     b.HasKey("Id");
 
@@ -701,32 +776,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("ApplicationCore.Entities.BlogSiteTypeEntities.BlogTypeSite", b =>
                 {
-                    b.HasBaseType("ApplicationCore.Entities.BaseEntities.BaseSiteProject");
-
-                    b.Property<string>("ProjectId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasDiscriminator().HasValue("BlogTypeSite");
-                });
-
-            modelBuilder.Entity("ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate.StoreTypeSite", b =>
-                {
-                    b.HasBaseType("ApplicationCore.Entities.BaseEntities.BaseSiteProject");
-
-                    b.Property<string>("ProjectId")
-                        .HasColumnName("StoreTypeSite_ProjectId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasDiscriminator().HasValue("StoreTypeSite");
-                });
-
-            modelBuilder.Entity("ApplicationCore.Entities.BaseEntities.BaseSiteProject", b =>
-                {
                     b.HasOne("ApplicationCore.Entities.LaunchConfig", "LaunchingConfig")
                         .WithMany()
                         .HasForeignKey("LaunchingConfigId");
+
+                    b.HasOne("ApplicationCore.Entities.SiteProjectAggregate.Project")
+                        .WithMany("BlogSiteTypes")
+                        .HasForeignKey("ProjectId");
                 });
 
             modelBuilder.Entity("ApplicationCore.Entities.BlogTypeSiteEntitiesAggregate.BlogPost", b =>
@@ -782,11 +838,37 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate.ProductFrontMatter", "ProductId");
                 });
 
+            modelBuilder.Entity("ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate.StoreTypeSite", b =>
+                {
+                    b.HasOne("ApplicationCore.Entities.LaunchConfig", "LaunchingConfig")
+                        .WithMany()
+                        .HasForeignKey("LaunchingConfigId");
+
+                    b.HasOne("ApplicationCore.Entities.SiteProjectAggregate.Project")
+                        .WithMany("StoreSiteTypes")
+                        .HasForeignKey("ProjectId");
+                });
+
             modelBuilder.Entity("ApplicationCore.Entities.WidjetsEntityAggregate.ClientWidjet", b =>
                 {
                     b.HasOne("Infrastructure.Identity.ApplicationUser")
                         .WithMany("ClientWidjets")
                         .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("ApplicationCore.Entities.WidjetsEntityAggregate.Widjet", b =>
+                {
+                    b.HasOne("ApplicationCore.Entities.BlogSiteTypeEntities.BlogTypeSite")
+                        .WithMany("TemplateUsableWidjets")
+                        .HasForeignKey("BlogTypeSiteId");
+
+                    b.HasOne("ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate.StoreTypeSite")
+                        .WithMany("TemplateUsableWidjets")
+                        .HasForeignKey("StoreTypeSiteId");
+
+                    b.HasOne("ApplicationCore.Entities.WidjetsEntityAggregate.WidjetElement")
+                        .WithMany("Widjets")
+                        .HasForeignKey("WidjetElementId");
                 });
 
             modelBuilder.Entity("ApplicationCore.Entities.WidjetsEntityAggregate.WidjetElement", b =>
@@ -858,20 +940,6 @@ namespace Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ApplicationCore.Entities.BlogSiteTypeEntities.BlogTypeSite", b =>
-                {
-                    b.HasOne("ApplicationCore.Entities.SiteProjectAggregate.Project")
-                        .WithMany("BlogSiteTypes")
-                        .HasForeignKey("ProjectId");
-                });
-
-            modelBuilder.Entity("ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate.StoreTypeSite", b =>
-                {
-                    b.HasOne("ApplicationCore.Entities.SiteProjectAggregate.Project")
-                        .WithMany("StoreSiteTypes")
-                        .HasForeignKey("ProjectId");
                 });
 #pragma warning restore 612, 618
         }

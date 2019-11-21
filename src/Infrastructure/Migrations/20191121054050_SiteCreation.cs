@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class SiteCreationModels : Migration
+    public partial class SiteCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -120,7 +120,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BaseSiteProject",
+                name: "BlogTypeSites",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
@@ -134,28 +134,54 @@ namespace Infrastructure.Migrations
                     TemplateLocation = table.Column<string>(maxLength: 100, nullable: false),
                     ClientId = table.Column<string>(nullable: true),
                     LaunchingConfigId = table.Column<string>(nullable: true),
-                    Discriminator = table.Column<string>(nullable: false),
-                    ProjectId = table.Column<string>(nullable: true),
-                    StoreTypeSite_ProjectId = table.Column<string>(nullable: true)
+                    ProjectId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BaseSiteProject", x => x.Id);
+                    table.PrimaryKey("PK_BlogTypeSites", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BaseSiteProject_LaunchConfigs_LaunchingConfigId",
+                        name: "FK_BlogTypeSites_LaunchConfigs_LaunchingConfigId",
                         column: x => x.LaunchingConfigId,
                         principalTable: "LaunchConfigs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BaseSiteProject_Projects_ProjectId",
+                        name: "FK_BlogTypeSites_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StoreTypeSites",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
+                    Description = table.Column<string>(maxLength: 200, nullable: false),
+                    NewProjectLocation = table.Column<string>(maxLength: 100, nullable: false),
+                    TemplateLocation = table.Column<string>(maxLength: 100, nullable: false),
+                    ClientId = table.Column<string>(nullable: true),
+                    LaunchingConfigId = table.Column<string>(nullable: true),
+                    ProjectId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StoreTypeSites", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BaseSiteProject_Projects_StoreTypeSite_ProjectId",
-                        column: x => x.StoreTypeSite_ProjectId,
+                        name: "FK_StoreTypeSites_LaunchConfigs_LaunchingConfigId",
+                        column: x => x.LaunchingConfigId,
+                        principalTable: "LaunchConfigs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StoreTypeSites_Projects_ProjectId",
+                        column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -170,15 +196,6 @@ namespace Infrastructure.Migrations
                     ModifiedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(maxLength: 100, nullable: false),
-                    Description = table.Column<string>(maxLength: 200, nullable: false),
-                    Functionality = table.Column<string>(nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(5, 2)", nullable: false),
-                    Version = table.Column<int>(nullable: false),
-                    Votes = table.Column<double>(nullable: false),
-                    IsOn = table.Column<bool>(nullable: false),
-                    Key = table.Column<string>(nullable: true),
-                    IsFree = table.Column<bool>(nullable: false),
                     ClientWidjetId = table.Column<string>(nullable: true),
                     AvailibleSiteWidjetId = table.Column<string>(nullable: true),
                     UsedSiteWidjetId = table.Column<string>(nullable: true)
@@ -229,9 +246,9 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_BlogPosts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BlogPosts_BaseSiteProject_ProjectId",
+                        name: "FK_BlogPosts_BlogTypeSites_ProjectId",
                         column: x => x.ProjectId,
-                        principalTable: "BaseSiteProject",
+                        principalTable: "BlogTypeSites",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -277,9 +294,55 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_BaseSiteProject_ProjectId",
+                        name: "FK_Products_StoreTypeSites_ProjectId",
                         column: x => x.ProjectId,
-                        principalTable: "BaseSiteProject",
+                        principalTable: "StoreTypeSites",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Widjets",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
+                    Description = table.Column<string>(maxLength: 200, nullable: false),
+                    Functionality = table.Column<string>(nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(5, 2)", nullable: false),
+                    Version = table.Column<int>(nullable: false),
+                    Votes = table.Column<double>(nullable: false),
+                    IsOn = table.Column<bool>(nullable: false),
+                    Key = table.Column<string>(nullable: true),
+                    IsFree = table.Column<bool>(nullable: false),
+                    SiteTypeSpecification = table.Column<int>(nullable: false),
+                    BlogTypeSiteId = table.Column<string>(nullable: true),
+                    StoreTypeSiteId = table.Column<string>(nullable: true),
+                    WidjetElementId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Widjets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Widjets_BlogTypeSites_BlogTypeSiteId",
+                        column: x => x.BlogTypeSiteId,
+                        principalTable: "BlogTypeSites",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Widjets_StoreTypeSites_StoreTypeSiteId",
+                        column: x => x.StoreTypeSiteId,
+                        principalTable: "StoreTypeSites",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Widjets_WidjetElements_WidjetElementId",
+                        column: x => x.WidjetElementId,
+                        principalTable: "WidjetElements",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -340,21 +403,6 @@ namespace Infrastructure.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BaseSiteProject_LaunchingConfigId",
-                table: "BaseSiteProject",
-                column: "LaunchingConfigId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BaseSiteProject_ProjectId",
-                table: "BaseSiteProject",
-                column: "ProjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BaseSiteProject_StoreTypeSite_ProjectId",
-                table: "BaseSiteProject",
-                column: "StoreTypeSite_ProjectId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_BlogPostFrontMatters_BlogPostId",
                 table: "BlogPostFrontMatters",
                 column: "BlogPostId",
@@ -364,6 +412,16 @@ namespace Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_BlogPosts_ProjectId",
                 table: "BlogPosts",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BlogTypeSites_LaunchingConfigId",
+                table: "BlogTypeSites",
+                column: "LaunchingConfigId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BlogTypeSites_ProjectId",
+                table: "BlogTypeSites",
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
@@ -384,6 +442,16 @@ namespace Infrastructure.Migrations
                 filter: "[ProductId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StoreTypeSites_LaunchingConfigId",
+                table: "StoreTypeSites",
+                column: "LaunchingConfigId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StoreTypeSites_ProjectId",
+                table: "StoreTypeSites",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WidjetElements_AvailibleSiteWidjetId",
                 table: "WidjetElements",
                 column: "AvailibleSiteWidjetId");
@@ -397,6 +465,21 @@ namespace Infrastructure.Migrations
                 name: "IX_WidjetElements_UsedSiteWidjetId",
                 table: "WidjetElements",
                 column: "UsedSiteWidjetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Widjets_BlogTypeSiteId",
+                table: "Widjets",
+                column: "BlogTypeSiteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Widjets_StoreTypeSiteId",
+                table: "Widjets",
+                column: "StoreTypeSiteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Widjets_WidjetElementId",
+                table: "Widjets",
+                column: "WidjetElementId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUsers_Projects_ProjectId",
@@ -420,7 +503,7 @@ namespace Infrastructure.Migrations
                 name: "ProductsFrontMatters");
 
             migrationBuilder.DropTable(
-                name: "WidjetElements");
+                name: "Widjets");
 
             migrationBuilder.DropTable(
                 name: "BlogPosts");
@@ -429,10 +512,16 @@ namespace Infrastructure.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "ClientWidjets");
+                name: "WidjetElements");
 
             migrationBuilder.DropTable(
-                name: "BaseSiteProject");
+                name: "BlogTypeSites");
+
+            migrationBuilder.DropTable(
+                name: "StoreTypeSites");
+
+            migrationBuilder.DropTable(
+                name: "ClientWidjets");
 
             migrationBuilder.DropTable(
                 name: "LaunchConfigs");
