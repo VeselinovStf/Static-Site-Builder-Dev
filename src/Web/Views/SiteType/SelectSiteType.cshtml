@@ -20,7 +20,7 @@
                                     <p class="card-text text-center">@type.Description</p>
 
                                     <div class="text-center">
-                                        <a class="btn btn-info " asp-controller="SiteType" asp-action="SelectTemplate" asp-route-siteType="@type.BuildInName" asp-route-clientId="@Model.ClientId">Use</a>
+                                        <a class="btn btn-info " asp-controller="SiteType" asp-action="Create" asp-route-buildInType="@type.BuildInName" asp-route-clientId="@Model.ClientId">Use</a>
                                     </div>
                                 </div>
                             </div>
@@ -33,5 +33,5 @@
     </section>
 </section>
 <div class="row justify-content-center mb-1">
-    <a class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-dark" asp-controller="SiteType" asp-action="SelectSiteType">Back to Projects</a>
+    <a class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-dark" asp-controller="Projects" asp-action="Index" asp-route-clientId="@Model.ClientId">Back to Projects</a>
 </div>

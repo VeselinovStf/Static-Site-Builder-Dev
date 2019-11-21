@@ -20,6 +20,28 @@ namespace Infrastructure.SiteTypes
             this.appSiteTypeService = appSiteTypeService ?? throw new System.ArgumentNullException(nameof(appSiteTypeService));
         }
 
+        public async Task<bool> ConfirmType(string buildInType)
+        {
+            try
+            {
+                var siteTypes = await this.appSiteTypeService.GetAllAsync();
+
+                Validator.ObjectIsNull(
+                 siteTypes, $"{nameof(SiteTypesService)} : {nameof(GetAllTypesAsync)} : {nameof(siteTypes)} : Can't find build in site types!");
+
+                if (siteTypes.Any(t => t.Type.ToString() == buildInType))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new SiteTypesServiceConfirmTypeException($"{nameof(SiteTypesServiceConfirmTypeException)} : Can't get build in types! USER TRY UNLEAGLE ACTION : {ex.Message}");
+            }
+        }
+
         public async Task<IEnumerable<SiteTypeDTO>> GetAllTypesAsync()
         {
             try

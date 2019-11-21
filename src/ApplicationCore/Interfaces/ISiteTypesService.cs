@@ -6,5 +6,7 @@ namespace ApplicationCore.Interfaces
     public interface ISiteTypesService<T>
     {
         Task<IEnumerable<T>> GetAllTypesAsync();
+
+        Task<bool> ConfirmType(string buildInType);
     }
 }
