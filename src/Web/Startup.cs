@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities.SiteType;
+﻿using ApplicationCore.Entities.SiteProjectAggregate;
+using ApplicationCore.Entities.SiteType;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
 using Infrastructure.Blog;
@@ -91,6 +92,9 @@ namespace Web
             services.AddScoped<ISiteTypesService<SiteTypeDTO>, SiteTypesService>();
             services.AddScoped<ISiteTypeModelFactory, SiteTypeModelFactory>();
             services.AddScoped<IAppSiteTypesService<SiteType>, AppSiteTypesService>();
+            services.AddScoped<IAppProjectsService<Project>, AppProjectsService>();
+            services.AddScoped<SiteTypesFactory, BlogTypeSiteFactory>();
+            services.AddScoped<SiteTypesFactory, StoreTypeSiteFactory>();
 
             //Client
             services.AddScoped<IClientModelFactory, ClientModelFactory>();

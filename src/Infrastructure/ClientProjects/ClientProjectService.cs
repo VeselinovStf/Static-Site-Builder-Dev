@@ -1,8 +1,8 @@
-﻿using ApplicationCore.Interfaces;
+﻿using ApplicationCore.Entities.SiteProjectAggregate;
+using ApplicationCore.Interfaces;
 using Infrastructure.ClientProjects.DTOs;
 using Infrastructure.ClientProjects.Exceptions;
 using Infrastructure.Guard;
-using Infrastructure.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +12,12 @@ namespace Infrastructure.ClientProjects
 {
     public class ClientProjectService : IClientProjectService<ClientProjectDTO>
     {
-        private readonly IAppUserManager<ApplicationUser> userManager;
+        private readonly IAppProjectsService<Project> appProjectService;
 
         public ClientProjectService(
-            IAppUserManager<ApplicationUser> userManager)
+            IAppProjectsService<Project> appProjectService)
         {
-            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            this.appProjectService = appProjectService ?? throw new ArgumentNullException(nameof(appProjectService));
         }
 
         public async Task<IEnumerable<ClientProjectDTO>> GetAllAsync(string clientId)
@@ -27,12 +27,10 @@ namespace Infrastructure.ClientProjects
 
             try
             {
-                var client = await this.userManager.FindByIdAsync(clientId);
+                var project = await this.appProjectService.GetClientProject(clientId);
 
                 Validator.ObjectIsNull(
-                    client, $"{nameof(ClientProjectService)} : {nameof(GetAllAsync)} : {nameof(client)} : Can't find client with this id");
-
-                var project = client.Project;
+                    project, $"{nameof(ClientProjectService)} : {nameof(GetAllAsync)} : {nameof(project)} : Can't find client projects with this id");
 
                 var siteTypes = new List<ClientProjectDTO>(project.StoreSiteTypes.Select(p => new ClientProjectDTO()
                 {

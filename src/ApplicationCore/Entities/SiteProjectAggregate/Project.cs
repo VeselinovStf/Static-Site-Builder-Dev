@@ -35,16 +35,33 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
             }
         }
 
-        public void AddStoreTypeSite(string projectName, string description, string newProjectLocation, string templateLocation,
-            string clientId)
+        public void AddStoreTypeSite(string clientProjectId, string name, string description, string clientId,
+            string buildInType, string newProjectLocation, string templateLocation,
+            string cardApiKey, string cardServiceGate, string hostingServiceGate,
+            string repository)
         {
             _storeSiteTypes.Add(new StoreTypeSite()
             {
-                Name = projectName,
+                Name = name,
                 Description = description,
                 NewProjectLocation = newProjectLocation,
                 TemplateLocation = templateLocation,
-                ClientId = clientId
+                ClientId = clientId,
+            });
+        }
+
+        public void AddBlogTypeSite(string clientProjectId, string name, string description, string clientId,
+            string buildInType, string newProjectLocation, string templateLocation,
+            string cardApiKey, string cardServiceGate, string hostingServiceGate,
+            string repository)
+        {
+            _blogSiteTypes.Add(new BlogTypeSite()
+            {
+                Name = name,
+                Description = description,
+                NewProjectLocation = newProjectLocation,
+                TemplateLocation = templateLocation,
+                ClientId = clientId,
             });
         }
     }

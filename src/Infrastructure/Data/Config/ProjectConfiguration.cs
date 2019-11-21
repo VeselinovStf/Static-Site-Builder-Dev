@@ -8,12 +8,6 @@ namespace Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<Project> builder)
         {
-            var navigationStore = builder.Metadata.FindNavigation(nameof(Project.StoreSiteTypes));
-            navigationStore.SetPropertyAccessMode(PropertyAccessMode.Field);
-
-            var navigationBlog = builder.Metadata.FindNavigation(nameof(Project.BlogSiteTypes));
-            navigationStore.SetPropertyAccessMode(PropertyAccessMode.Field);
-
             builder.HasMany(b => b.AvailibleWidjets)
                .WithOne(w => w.AvailibleSiteWidjet)
                .HasForeignKey(w => w.AvailibleSiteWidjetId);
@@ -21,6 +15,14 @@ namespace Infrastructure.Data.Config
             builder.HasMany(b => b.UsedWidjets)
                .WithOne(w => w.UsedSiteWidjet)
                .HasForeignKey(w => w.UsedSiteWidjetId);
+
+            var elementMetadata = builder.Metadata.FindNavigation(nameof(Project.BlogSiteTypes));
+            elementMetadata.SetField("_blogSiteTypes");
+            elementMetadata.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+            //Work's only for one field!!
+            var navigationStore = builder.Metadata.FindNavigation(nameof(Project.StoreSiteTypes));
+            navigationStore.SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

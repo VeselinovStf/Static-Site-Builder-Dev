@@ -2,13 +2,14 @@
 using ApplicationCore.Entities.BlogTypeSiteEntitiesAggregate;
 using ApplicationCore.Entities.SiteType;
 using ApplicationCore.Entities.WidjetsEntityAggregate;
+using ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ApplicationCore.Entities.BlogSiteTypeEntities
 {
-    public class BlogTypeSite : DescriptiveEntity
+    public class BlogTypeSite : DescriptiveEntity, IBaseSiteProject, IAggregateRoot
     {
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -22,6 +23,7 @@ namespace ApplicationCore.Entities.BlogSiteTypeEntities
 
         public string ClientId { get; set; }
 
+        public string LaunchingConfigId { get; set; }
         public LaunchConfig LaunchingConfig { get; set; }
 
         private readonly List<BlogPost> _blogPosts = new List<BlogPost>();
@@ -45,6 +47,8 @@ namespace ApplicationCore.Entities.BlogSiteTypeEntities
 
         //Build in widjets
         public ICollection<Widjet> TemplateUsableWidjets { get; set; }
+
+        public string ProjectId { get; set; }
 
         public void AddBlogPost(string name, string description,
             string header, string image, string content,

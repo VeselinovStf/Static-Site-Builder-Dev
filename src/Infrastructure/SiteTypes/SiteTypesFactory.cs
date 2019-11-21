@@ -1,15 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace ApplicationCore.Interfaces
+namespace Infrastructure.SiteTypes
 {
-    public interface ISiteTypesService<T>
+    public abstract class SiteTypesFactory
     {
-        Task<IEnumerable<T>> GetAllTypesAsync();
-
-        Task<bool> ConfirmType(string buildInType);
-
-        Task Create(
+        public abstract Task Create(string clientProjectId,
             string name, string description, string clientId,
             string buildInType, string newProjectLocation, string templateLocation,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,

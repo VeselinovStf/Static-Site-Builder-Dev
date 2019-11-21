@@ -14,6 +14,6 @@ namespace ApplicationCore.Entities
 
         public string Repository { get; set; }
 
-        public string ClientId { get; set; }
+        public string SiteTypeId { get; set; }
     }
 }

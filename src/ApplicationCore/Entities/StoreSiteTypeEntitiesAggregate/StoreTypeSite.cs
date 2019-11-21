@@ -22,6 +22,7 @@ namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
 
         public string ClientId { get; set; }
 
+        public string LaunchingConfigId { get; set; }
         public LaunchConfig LaunchingConfig { get; set; }
 
         private readonly List<Product> _products = new List<Product>();
@@ -36,6 +37,8 @@ namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
 
         //Build in widjets
         public ICollection<Widjet> TemplateUsableWidjets { get; set; }
+
+        public string ProjectId { get; set; }
 
         //Build in site type config
         public SiteTypesEnum SiteTypeSpecification

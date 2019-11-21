@@ -94,5 +94,37 @@ namespace Web.Controllers
 
             return RedirectToAction("Error", "Home", new { message = "Can't display site types. Contact support" });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(
+            [Bind("Name","Description","ClientId",
+            "BuildInType", "NewProjectLocation", "TemplateLocation",
+            "CardApiKey", "CardServiceGate", "HostingServiceGate",
+            "Repository")]
+            CreateSiteTypeViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await this.siteTypesService.Create(
+                        model.Name, model.Description, model.ClientId,
+                        model.BuildInType, model.NewProjectLocation, model.TemplateLocation,
+                        model.CardApiKey, model.CardServiceGate, model.HostingServiceGate,
+                        model.Repository);
+
+                    this.logger.LogInformation($"{nameof(SiteTypeController)} : {nameof(Create)} : Sucess - Creating Site Type");
+
+                    return RedirectToAction("Index", "Projects", new { clientId = model.ClientId });
+                }
+                catch (Exception ex)
+                {
+                    this.logger.LogWarning($"{nameof(SiteTypeController)} : {nameof(Create)} : Exception - {ex.Message}");
+                }
+            }
+
+            return View(model);
+        }
     }
 }

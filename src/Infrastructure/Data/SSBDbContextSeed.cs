@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities.SiteType;
+﻿using ApplicationCore.Entities.SiteProjectAggregate;
+using ApplicationCore.Entities.SiteType;
 using ApplicationCore.Entities.WidjetsEntityAggregate;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -34,10 +35,10 @@ namespace Infrastructure.Data
                 if (!ssbDbContext.Users.Any())
                 {
                     await ssbDbContext.Users.AddAsync(
-                        GetPreconfiguredAdmin(ssbDbContext));
+                       await GetPreconfiguredAdmin(ssbDbContext));
 
                     await ssbDbContext.Users.AddAsync(
-                        GetPreconfiguredClient(ssbDbContext));
+                        await GetPreconfiguredClient(ssbDbContext));
 
                     await ssbDbContext.SaveChangesAsync();
                 }
@@ -118,9 +119,10 @@ namespace Infrastructure.Data
             return new IdentityRole[] { administrator, client };
         }
 
-        private static ApplicationUser GetPreconfiguredClient(SSBDbContext dbContext)
+        private static async Task<ApplicationUser> GetPreconfiguredClient(SSBDbContext dbContext)
         {
             var clientId = Guid.NewGuid().ToString();
+            var projectId = Guid.NewGuid().ToString();
 
             var mailBox = new ApplicationCore.Entities.MessageAggregate.MailBox()
             {
@@ -129,6 +131,12 @@ namespace Infrastructure.Data
                 CreatedOn = DateTime.Now,
                 ModifiedOn = DateTime.Now,
                 IsDeleted = false
+            };
+
+            var clientProject = new Project()
+            {
+                Id = projectId,
+                ClientId = clientId,
             };
 
             var clientUser = new ApplicationUser()
@@ -146,10 +154,7 @@ namespace Infrastructure.Data
                 AccessFailedCount = 0,
                 LockoutEnabled = false,
                 MailBox = mailBox,
-                Project = new ApplicationCore.Entities.SiteProjectAggregate.Project()
-                {
-                    ClientId = clientId,
-                }
+                Project = clientProject
             };
 
             var hashePass = new PasswordHasher<ApplicationUser>().HashPassword(clientUser, "!Aa12345678");
@@ -161,14 +166,16 @@ namespace Infrastructure.Data
                 UserId = clientUser.Id
             }).Wait();
 
-            dbContext.MailBoxes.AddAsync(mailBox);
+            await dbContext.MailBoxes.AddAsync(mailBox);
+            await dbContext.Projects.AddAsync(clientProject);
 
             return clientUser;
         }
 
-        private static ApplicationUser GetPreconfiguredAdmin(SSBDbContext dbContext)
+        private static async Task<ApplicationUser> GetPreconfiguredAdmin(SSBDbContext dbContext)
         {
             var adminId = Guid.NewGuid().ToString();
+            var projectId = Guid.NewGuid().ToString();
 
             var mailBox = new ApplicationCore.Entities.MessageAggregate.MailBox()
             {
@@ -178,6 +185,13 @@ namespace Infrastructure.Data
                 ModifiedOn = DateTime.Now,
                 IsDeleted = false
             };
+
+            var adminProject = new Project()
+            {
+                Id = projectId,
+                ClientId = adminId,
+            };
+
             var adminUser = new ApplicationUser()
             {
                 Id = adminId,
@@ -193,10 +207,7 @@ namespace Infrastructure.Data
                 AccessFailedCount = 0,
                 LockoutEnabled = false,
                 MailBox = mailBox,
-                Project = new ApplicationCore.Entities.SiteProjectAggregate.Project()
-                {
-                    ClientId = adminId
-                }
+                Project = adminProject
             };
 
             var hashePass = new PasswordHasher<ApplicationUser>().HashPassword(adminUser, "!Aa12345678");
@@ -208,7 +219,8 @@ namespace Infrastructure.Data
                 UserId = adminUser.Id
             }).Wait();
 
-            dbContext.MailBoxes.AddAsync(mailBox);
+            await dbContext.MailBoxes.AddAsync(mailBox);
+            await dbContext.Projects.AddAsync(adminProject);
 
             return adminUser;
         }
