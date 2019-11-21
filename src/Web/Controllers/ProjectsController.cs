@@ -1,5 +1,5 @@
 ﻿using ApplicationCore.Interfaces;
-using Infrastructure.SiteProjects.DTOs;
+using Infrastructure.ClientProjects.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,12 +11,12 @@ namespace Web.Controllers
     [Authorize]
     public class ProjectsController : Controller
     {
-        private readonly ISiteProjectService<SiteProjectDTO> projectService;
+        private readonly IClientProjectService<ClientProjectDTO> projectService;
         private readonly IProjectsModelFactory modelFactory;
         private readonly IAppLogger<ProjectsController> logger;
 
         public ProjectsController(
-            ISiteProjectService<SiteProjectDTO> projectService,
+            IClientProjectService<ClientProjectDTO> projectService,
             IProjectsModelFactory modelFactory,
             IAppLogger<ProjectsController> logger)
         {

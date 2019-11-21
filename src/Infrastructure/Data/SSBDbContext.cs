@@ -31,6 +31,7 @@ namespace Infrastructure.Data
         public DbSet<BlogPostFrontMatter> BlogPostFrontMatters { get; set; }
         public DbSet<ClientWidjet> ClientWidjets { get; set; }
         public DbSet<WidjetElement> WidjetElements { get; set; }
+        public DbSet<Widjet> Widjets { get; set; }
         public DbSet<LaunchConfig> LaunchConfigs { get; set; }
 
         //Application Messaging System

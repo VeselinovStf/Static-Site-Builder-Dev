@@ -24,14 +24,6 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
         {
             _clientWidjets.Add(new WidjetElement()
             {
-                Name = name,
-                Description = description,
-                Functionality = functionality,
-                Price = price,
-                Version = version,
-                Votes = votes,
-                IsOn = isOn,
-                IsFree = isFree
             });
         }
     }

@@ -2,14 +2,14 @@
 using ApplicationCore.Services;
 using Infrastructure.Blog;
 using Infrastructure.Blog.DTOs;
+using Infrastructure.ClientProjects;
+using Infrastructure.ClientProjects.DTOs;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Infrastructure.Logging;
 using Infrastructure.Messages;
 using Infrastructure.Messages.DTOs;
 using Infrastructure.Services;
-using Infrastructure.SiteProjects;
-using Infrastructure.SiteProjects.DTOs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -80,7 +80,7 @@ namespace Web
 
             //Projects
             // services.AddScoped<IAppSiteProjectsService<Project>, AppSiteProjectsService>();
-            services.AddScoped<ISiteProjectService<SiteProjectDTO>, SiteProjectService>();
+            services.AddScoped<IClientProjectService<ClientProjectDTO>, ClientProjectService>();
             services.AddScoped<IProjectsModelFactory, ProjectsModelFactory>();
 
             //Client

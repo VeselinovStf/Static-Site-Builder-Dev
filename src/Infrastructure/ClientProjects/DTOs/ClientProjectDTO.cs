@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Infrastructure.SiteProjects.DTOs
+namespace Infrastructure.ClientProjects.DTOs
 {
-    public class SiteProjectDTO
+    public class ClientProjectDTO
     {
         public string Name { get; set; }
         public string Description { get; set; }

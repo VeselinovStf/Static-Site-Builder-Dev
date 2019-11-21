@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Interfaces
 {
-    public interface ISiteProjectService<T>
+    public interface IClientProjectService<T>
     {
         Task<IEnumerable<T>> GetAllAsync(string clientId);
     }

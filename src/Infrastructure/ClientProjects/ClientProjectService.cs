@@ -1,21 +1,21 @@
 ﻿using ApplicationCore.Interfaces;
+using Infrastructure.ClientProjects.DTOs;
+using Infrastructure.ClientProjects.Exceptions;
 using Infrastructure.Guard;
 using Infrastructure.Identity;
-using Infrastructure.SiteProjects.DTOs;
-using Infrastructure.SiteProjects.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Infrastructure.SiteProjects
+namespace Infrastructure.ClientProjects
 {
-    public class SiteProjectService : ISiteProjectService<SiteProjectDTO>
+    public class ClientProjectService : IClientProjectService<ClientProjectDTO>
     {
         //private readonly IAppSiteProjectsService<Project> appSiteProjectService;
         private readonly IAppUserManager<ApplicationUser> userManager;
 
-        public SiteProjectService(
+        public ClientProjectService(
             //IAppSiteProjectsService<Project> appSiteProjectService,
             IAppUserManager<ApplicationUser> userManager)
         {
@@ -23,21 +23,21 @@ namespace Infrastructure.SiteProjects
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
-        public async Task<IEnumerable<SiteProjectDTO>> GetAllAsync(string clientId)
+        public async Task<IEnumerable<ClientProjectDTO>> GetAllAsync(string clientId)
         {
             Validator.StringIsNullOrEmpty(
-               clientId, $"{nameof(SiteProjectService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : is null/empty");
+               clientId, $"{nameof(ClientProjectService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : is null/empty");
 
             try
             {
                 var client = await this.userManager.FindByIdAsync(clientId);
 
                 Validator.ObjectIsNull(
-                    client, $"{nameof(SiteProjectService)} : {nameof(GetAllAsync)} : {nameof(client)} : Can't find client with this id");
+                    client, $"{nameof(ClientProjectService)} : {nameof(GetAllAsync)} : {nameof(client)} : Can't find client with this id");
 
                 var project = client.Project;
 
-                var siteTypes = new List<SiteProjectDTO>(project.StoreSiteTypes.Select(p => new SiteProjectDTO()
+                var siteTypes = new List<ClientProjectDTO>(project.StoreSiteTypes.Select(p => new ClientProjectDTO()
                 {
                     Name = p.Name,
                     Description = p.Description,
@@ -47,7 +47,7 @@ namespace Infrastructure.SiteProjects
                     ProjectType = "Store Type"
                 }));
 
-                siteTypes.AddRange(new List<SiteProjectDTO>(project.BlogSiteTypes.Select(p => new SiteProjectDTO()
+                siteTypes.AddRange(new List<ClientProjectDTO>(project.BlogSiteTypes.Select(p => new ClientProjectDTO()
                 {
                     Name = p.Name,
                     Description = p.Description,
@@ -61,7 +61,7 @@ namespace Infrastructure.SiteProjects
             }
             catch (Exception ex)
             {
-                throw new SiteProjectServiceGetAllException($"{nameof(SiteProjectServiceGetAllException)} : Can't Get all clients Site projects : {ex.Message}");
+                throw new ClientProjectServiceGetAllException($"{nameof(ClientProjectServiceGetAllException)} : Can't Get all clients Site projects : {ex.Message}");
             }
         }
     }

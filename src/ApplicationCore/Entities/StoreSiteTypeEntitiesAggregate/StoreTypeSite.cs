@@ -1,4 +1,6 @@
 ﻿using ApplicationCore.Entities.BaseEntities;
+using ApplicationCore.Entities.SiteType;
+using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,18 @@ namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
             get
             {
                 return new List<Product>(_products.AsReadOnly());
+            }
+        }
+
+        //Build in widjets
+        public ICollection<Widjet> TemplateUsableWidjets { get; set; }
+
+        //Build in site type config
+        public SiteTypes SiteTypeSpecification
+        {
+            get
+            {
+                return SiteTypes.StoreType;
             }
         }
 

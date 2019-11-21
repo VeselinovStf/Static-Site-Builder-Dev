@@ -1,4 +1,5 @@
-﻿using Infrastructure.Identity;
+﻿using ApplicationCore.Entities.WidjetsEntityAggregate;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,19 +24,27 @@ namespace Infrastructure.Data
 
                 if (!ssbDbContext.Roles.Any())
                 {
-                    ssbDbContext.Roles.AddRange(
-                        GetPreconfiguredRoles());
+                    await ssbDbContext.Roles.AddRangeAsync(
+                         GetPreconfiguredRoles());
 
                     await ssbDbContext.SaveChangesAsync();
                 }
 
                 if (!ssbDbContext.Users.Any())
                 {
-                    ssbDbContext.Users.Add(
+                    await ssbDbContext.Users.AddAsync(
                         GetPreconfiguredAdmin(ssbDbContext));
 
-                    ssbDbContext.Users.Add(
+                    await ssbDbContext.Users.AddAsync(
                         GetPreconfiguredClient(ssbDbContext));
+
+                    await ssbDbContext.SaveChangesAsync();
+                }
+
+                if (!ssbDbContext.Widjets.Any())
+                {
+                    await ssbDbContext.Widjets.AddRangeAsync(
+                        GetPreconfiguredWidjets());
 
                     await ssbDbContext.SaveChangesAsync();
                 }
@@ -50,6 +59,25 @@ namespace Infrastructure.Data
                     await SeedAsync(ssbDbContext, loggerFactory, retryAvailibility);
                 }
             }
+        }
+
+        private static Widjet[] GetPreconfiguredWidjets()
+        {
+            var menuConfigWidjet = new Widjet()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Description = "This widjet gives you the ability to change the display of meny",
+                Functionality = "menu-config",
+                IsFree = true,
+                IsOn = true,
+                Key = "",
+                Name = "MenuConfig",
+                Price = 0m,
+                Version = 1,
+                Votes = 0,
+            };
+
+            return new Widjet[] { menuConfigWidjet };
         }
 
         private static IdentityRole[] GetPreconfiguredRoles()
@@ -90,7 +118,7 @@ namespace Infrastructure.Data
                 MailBox = mailBox,
                 Project = new ApplicationCore.Entities.SiteProjectAggregate.Project()
                 {
-                    ClientId = clientId
+                    ClientId = clientId,
                 }
             };
 

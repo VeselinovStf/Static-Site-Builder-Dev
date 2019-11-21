@@ -1,23 +1,12 @@
 ﻿using ApplicationCore.Entities.BaseEntities;
 using ApplicationCore.Entities.SiteProjectAggregate;
+using System.Collections.Generic;
 
 namespace ApplicationCore.Entities.WidjetsEntityAggregate
 {
-    public class WidjetElement : DescriptiveEntity
+    public class WidjetElement : BaseEntity
     {
-        public string Functionality { get; set; }
-
-        public decimal Price { get; set; }
-
-        public int Version { get; set; }
-
-        public double Votes { get; set; }
-
-        public bool IsOn { get; set; }
-
-        public string Key { get; set; }
-
-        public bool IsFree { get; set; }
+        public ICollection<Widjet> Widjets { get; set; }
 
         public string ClientWidjetId { get; private set; }
 

@@ -1,4 +1,4 @@
-﻿using Infrastructure.SiteProjects.DTOs;
+﻿using Infrastructure.ClientProjects.DTOs;
 using System.Collections.Generic;
 using System.Linq;
 using Web.ModelFatories.ProjectsModelFactory.Abstraction;
@@ -9,7 +9,7 @@ namespace Web.ModelFatories.ProjectsModelFactory
 {
     public class ProjectsModelFactory : IProjectsModelFactory
     {
-        public ProjectsListViewModel Create(IEnumerable<SiteProjectDTO> serviceCall, string clientId, bool walkTry)
+        public ProjectsListViewModel Create(IEnumerable<ClientProjectDTO> serviceCall, string clientId, bool walkTry)
         {
             return new ProjectsListViewModel()
             {
