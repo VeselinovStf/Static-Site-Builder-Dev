@@ -22,5 +22,7 @@
         public string HostingServiceGate { get; set; }
 
         public string Repository { get; set; }
+
+        public bool IsLaunched { get; set; }
     }
 }

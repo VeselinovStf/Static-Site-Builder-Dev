@@ -135,7 +135,7 @@ namespace Web.Controllers
         {
             try
             {
-                var serviceCall = await this.siteTypeEditorService.GetClientEditableSiteTypeAsync(clientId, siteTypeId);
+                var serviceCall = await this.siteTypeEditorService.GetClientSiteTypeAsync(clientId, siteTypeId);
 
                 this.logger.LogInformation($"{nameof(SiteTypeController)} : {nameof(Site)} : Sucess - Getting Client Site Type");
 

@@ -35,7 +35,8 @@ namespace Web.ModelFatories.SiteTypeModelFactory
                 Repository = serviceCall.Repository,
                 TemplateLocation = serviceCall.Repository,
                 ClientId = serviceCall.ClientId,
-                Id = serviceCall.Id
+                Id = serviceCall.Id,
+                IsLaunched = serviceCall.IsLaunched
             };
         }
     }

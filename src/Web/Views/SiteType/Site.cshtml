@@ -60,8 +60,17 @@
                         </h4>
                     </li>
                 </ul>
-                <a asp-action="EditSite" asp-controller="SiteType" asp-route-clientId="@Model.ClientId" asp-route-siteTypeId="@Model.Id" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Edit</a>
-                <a asp-action="DeleteSite" asp-controller="SiteType" asp-route-clientId="@Model.ClientId" asp-route-siteTypeId="@Model.Id" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Delete</a>
+                @if (Model.IsLaunched)
+                {
+                    <a asp-action="EditSite" asp-controller="SiteType" asp-route-clientId="@Model.ClientId" asp-route-siteTypeId="@Model.Id" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Use</a>
+                    <a asp-action="EditSite" asp-controller="SiteType" asp-route-clientId="@Model.ClientId" asp-route-siteTypeId="@Model.Id" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Un-Launch</a>
+                }
+                else
+                {
+                    <a asp-action="EditSite" asp-controller="SiteType" asp-route-clientId="@Model.ClientId" asp-route-siteTypeId="@Model.Id" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Launch</a>
+                    <a asp-action="EditSite" asp-controller="SiteType" asp-route-clientId="@Model.ClientId" asp-route-siteTypeId="@Model.Id" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Edit</a>
+                    <a asp-action="DeleteSite" asp-controller="SiteType" asp-route-clientId="@Model.ClientId" asp-route-siteTypeId="@Model.Id" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Delete</a>
+                }
             </div>
         </div>
     </div>

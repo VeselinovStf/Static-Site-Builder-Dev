@@ -208,6 +208,7 @@ namespace Infrastructure.SiteTypes
                             resultModel.Repository = clientStoreConfig.Repository;
                             resultModel.TemplateLocation = clientStoreSiteType.TemplateLocation;
                             resultModel.ClientId = clientStoreSiteType.ClientId;
+                            resultModel.IsLaunched = clientStoreConfig.IsLaunched;
 
                             return resultModel;
                         }
@@ -229,9 +230,83 @@ namespace Infrastructure.SiteTypes
                         resultModel.Repository = clientBlogConfig.Repository;
                         resultModel.TemplateLocation = clientBlogSiteType.TemplateLocation;
                         resultModel.ClientId = clientBlogSiteType.ClientId;
+                        resultModel.IsLaunched = clientBlogConfig.IsLaunched;
 
                         return resultModel;
                     }
+                }
+
+                throw new SiteTypeEditorGetClientEditableSiteTypeIsLaunchedException($"{nameof(SiteTypeEditorGetClientEditableSiteTypeIsLaunchedException)} : Can't get edit launched site type!");
+            }
+            catch (Exception ex)
+            {
+                throw new SiteTypeEditorGetClientEditableSiteTypeException($"{nameof(SiteTypeEditorGetClientEditableSiteTypeException)} : Can't get client site type! : {ex.Message}");
+            }
+        }
+
+        public async Task<SiteTypeEditorDTO> GetClientSiteTypeAsync(string clientId, string siteTypeId)
+        {
+            Validator.StringIsNullOrEmpty(
+               clientId, $"{nameof(SiteTypeEditorService)} : {nameof(GetClientEditableSiteTypeAsync)} : {nameof(clientId)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+               siteTypeId, $"{nameof(SiteTypeEditorService)} : {nameof(GetClientEditableSiteTypeAsync)} : {nameof(siteTypeId)} : is null/empty");
+
+            try
+            {
+                var clientProjects = await this.appProjectService.GetClientProject(clientId);
+
+                Validator.ObjectIsNull(
+                    clientProjects, $"{nameof(SiteTypeEditorService)} : {nameof(GetClientEditableSiteTypeAsync)} : {nameof(clientProjects)} : Can't find client project types!");
+
+                var resultModel = new SiteTypeEditorDTO();
+
+                // Find in any pre-build siteType
+                var clientBlogSiteType = clientProjects.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
+                var clientStoreSiteType = clientProjects.StoreSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
+
+                if (clientBlogSiteType == null)
+                {
+                    if (clientStoreSiteType == null)
+                    {
+                        throw new SiteTypeEditorGetClientEditableSiteTypeNoSiteTypeException($"{nameof(SiteTypeEditorGetClientEditableSiteTypeNoSiteTypeException)} : ATTENTION: UNLEAGLE ACTION: Client : {clientId} : doesn't have any sites created!");
+                    }
+                    else
+                    {
+                        var clientStoreConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfig(clientStoreSiteType.Id);
+
+                        resultModel.Id = clientStoreSiteType.Id;
+                        resultModel.CardApiKey = clientStoreConfig.CardApiKey;
+                        resultModel.CardServiceGate = clientStoreConfig.CardServiceGate;
+                        resultModel.HostingServiceGate = clientStoreConfig.HostingServiceGate;
+                        resultModel.Description = clientStoreSiteType.Description;
+                        resultModel.Name = clientStoreSiteType.Name;
+                        resultModel.NewProjectLocation = clientStoreSiteType.NewProjectLocation;
+                        resultModel.Repository = clientStoreConfig.Repository;
+                        resultModel.TemplateLocation = clientStoreSiteType.TemplateLocation;
+                        resultModel.ClientId = clientStoreSiteType.ClientId;
+                        resultModel.IsLaunched = clientStoreConfig.IsLaunched;
+
+                        return resultModel;
+                    }
+                }
+                else
+                {
+                    var clientBlogConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfig(clientBlogSiteType.Id);
+
+                    resultModel.Id = clientBlogSiteType.Id;
+                    resultModel.CardApiKey = clientBlogConfig.CardApiKey;
+                    resultModel.CardServiceGate = clientBlogConfig.CardServiceGate;
+                    resultModel.HostingServiceGate = clientBlogConfig.HostingServiceGate;
+                    resultModel.Description = clientBlogSiteType.Description;
+                    resultModel.Name = clientBlogSiteType.Name;
+                    resultModel.NewProjectLocation = clientBlogSiteType.NewProjectLocation;
+                    resultModel.Repository = clientBlogConfig.Repository;
+                    resultModel.TemplateLocation = clientBlogSiteType.TemplateLocation;
+                    resultModel.ClientId = clientBlogSiteType.ClientId;
+                    resultModel.IsLaunched = clientBlogConfig.IsLaunched;
+
+                    return resultModel;
                 }
 
                 throw new SiteTypeEditorGetClientEditableSiteTypeIsLaunchedException($"{nameof(SiteTypeEditorGetClientEditableSiteTypeIsLaunchedException)} : Can't get edit launched site type!");

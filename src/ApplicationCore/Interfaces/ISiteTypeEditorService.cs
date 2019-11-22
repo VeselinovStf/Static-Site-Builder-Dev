@@ -15,5 +15,7 @@ namespace ApplicationCore.Interfaces
         Task EditSiteTypeAsync(string name, string description, string clientId, string id, string newProjectLocation, string templateLocation, string cardApiKey, string cardServiceGate, string hostingServiceGate, string repository);
 
         Task DeleteSiteTypeAsync(string clientId, string siteTypeId);
+
+        Task<T> GetClientSiteTypeAsync(string clientId, string siteTypeId);
     }
 }
