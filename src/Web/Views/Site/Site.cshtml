@@ -1,0 +1,10 @@
+﻿@model SiteRenderingViewModel
+@{
+
+    Layout = "~/Views/Shared/_SiteAdminLayout.cshtml";
+    ViewData["ProjectId"] = Model.ProjectId;
+}
+
+<div class="embed-responsive embed-responsive-16by9">
+    <iframe class="embed-responsive-item" @*src="@Model.PresentationLink" *@ allowfullscreen></iframe>
+</div>

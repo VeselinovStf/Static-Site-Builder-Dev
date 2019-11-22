@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<partial name="_SiteAdminHead.cshtml" />
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <!-- /#sidebar-wrapper -->
+        @await Component.InvokeAsync("AdminSideNavigation", new { id = ViewData["ProjectId"] })
+        <!-- Page Content -->
+        <!--Slidebar buttons-->
+
+        <partial name="_SiteAdminNavigation.cshtml" />
+        <div class="content-wrapper">
+            <partial name="_SiteAdminContentHeader.cshtml" />
+
+            <partial name="_CookieConsentPartial" />
+            <!-- Main content -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+
+            <!-- /#page-content-wrapper -->
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+        <!--Footer-->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 3.0.0-rc.3
+            </div>
+        </footer>
+    </div>
+
+    <partial name="_SiteAdminFooterEnvirenment.cshtml" />
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
