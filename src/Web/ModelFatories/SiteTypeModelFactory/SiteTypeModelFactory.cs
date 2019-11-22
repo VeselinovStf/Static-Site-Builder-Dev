@@ -33,7 +33,7 @@ namespace Web.ModelFatories.SiteTypeModelFactory
                 Name = serviceCall.Name,
                 NewProjectLocation = serviceCall.NewProjectLocation,
                 Repository = serviceCall.Repository,
-                TemplateLocation = serviceCall.Repository,
+                TemplateLocation = serviceCall.TemplateLocation,
                 ClientId = serviceCall.ClientId,
                 Id = serviceCall.Id,
                 IsLaunched = serviceCall.IsLaunched

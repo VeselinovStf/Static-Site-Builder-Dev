@@ -5,6 +5,7 @@ namespace ApplicationCore.Entities
     public class LaunchConfig : BaseEntity
     {
         public bool IsLaunched { get; set; }
+        public bool IsPushed { get; set; }
 
         public string CardApiKey { get; set; }
 

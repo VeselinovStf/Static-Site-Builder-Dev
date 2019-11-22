@@ -11,6 +11,7 @@ using Infrastructure.ClientProjects;
 using Infrastructure.ClientProjects.DTOs;
 using Infrastructure.Data;
 using Infrastructure.Identity;
+using Infrastructure.LaunchSite;
 using Infrastructure.Logging;
 using Infrastructure.Messages;
 using Infrastructure.Messages.DTOs;
@@ -76,7 +77,6 @@ namespace Web
 
             //Messages
             services.AddScoped<IMessagesModelFactory, MessagesModelFactory>();
-
             services.AddScoped<IMessageService<MessageDTO>, MailBoxService>();
             services.AddScoped<IMailBoxService<MailBoxDTO>, MailBoxService>();
 
@@ -103,6 +103,9 @@ namespace Web
             services.AddScoped<SiteTypesFactory, BlogTypeSiteFactory>();
             services.AddScoped<SiteTypesFactory, StoreTypeSiteFactory>();
 
+            //LaunchSite
+            services.AddScoped<ILaunchSiteService, LaunchSiteService>();
+
             //Client
             services.AddScoped<IClientModelFactory, ClientModelFactory>();
 
@@ -112,8 +115,9 @@ namespace Web
             services.AddScoped<IAppMailBoxService, AppMailBoxService>();
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
 
-            //Extend Service
+            //Infrastructure Services
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IFileTransporter, FileTransporter>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddHttpContextAccessor();

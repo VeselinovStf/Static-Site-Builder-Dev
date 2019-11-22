@@ -22,5 +22,38 @@ namespace ApplicationCore.Services
 
             return this.launchConfigRepository.GetSingleBySpec(specification);
         }
+
+        public async Task LaunchSiteTypeLaunchConfig(string siteTypeId)
+        {
+            var specification = new SiteTypeLaunchConfigSpecification(siteTypeId);
+
+            var config = this.launchConfigRepository.GetSingleBySpec(specification);
+
+            config.IsLaunched = true;
+
+            await this.launchConfigRepository.UpdateAsync(config);
+        }
+
+        public async Task PushSiteTypeLaunchConfig(string siteTypeId)
+        {
+            var specification = new SiteTypeLaunchConfigSpecification(siteTypeId);
+
+            var config = this.launchConfigRepository.GetSingleBySpec(specification);
+
+            config.IsPushed = true;
+
+            await this.launchConfigRepository.UpdateAsync(config);
+        }
+
+        public async Task UnLaunchSiteTypeLaunchConfig(string siteTypeId)
+        {
+            var specification = new SiteTypeLaunchConfigSpecification(siteTypeId);
+
+            var config = this.launchConfigRepository.GetSingleBySpec(specification);
+
+            config.IsLaunched = false;
+
+            await this.launchConfigRepository.UpdateAsync(config);
+        }
     }
 }
