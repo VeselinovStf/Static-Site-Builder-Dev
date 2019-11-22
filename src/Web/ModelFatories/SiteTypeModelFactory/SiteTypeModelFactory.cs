@@ -21,5 +21,22 @@ namespace Web.ModelFatories.SiteTypeModelFactory
                 }))
             };
         }
+
+        public SiteTypeEditViewModel Create(SiteTypeEditorDTO serviceCall)
+        {
+            return new SiteTypeEditViewModel()
+            {
+                CardApiKey = serviceCall.CardApiKey,
+                CardServiceGate = serviceCall.CardServiceGate,
+                Description = serviceCall.Description,
+                HostingServiceGate = serviceCall.HostingServiceGate,
+                Name = serviceCall.Name,
+                NewProjectLocation = serviceCall.NewProjectLocation,
+                Repository = serviceCall.Repository,
+                TemplateLocation = serviceCall.Repository,
+                ClientId = serviceCall.ClientId,
+                Id = serviceCall.Id
+            };
+        }
     }
 }

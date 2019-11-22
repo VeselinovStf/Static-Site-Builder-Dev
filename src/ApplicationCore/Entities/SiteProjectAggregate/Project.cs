@@ -3,7 +3,9 @@ using ApplicationCore.Entities.BlogSiteTypeEntities;
 using ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate;
 using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ApplicationCore.Entities.SiteProjectAggregate
 {
@@ -23,7 +25,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
         {
             get
             {
-                return new List<StoreTypeSite>(_storeSiteTypes.AsReadOnly());
+                return new List<StoreTypeSite>(_storeSiteTypes.AsReadOnly().Where(b => !b.IsDeleted));
             }
         }
 
@@ -31,7 +33,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
         {
             get
             {
-                return new List<BlogTypeSite>(_blogSiteTypes.AsReadOnly());
+                return new List<BlogTypeSite>(_blogSiteTypes.AsReadOnly().Where(b => !b.IsDeleted));
             }
         }
 
@@ -40,13 +42,27 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository)
         {
+            var newStoreId = Guid.NewGuid().ToString();
             _storeSiteTypes.Add(new StoreTypeSite()
             {
+                Id = newStoreId,
                 Name = name,
                 Description = description,
                 NewProjectLocation = newProjectLocation,
                 TemplateLocation = templateLocation,
                 ClientId = clientId,
+                LaunchingConfig = new LaunchConfig()
+                {
+                    SiteTypeId = newStoreId,
+                    CardApiKey = cardApiKey,
+                    CardServiceGate = cardServiceGate,
+                    HostingServiceGate = hostingServiceGate,
+                    Repository = repository,
+                    IsLaunched = false,
+                    IsDeleted = false,
+                    CreatedOn = DateTime.Now,
+                    ModifiedOn = DateTime.Now,
+                }
             });
         }
 
@@ -55,13 +71,27 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository)
         {
+            var newBlogId = Guid.NewGuid().ToString();
             _blogSiteTypes.Add(new BlogTypeSite()
             {
+                Id = newBlogId,
                 Name = name,
                 Description = description,
                 NewProjectLocation = newProjectLocation,
                 TemplateLocation = templateLocation,
                 ClientId = clientId,
+                LaunchingConfig = new LaunchConfig()
+                {
+                    SiteTypeId = newBlogId,
+                    CardApiKey = cardApiKey,
+                    CardServiceGate = cardServiceGate,
+                    HostingServiceGate = hostingServiceGate,
+                    Repository = repository,
+                    IsLaunched = false,
+                    IsDeleted = false,
+                    CreatedOn = DateTime.Now,
+                    ModifiedOn = DateTime.Now,
+                }
             });
         }
     }

@@ -34,6 +34,7 @@ namespace Infrastructure.ClientProjects
 
                 var siteTypes = new List<ClientProjectDTO>(project.StoreSiteTypes.Select(p => new ClientProjectDTO()
                 {
+                    Id = p.Id,
                     Name = p.Name,
                     Description = p.Description,
                     CreatedOn = p.CreatedOn,
@@ -44,6 +45,7 @@ namespace Infrastructure.ClientProjects
 
                 siteTypes.AddRange(new List<ClientProjectDTO>(project.BlogSiteTypes.Select(p => new ClientProjectDTO()
                 {
+                    Id = p.Id,
                     Name = p.Name,
                     Description = p.Description,
                     CreatedOn = p.CreatedOn,

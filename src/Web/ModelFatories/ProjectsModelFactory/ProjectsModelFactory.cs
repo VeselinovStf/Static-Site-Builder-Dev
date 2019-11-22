@@ -20,6 +20,7 @@ namespace Web.ModelFatories.ProjectsModelFactory
                 },
                 Projects = new List<SiteProjectViewModel>(serviceCall.Select(p => new SiteProjectViewModel()
                 {
+                    Id = p.Id,
                     Name = p.Name,
                     Description = p.Description,
                     CreatedOn = p.CreatedOn,

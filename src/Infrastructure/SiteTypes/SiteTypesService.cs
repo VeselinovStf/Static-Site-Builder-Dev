@@ -40,7 +40,7 @@ namespace Infrastructure.SiteTypes
              cardApiKey, cardServiceGate, hostingServiceGate,
              repository);
 
-        public async Task<bool> ConfirmType(string buildInType)
+        public async Task<bool> ConfirmTypeAsync(string buildInType)
         {
             try
             {
@@ -62,32 +62,32 @@ namespace Infrastructure.SiteTypes
             }
         }
 
-        public async Task Create(
+        public async Task CreateAsync(
             string name, string description, string clientId,
             string buildInType, string newProjectLocation, string templateLocation,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository)
         {
             Validator.StringIsNullOrEmpty(
-                 name, $"{nameof(SiteTypesService)} : {nameof(Create)} : {nameof(name)} : is null/empty");
+                 name, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(name)} : is null/empty");
             Validator.StringIsNullOrEmpty(
-                description, $"{nameof(SiteTypesService)} : {nameof(Create)} : {nameof(description)} : is null/empty");
+                description, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(description)} : is null/empty");
             Validator.StringIsNullOrEmpty(
-                clientId, $"{nameof(SiteTypesService)} : {nameof(Create)} : {nameof(clientId)} : is null/empty");
+                clientId, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(clientId)} : is null/empty");
             Validator.StringIsNullOrEmpty(
-                buildInType, $"{nameof(SiteTypesService)} : {nameof(Create)} : {nameof(buildInType)} : is null/empty");
+                buildInType, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(buildInType)} : is null/empty");
             Validator.StringIsNullOrEmpty(
-                newProjectLocation, $"{nameof(SiteTypesService)} : {nameof(Create)} : {nameof(newProjectLocation)} : is null/empty");
+                newProjectLocation, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(newProjectLocation)} : is null/empty");
             Validator.StringIsNullOrEmpty(
-                templateLocation, $"{nameof(SiteTypesService)} : {nameof(Create)} : {nameof(templateLocation)} : is null/empty");
+                templateLocation, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(templateLocation)} : is null/empty");
             Validator.StringIsNullOrEmpty(
-                cardApiKey, $"{nameof(SiteTypesService)} : {nameof(Create)} : {nameof(cardApiKey)} : is null/empty");
+                cardApiKey, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(cardApiKey)} : is null/empty");
             Validator.StringIsNullOrEmpty(
-                cardServiceGate, $"{nameof(SiteTypesService)} : {nameof(Create)} : {nameof(cardServiceGate)} : is null/empty");
+                cardServiceGate, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(cardServiceGate)} : is null/empty");
             Validator.StringIsNullOrEmpty(
-                hostingServiceGate, $"{nameof(SiteTypesService)} : {nameof(Create)} : {nameof(hostingServiceGate)} : is null/empty");
+                hostingServiceGate, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(hostingServiceGate)} : is null/empty");
             Validator.StringIsNullOrEmpty(
-                repository, $"{nameof(SiteTypesService)} : {nameof(Create)} : {nameof(repository)} : is null/empty");
+                repository, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(repository)} : is null/empty");
 
             try
             {
@@ -96,12 +96,12 @@ namespace Infrastructure.SiteTypes
                 var clientProject = await this.appProjectService.GetClientProject(clientId);
 
                 Validator.ObjectIsNull(
-                    clientProject, $"{nameof(SiteTypesService)} : {nameof(Create)} : {nameof(clientProject)} : Object is null");
+                    clientProject, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(clientProject)} : Object is null");
 
                 var clientProjectId = clientProject.Id;
 
                 Validator.StringIsNullOrEmpty(
-                    clientProjectId, $"{nameof(SiteTypesService)} : {nameof(Create)} : {nameof(clientProjectId)} : is null/empty");
+                    clientProjectId, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(clientProjectId)} : is null/empty");
 
                 await this.ExecuteCreation(type, clientProjectId,
                            name, description, clientId,

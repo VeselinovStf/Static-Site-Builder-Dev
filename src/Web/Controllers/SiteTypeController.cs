@@ -14,17 +14,20 @@ namespace Web.Controllers
     public class SiteTypeController : Controller
     {
         private readonly ISiteTypesService<SiteTypeDTO> siteTypesService;
+        private readonly ISiteTypeEditorService<SiteTypeEditorDTO> siteTypeEditorService;
         private readonly IAccountService<ApplicationUser> accountService;
         private readonly ISiteTypeModelFactory modelFactory;
         private readonly IAppLogger<SiteTypeController> logger;
 
         public SiteTypeController(
             ISiteTypesService<SiteTypeDTO> siteTypesService,
+            ISiteTypeEditorService<SiteTypeEditorDTO> siteTypeEditorService,
             IAccountService<ApplicationUser> accountService,
             ISiteTypeModelFactory modelFactory,
             IAppLogger<SiteTypeController> logger)
         {
             this.siteTypesService = siteTypesService ?? throw new ArgumentNullException(nameof(siteTypesService));
+            this.siteTypeEditorService = siteTypeEditorService ?? throw new ArgumentNullException(nameof(siteTypeEditorService));
             this.accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
             this.modelFactory = modelFactory ?? throw new ArgumentNullException(nameof(modelFactory));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -65,7 +68,7 @@ namespace Web.Controllers
             {
                 if (await this.accountService.FindByIdAsync(clientId) != null)
                 {
-                    if (await this.siteTypesService.ConfirmType(buildInType))
+                    if (await this.siteTypesService.ConfirmTypeAsync(buildInType))
                     {
                         this.logger.LogInformation($"{nameof(SiteTypeController)} : {nameof(SelectSiteType)} : Sucess - Getting Site Types");
 
@@ -108,7 +111,7 @@ namespace Web.Controllers
             {
                 try
                 {
-                    await this.siteTypesService.Create(
+                    await this.siteTypesService.CreateAsync(
                         model.Name, model.Description, model.ClientId,
                         model.BuildInType, model.NewProjectLocation, model.TemplateLocation,
                         model.CardApiKey, model.CardServiceGate, model.HostingServiceGate,
@@ -121,6 +124,126 @@ namespace Web.Controllers
                 catch (Exception ex)
                 {
                     this.logger.LogWarning($"{nameof(SiteTypeController)} : {nameof(Create)} : Exception - {ex.Message}");
+                }
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Site(string clientId, string siteTypeId)
+        {
+            try
+            {
+                var serviceCall = await this.siteTypeEditorService.GetClientEditableSiteTypeAsync(clientId, siteTypeId);
+
+                this.logger.LogInformation($"{nameof(SiteTypeController)} : {nameof(Site)} : Sucess - Getting Client Site Type");
+
+                var model = this.modelFactory.Create(serviceCall);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(SiteTypeController)} : {nameof(Site)} : Exception - {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { message = "Can't display client site type. Contact support" });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditSite(string clientId, string siteTypeId)
+        {
+            try
+            {
+                var serviceCall = await this.siteTypeEditorService.GetClientEditableSiteTypeAsync(clientId, siteTypeId);
+
+                this.logger.LogInformation($"{nameof(SiteTypeController)} : {nameof(EditSite)} : Sucess - Getting Client Site Type");
+
+                var model = this.modelFactory.Create(serviceCall);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(SiteTypeController)} : {nameof(EditSite)} : Exception - {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { message = "Can't display client site type. Contact support" });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSite([Bind("Name","Description","ClientId", "Id",
+            "BuildInType", "NewProjectLocation", "TemplateLocation",
+            "CardApiKey", "CardServiceGate", "HostingServiceGate",
+            "Repository")]SiteTypeEditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await this.siteTypeEditorService.EditSiteTypeAsync(
+                        model.Name, model.Description, model.ClientId,
+                        model.Id, model.NewProjectLocation, model.TemplateLocation,
+                        model.CardApiKey, model.CardServiceGate, model.HostingServiceGate,
+                        model.Repository);
+
+                    this.logger.LogInformation($"{nameof(SiteTypeController)} : {nameof(EditSite)} : Success - Editing Client Site Type");
+
+                    return RedirectToAction("Site", "SiteType", new { clientId = model.ClientId, siteTypeId = model.Id });
+                }
+                catch (Exception ex)
+                {
+                    this.logger.LogWarning($"{nameof(SiteTypeController)} : {nameof(EditSite)} : Exception - {ex.Message}");
+
+                    return RedirectToAction("Error", "Home", new { message = "Can't edit client site type. Contact support" });
+                }
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteSite(string clientId, string siteTypeId)
+        {
+            try
+            {
+                var serviceCall = await this.siteTypeEditorService.GetClientEditableSiteTypeAsync(clientId, siteTypeId);
+
+                this.logger.LogInformation($"{nameof(SiteTypeController)} : {nameof(DeleteSite)} : Sucess - Getting Client Site Type");
+
+                var model = this.modelFactory.Create(serviceCall);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(SiteTypeController)} : {nameof(DeleteSite)} : Exception - {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { message = "Can't display client site type. Contact support" });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteSite([Bind("ClientId", "Id")]SiteTypeEditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await this.siteTypeEditorService.DeleteSiteTypeAsync(model.ClientId, model.Id);
+
+                    this.logger.LogInformation($"{nameof(SiteTypeController)} : {nameof(DeleteSite)} : Sucess - DFeletition Client Site Type");
+
+                    return RedirectToAction("Index", "Projects", new { clientId = model.ClientId });
+                }
+                catch (Exception ex)
+                {
+                    this.logger.LogWarning($"{nameof(SiteTypeController)} : {nameof(DeleteSite)} : Exception - {ex.Message}");
+
+                    return RedirectToAction("Error", "Home", new { message = "Can't delete client site type. Contact support" });
                 }
             }
 

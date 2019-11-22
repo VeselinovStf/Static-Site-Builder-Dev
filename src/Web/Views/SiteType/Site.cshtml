@@ -1,0 +1,69 @@
+﻿@model SiteTypeEditViewModel
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 ftco-animate">
+                <h2 class="mb-3">Site Details</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="media block-12 services border text-center">
+                <ul class="about-author">
+                    <li>
+                        <h4>
+                            @Html.DisplayNameFor(m => m.Name) :
+                            @Html.DisplayFor(m => m.Name)
+                        </h4>
+                    </li>
+
+                    <li>
+                        <h4>
+                            @Html.DisplayNameFor(m => m.Description) :
+                            @Html.DisplayFor(m => m.Description)
+                        </h4>
+                    </li>
+                    <li>
+                        <h4>
+                            @Html.DisplayNameFor(m => m.NewProjectLocation) :
+                            @Html.DisplayFor(m => m.NewProjectLocation)
+                        </h4>
+                    </li>
+                    <li>
+                        <h4>
+                            @Html.DisplayNameFor(m => m.TemplateLocation) :
+                            @Html.DisplayFor(m => m.TemplateLocation)
+                        </h4>
+                    </li>
+                    <li>
+                        <h4>
+                            @Html.DisplayNameFor(m => m.CardApiKey) :
+                            @Html.DisplayFor(m => m.CardApiKey)
+                        </h4>
+                    </li>
+                    <li>
+                        <h4>
+                            @Html.DisplayNameFor(m => m.CardServiceGate) :
+                            @Html.DisplayFor(m => m.CardServiceGate)
+                        </h4>
+                    </li>
+                    <li>
+                        <h4>
+                            @Html.DisplayNameFor(m => m.HostingServiceGate) :
+                            @Html.DisplayFor(m => m.HostingServiceGate)
+                        </h4>
+                    </li>
+                    <li>
+                        <h4>
+                            @Html.DisplayNameFor(m => m.Repository) :
+                            @Html.DisplayFor(m => m.Repository)
+                        </h4>
+                    </li>
+                </ul>
+                <a asp-action="EditSite" asp-controller="SiteType" asp-route-clientId="@Model.ClientId" asp-route-siteTypeId="@Model.Id" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Edit</a>
+                <a asp-action="DeleteSite" asp-controller="SiteType" asp-route-clientId="@Model.ClientId" asp-route-siteTypeId="@Model.Id" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Delete</a>
+            </div>
+        </div>
+    </div>
+</section> <!-- .section -->
+<a asp-action="Index" asp-controller="Projects" asp-route-clientId="@Model.ClientId" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Back to Projects</a>
