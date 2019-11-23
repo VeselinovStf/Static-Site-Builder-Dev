@@ -56,8 +56,9 @@ namespace Infrastructure.LaunchSite
 
                         if (!clientStoreConfig.IsLaunched && !clientStoreConfig.IsPushed)
                         {
-                            await this.fileTransporter.CreateHub("TestSSB");
-                            this.fileTransporter.DirectoryCoppy(clientStoreSiteType.TemplateLocation, clientStoreSiteType.NewProjectLocation);
+                            //await this.fileTransporter.CreateHub("TestSSB");
+                            //this.fileTransporter.DirectoryCoppy(clientStoreSiteType.TemplateLocation, clientStoreSiteType.NewProjectLocation);
+                            await this.fileTransporter.PushProject("fasas", clientStoreSiteType.TemplateLocation);
 
                             await this.appLaunchConfigService.LaunchSiteTypeLaunchConfig(clientStoreSiteType.Id);
                             await this.appLaunchConfigService.PushSiteTypeLaunchConfig(clientStoreSiteType.Id);
@@ -79,7 +80,7 @@ namespace Infrastructure.LaunchSite
 
                     if (!clientBlogConfig.IsLaunched && !clientBlogConfig.IsPushed)
                     {
-                        this.fileTransporter.DirectoryCoppy(clientBlogSiteType.TemplateLocation, clientBlogSiteType.NewProjectLocation);
+                        // this.fileTransporter.DirectoryCoppy(clientBlogSiteType.TemplateLocation, clientBlogSiteType.NewProjectLocation);
 
                         await this.appLaunchConfigService.LaunchSiteTypeLaunchConfig(clientBlogSiteType.Id);
                         await this.appLaunchConfigService.PushSiteTypeLaunchConfig(clientBlogSiteType.Id);

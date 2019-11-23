@@ -4,6 +4,7 @@ using Infrastructure.Services.APIClientService.Clients;
 using Infrastructure.Services.HubConnectorService.Exceptions;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -58,12 +59,24 @@ namespace Infrastructure.Services.HubConnectorService
             return await ExecutePush(hubName, sourceDirName, Options.AccesTokken, copySubDir);
         }
 
-        private async Task<bool> ExecutePush(string hubName, string sourceDirName, string accesTokken, bool copySubDir)
+        private async Task<bool> ExecutePush(string hubName, string sourceDirName, string accesTokken, bool copySubDirs = true, string destDirName = "")
         {
-            throw new NotImplementedException();
+            var branch = "master";
+            var commitMessage = "Initial";
+            var actions = "create";
+
+            //var filePath = new List<string>();
+            //var contents = new List<string>();
+
+            //USE TWO LISTS TO PASS DATA, if the end function is pre-created to add more to the hub action
+            var directoryCoppy = new List<FileContent>();
+
+            DirectoryCoppy(sourceDirName, directoryCoppy);
+
+            return false;
         }
 
-        public void DirectoryCoppy(string sourceDirName, string destDirName, bool copySubDirs = true)
+        private void DirectoryCoppy(string sourceDirName, List<FileContent> content, string destDirName = "", bool copySubDirs = true)
         {
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
@@ -76,18 +89,30 @@ namespace Infrastructure.Services.HubConnectorService
             }
 
             DirectoryInfo[] dirs = dir.GetDirectories();
-            // If the destination directory doesn't exist, create it.
-            if (!Directory.Exists(destDirName))
-            {
-                Directory.CreateDirectory(destDirName);
-            }
 
-            // Get the files in the directory and copy them to the new location.
             FileInfo[] files = dir.GetFiles();
             foreach (FileInfo file in files)
             {
-                string temppath = Path.Combine(destDirName, file.Name);
-                file.CopyTo(temppath, false);
+                if (destDirName == "")
+                {
+                    string temppath = destDirName + file.Name;
+
+                    content.Add(new FileContent()
+                    {
+                        FilePath = temppath,
+                        Content = temppath + " 1"
+                    });
+                }
+                else
+                {
+                    string temppath = destDirName + "/" + file.Name;
+
+                    content.Add(new FileContent()
+                    {
+                        FilePath = temppath,
+                        Content = temppath + " 1"
+                    });
+                }
             }
 
             // If copying subdirectories, copy them and their contents to new location.
@@ -95,8 +120,18 @@ namespace Infrastructure.Services.HubConnectorService
             {
                 foreach (DirectoryInfo subdir in dirs)
                 {
-                    string temppath = Path.Combine(destDirName, subdir.Name);
-                    DirectoryCoppy(subdir.FullName, temppath, copySubDirs);
+                    if (destDirName == "")
+                    {
+                        string temppath = destDirName + subdir.Name;
+
+                        DirectoryCoppy(subdir.FullName, content, temppath, copySubDirs);
+                    }
+                    else
+                    {
+                        string temppath = destDirName + "/" + subdir.Name;
+
+                        DirectoryCoppy(subdir.FullName, content, temppath, copySubDirs);
+                    }
                 }
             }
         }
@@ -126,5 +161,12 @@ namespace Infrastructure.Services.HubConnectorService
                 throw new FileTransporterDirectoryToTransportNotExistExeption($"{nameof(FileTransporterDirectoryToTransportNotExistExeption)} : No Files Directory to transport From");
             }
         }
+    }
+
+    public class FileContent
+    {
+        public string FilePath { get; set; }
+
+        public string Content { get; set; }
     }
 }

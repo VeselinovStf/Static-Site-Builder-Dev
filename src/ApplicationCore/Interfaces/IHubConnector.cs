@@ -28,7 +28,7 @@ namespace ApplicationCore.Interfaces
         /// <param name="sourceDirName">Source directory</param>
         /// <param name="destDisName">Destination directory</param>
         /// <param name="copySubDirs">Default set to coppy all sub directoies</param>
-        void DirectoryCoppy(string sourceDirName, string destDisName, bool copySubDirs = true);
+       // void DirectoryCoppy(string sourceDirName, string destDisName, bool copySubDirs = true);
 
         /// <summary>
         /// Moves Whole Directory from one place to new place.
