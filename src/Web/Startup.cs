@@ -125,7 +125,10 @@ namespace Web
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<AuthHubConnectorOptions>(Configuration);
 
-            services.AddHttpClient<GitLabHubClient>();
+            services.AddHttpClient<GitLabHubClient>(c =>
+                c.BaseAddress = new Uri("https://gitlab.com/api/v4/")
+                );
+
             services.AddHttpContextAccessor();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

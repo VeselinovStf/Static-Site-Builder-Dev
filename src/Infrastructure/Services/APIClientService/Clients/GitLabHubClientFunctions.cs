@@ -18,7 +18,7 @@ namespace Infrastructure.Services.APIClientService.Clients
                 Name = newHubName
             };
 
-            var response = await this.Client.PostAsync($"projects?access_token={credidentials}", this.CreateHttpContent<CreateHubDTO>(model));
+            var response = await this.Client.PostAsync($"projects?access_token={credidentials}", base.CreateHttpContent<CreateHubDTO>(model));
 
             response.EnsureSuccessStatusCode();
 
