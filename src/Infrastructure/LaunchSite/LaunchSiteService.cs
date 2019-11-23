@@ -12,12 +12,12 @@ namespace Infrastructure.LaunchSite
     public class LaunchSiteService : ILaunchSiteService
     {
         private readonly IAppProjectsService<Project> appProjectService;
-        private readonly IFileTransporter fileTransporter;
+        private readonly IHubConnector fileTransporter;
         private readonly IAppLaunchConfigService<LaunchConfig> appLaunchConfigService;
 
         public LaunchSiteService(
            IAppProjectsService<Project> appProjectService,
-           IFileTransporter fileTransporter,
+           IHubConnector fileTransporter,
            IAppLaunchConfigService<LaunchConfig> appLaunchConfigService)
         {
             this.appProjectService = appProjectService ?? throw new ArgumentNullException(nameof(appProjectService));

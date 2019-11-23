@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Infrastructure.Services.Exceptions
+namespace Infrastructure.Services.HubConnectorService.Exceptions
 {
     public class FileTransporterDirectoryToTransportNotExistExeption : Exception
     {

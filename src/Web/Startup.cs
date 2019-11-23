@@ -15,7 +15,8 @@ using Infrastructure.LaunchSite;
 using Infrastructure.Logging;
 using Infrastructure.Messages;
 using Infrastructure.Messages.DTOs;
-using Infrastructure.Services;
+using Infrastructure.Services.EmailSenderService;
+using Infrastructure.Services.HubConnectorService;
 using Infrastructure.SiteTypes;
 using Infrastructure.SiteTypes.DTOs;
 using Microsoft.AspNetCore.Builder;
@@ -117,8 +118,9 @@ namespace Web
 
             //Infrastructure Services
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<IFileTransporter, FileTransporter>();
+            services.AddTransient<IHubConnector, HubConnector>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
+            services.Configure<AuthHubConnectorOptions>(Configuration);
 
             services.AddHttpContextAccessor();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

@@ -1,7 +1,25 @@
-﻿namespace ApplicationCore.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace ApplicationCore.Interfaces
 {
-    public interface IFileTransporter
+    public interface IHubConnector
     {
+        /// <summary>
+        /// Create site project hub
+        /// </summary>
+        /// <param name="name">Name of the project, used for hub name</param>
+        /// <returns>Created or not bool value</returns>
+        Task<bool> CreateHub(string name);
+
+        /// <summary>
+        /// Uploading new project directly to hub
+        /// </summary>
+        /// <param name="hubProjectName">Project name created by CreateHub</param>
+        /// <param name="sourceDirName">Source of ptoject template</param>
+        /// <param name="copySubDir">copy all or coppy only file</param>
+        /// <returns>Pushed or not bool value</returns>
+        Task<bool> PushProject(string hubProjectName, string sourceDirName, bool copySubDir = true);
+
         /// <summary>
         /// Coppy whole directory from one place to other
         /// Main idea is to move template project from one place to other.

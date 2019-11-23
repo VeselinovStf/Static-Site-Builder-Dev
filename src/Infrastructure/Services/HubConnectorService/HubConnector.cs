@@ -1,12 +1,47 @@
 ﻿using ApplicationCore.Interfaces;
-using Infrastructure.Services.Exceptions;
+using Infrastructure.Services.HubConnectorService.Exceptions;
+using Microsoft.Extensions.Options;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
-namespace Infrastructure.Services
+namespace Infrastructure.Services.HubConnectorService
 {
-    public class FileTransporter : IFileTransporter
+    public class HubConnector : IHubConnector
     {
+        public HubConnector(IOptions<AuthHubConnectorOptions> options)
+        {
+            this.Options = options.Value;
+        }
+
+        public AuthHubConnectorOptions Options { get; }
+
+        public async Task<bool> CreateHub(string name)
+        {
+            return await ExecuteCreate(name, Options.AccesTokken);
+        }
+
+        private async Task<bool> ExecuteCreate(string name, string accesTokken)
+        {
+            //POST
+            //CREATE PROJECT
+            // https://gitlab.com/api/v4/projects?access_token=xz5NLCcyjkovPguXWzGC
+            //{
+            //	"name" : "Test2"
+            //}
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> PushProject(string hubName, string sourceDirName, bool copySubDir = true)
+        {
+            return await ExecutePush(hubName, sourceDirName, Options.AccesTokken, copySubDir);
+        }
+
+        private async Task<bool> ExecutePush(string hubName, string sourceDirName, string accesTokken, bool copySubDir)
+        {
+            throw new NotImplementedException();
+        }
+
         public void DirectoryCoppy(string sourceDirName, string destDirName, bool copySubDirs = true)
         {
             // Get the subdirectories for the specified directory.
