@@ -1,4 +1,6 @@
 ﻿using ApplicationCore.Interfaces;
+using Infrastructure.Guard;
+using Infrastructure.Services.APIClientService.Clients;
 using Infrastructure.Services.HubConnectorService.Exceptions;
 using Microsoft.Extensions.Options;
 using System;
@@ -9,9 +11,14 @@ namespace Infrastructure.Services.HubConnectorService
 {
     public class HubConnector : IHubConnector
     {
-        public HubConnector(IOptions<AuthHubConnectorOptions> options)
+        private readonly IAPIClientService<GitLabHubClient> clientHub;
+
+        public HubConnector(
+            IOptions<AuthHubConnectorOptions> options,
+            IAPIClientService<GitLabHubClient> clientHub)
         {
             this.Options = options.Value;
+            this.clientHub = clientHub ?? throw new ArgumentNullException(nameof(clientHub));
         }
 
         public AuthHubConnectorOptions Options { get; }
@@ -23,13 +30,27 @@ namespace Infrastructure.Services.HubConnectorService
 
         private async Task<bool> ExecuteCreate(string name, string accesTokken)
         {
-            //POST
-            //CREATE PROJECT
-            // https://gitlab.com/api/v4/projects?access_token=xz5NLCcyjkovPguXWzGC
-            //{
-            //	"name" : "Test2"
-            //}
-            throw new NotImplementedException();
+            Validator.StringIsNullOrEmpty(
+              name, $"{nameof(HubConnector)} : {nameof(ExecuteCreate)} : {nameof(name)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+              accesTokken, $"{nameof(HubConnector)} : {nameof(ExecuteCreate)} : {nameof(accesTokken)} : is null/empty");
+
+            try
+            {
+                var clientHubCall = await this.clientHub.CreateHubAsync(name, accesTokken);
+
+                if (clientHubCall)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new HubConnectorCreateHubException($"{nameof(HubConnectorCreateHubException)} : Exception : Can't create hub! : {ex.Message}");
+            }
         }
 
         public async Task<bool> PushProject(string hubName, string sourceDirName, bool copySubDir = true)

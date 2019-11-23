@@ -56,6 +56,7 @@ namespace Infrastructure.LaunchSite
 
                         if (!clientStoreConfig.IsLaunched && !clientStoreConfig.IsPushed)
                         {
+                            await this.fileTransporter.CreateHub("TestSSB");
                             this.fileTransporter.DirectoryCoppy(clientStoreSiteType.TemplateLocation, clientStoreSiteType.NewProjectLocation);
 
                             await this.appLaunchConfigService.LaunchSiteTypeLaunchConfig(clientStoreSiteType.Id);

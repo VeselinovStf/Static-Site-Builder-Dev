@@ -15,6 +15,8 @@ using Infrastructure.LaunchSite;
 using Infrastructure.Logging;
 using Infrastructure.Messages;
 using Infrastructure.Messages.DTOs;
+using Infrastructure.Services.APIClientService;
+using Infrastructure.Services.APIClientService.Clients;
 using Infrastructure.Services.EmailSenderService;
 using Infrastructure.Services.HubConnectorService;
 using Infrastructure.SiteTypes;
@@ -119,9 +121,11 @@ namespace Web
             //Infrastructure Services
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IHubConnector, HubConnector>();
+            services.AddTransient<IAPIClientService<GitLabHubClient>, GitLabAPIClientService>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<AuthHubConnectorOptions>(Configuration);
 
+            services.AddHttpClient<GitLabHubClient>();
             services.AddHttpContextAccessor();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
