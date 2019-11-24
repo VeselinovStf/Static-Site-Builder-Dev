@@ -1,0 +1,18 @@
+{% for product in site.data.products.products%}
+   {% if product.id  == include.productId %}
+<div class="col-md-12">
+    <div class="product-tab">
+        <ul class="tab-nav">
+            <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
+            <li><a data-toggle="tab" href="#tab1">Details</a></li>
+
+        </ul>
+        <div class="tab-content">
+            <div id="tab1" class="tab-pane fade in active">
+                <p>{{ product.details}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endfor %}

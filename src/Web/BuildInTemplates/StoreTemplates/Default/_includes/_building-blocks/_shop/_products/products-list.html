@@ -1,0 +1,49 @@
+{% for product in site.data.products.products %}
+{% assign productId = product.detailsLink %}
+<div class="col-md-4 col-sm-6 col-xs-6">
+        <div class="product product-single">
+             <div class="product-thumb">
+        <div class="product-label">
+            {% if product.state%}
+            <span>New</span>
+            {% endif %}
+            {% if product.discount-procent %}
+            <span class="sale">-{{ product.discount-procent}}%</span>
+            {% endif %}
+
+        </div>
+        <ul class="product-countdown">
+            <li><span>00 H</span></li>
+            <li><span>00 M</span></li>
+            <li><span>00 S</span></li> 
+        </ul>
+        <button class="main-btn quick-view" ><a href="/product-details/{{ productId }}">Details</a>
+            </button>
+        <img src="{{ product.image }}" alt="">
+    </div>
+    <div class="product-body">
+        <h3 class="product-price">${{ product.price - ( product.price * (product.discount-procent / 100 )) }}
+            {% if product.discount-procent %}
+            <del class="product-old-price">${{ product.price }}</del>
+            {% endif %}</h3>
+        <div class="product-rating">
+            {% if rating %}
+            {% for number in product.rating %}
+            <i class="fa fa-star"></i>
+            {% endfor %}
+            {% else %}
+            <i class="fa fa-star empty"></i>
+            {% endif %}
+
+        </div>
+        <h2 class="product-name"><a href="#">{{ product.name}}</a></h2>
+        <div class="product-btns">
+            <button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
+            <button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
+            <button  class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i>Add to
+                Cart</button>
+        </div>
+    </div>
+        </div>
+    </div>
+{% endfor %}

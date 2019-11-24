@@ -14,6 +14,7 @@ namespace Web.Controllers
         {
             try
             {
+                //CALL TO HOSTING BUILD AND GET THE URL FOR PREVIEW
                 var model = new SiteRenderingViewModel();
 
                 return View(model);

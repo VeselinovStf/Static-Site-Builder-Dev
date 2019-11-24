@@ -48,7 +48,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
                 Id = newStoreId,
                 Name = name,
                 Description = description,
-                TemplateLocation = Environment.CurrentDirectory + "\\BuildInTemplates\\StoreTemplates",
+                TemplateLocation = Environment.CurrentDirectory + "\\BuildInTemplates\\StoreTemplates\\Default",
                 ClientId = clientId,
                 LaunchingConfig = new LaunchConfig()
                 {
@@ -77,7 +77,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
                 Id = newBlogId,
                 Name = name,
                 Description = description,
-                TemplateLocation = Environment.CurrentDirectory + "\\BuildInTemplates\\BlogTemplates\\Test",
+                TemplateLocation = Environment.CurrentDirectory + "\\BuildInTemplates\\BlogTemplates\\",
                 ClientId = clientId,
                 LaunchingConfig = new LaunchConfig()
                 {

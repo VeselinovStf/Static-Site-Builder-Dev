@@ -1,0 +1,25 @@
+
+<!-- section -->
+<div class="section section-grey">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<!-- banner -->
+          
+		
+			    {% include _building-blocks/_hot-deals/hot-deals-main-banner.html %}
+		
+			<!-- /banner -->
+
+			<!-- banner -->
+			{% for deal in site.data.top-products.c-hot-deal-collection.products %}
+			    {% include _building-blocks/_hot-deals/hot-deal-collection-item.html %}
+			{% endfor %}
+			
+
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>

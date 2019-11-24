@@ -1,0 +1,33 @@
+
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div id="aside" class="col-md-3">
+                {% include page-structure.html param='shop-sortings' %}
+            </div>
+
+            <div id="main" class="col-md-9">
+                <!-- store top filter -->
+                <div class="store-filter clearfix">
+                    {% include page-structure.html param='shop-pagination' %}
+                </div>
+
+                <!-- STORE -->
+                <div id="store">
+                    <!-- row -->
+                    <div class="row">
+                            {% include page-structure.html param='products' %}
+                    </div>
+                </div>
+
+                <div class="store-filter clearfix">
+                        {% include page-structure.html param='shop-pagination' %}
+                    </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

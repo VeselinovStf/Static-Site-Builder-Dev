@@ -64,6 +64,8 @@ namespace Infrastructure.LaunchSite
 
                             await this.fileTransporter.PushProject(createdHubId, clientStoreSiteType.TemplateLocation);
 
+                            //TODO: ADD TO HOSTING
+
                             await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
                             await this.appLaunchConfigService.PushSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
                         }

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+  {% include _site-structure/_main-blocks/_head/head.html %}
+<body>
+    {% include _site-structure/_main-blocks/_header/header.html %}
+    <main class="main">
+        <div class="products">
+
+            {{ content }}
+        </div>
+    </main>
+    {% include _site-structure/_main-blocks/_footer/footer.html %}
+
+    <div hidden id="snipcart" data-api-key="MzMxN2Y0ODMtOWNhMy00YzUzLWFiNTYtZjMwZTRkZDcxYzM4"></div>
+    <script src="https://cdn.snipcart.com/themes/v3.0.0-beta.3/default/snipcart.js" defer></script>
+    <!-- jQuery Plugins -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/slick.min.js"></script>
+    <script src="/assets/js/nouislider.min.js"></script>
+    <script src="/assets/js/jquery.zoom.min.js"></script>
+    <script src="/assets/js/main.js"></script>
+</body>
+</html>

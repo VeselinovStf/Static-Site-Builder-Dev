@@ -1,0 +1,26 @@
+
+<!-- section -->
+<div class="section">
+		<!-- container -->
+		<div class="container">
+<!-- row -->
+<div class="row">
+        <!-- section title -->
+        <div class="col-md-12">
+            <div class="section-title">
+                <h2 class="title">Picked For You</h2>
+            </div>
+        </div>
+        <!-- section title -->
+
+        {% for product in site.data.products.products %}
+			{% if product.picked-for-you %}
+			<!-- Product Single -->
+			{% include _building-blocks/_product-display/latest-product-banner.html %}
+			{% endif %}
+			<!-- /Product Single -->
+			{% endfor %}
+    </div>
+    <!-- /row -->
+        </div>
+</div>

@@ -1,0 +1,21 @@
+<!-- TOP BANNER -->
+<!-- HOME -->
+<div id="home">
+	<!-- container -->
+	<div class="container">
+		<!-- home wrap -->
+		<div class="home-wrap">
+			<!-- home slick -->
+			<div id="home-slick">
+				<!-- banner -->
+				{% for product in site.data.top-products.c-products-top-banner.products %}
+				{% include _building-blocks/_top-banner/product-top-banner-carousel.html  %}
+				{% endfor %}
+			</div>
+			<!-- /home slick -->
+		</div>
+		<!-- /home wrap -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- TOP BANNER -->
