@@ -44,10 +44,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<string>("NewProjectLocation")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
                     b.Property<string>("ProjectId");
 
                     b.Property<string>("TemplateLocation")
@@ -162,7 +158,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<string>("Repository");
+                    b.Property<string>("RepositoryId");
+
+                    b.Property<string>("RepositoryName");
 
                     b.Property<string>("SiteTypeId");
 
@@ -496,10 +494,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.Property<string>("NewProjectLocation")
                         .IsRequired()
                         .HasMaxLength(100);
 

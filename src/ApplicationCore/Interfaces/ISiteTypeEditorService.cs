@@ -12,7 +12,7 @@ namespace ApplicationCore.Interfaces
         /// <returns>User site type</returns>
         Task<T> GetClientEditableSiteTypeAsync(string clientId, string siteTypeId);
 
-        Task EditSiteTypeAsync(string name, string description, string clientId, string id, string newProjectLocation, string templateLocation, string cardApiKey, string cardServiceGate, string hostingServiceGate, string repository);
+        Task EditSiteTypeAsync(string name, string description, string clientId, string id, string cardApiKey, string cardServiceGate, string hostingServiceGate, string repository);
 
         Task DeleteSiteTypeAsync(string clientId, string siteTypeId);
 

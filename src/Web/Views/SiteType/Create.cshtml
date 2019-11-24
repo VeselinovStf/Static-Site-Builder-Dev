@@ -13,6 +13,7 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="@Model.ClientId" />
                     <input type="hidden" asp-for="@Model.BuildInType" />
+                    <input type="hidden" asp-for="@Model.TemplateName" />
                     <div class="form-group">
                         <label asp-for="Name"><i class="zmdi zmdi-email"></i></label>
                         <input asp-for="Name" type="text" name="Name" placeholder="Site Name" />
@@ -22,16 +23,6 @@
                         <label for="email"><i class="zmdi zmdi-email"></i></label>
                         <input asp-for="Description" type="text" name="description" placeholder="Site Description" />
                         <span asp-validation-for="Description" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="NewProjectLocation"><i class="zmdi zmdi-lock"></i></label>
-                        <input asp-for="NewProjectLocation" name="newProjectLocation" placeholder="Site Project Location" />
-                        <span asp-validation-for="NewProjectLocation" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="TemplateLocation"><i class="zmdi zmdi-lock-outline"></i></label>
-                        <input asp-for="TemplateLocation" type="text" name="templateLocation" placeholder="Site template location" />
-                        <span asp-validation-for="TemplateLocation" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="CardApiKey"><i class="zmdi zmdi-lock-outline"></i></label>

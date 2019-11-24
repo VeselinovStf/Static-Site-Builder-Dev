@@ -13,16 +13,7 @@
                         <form method="post">
                             <input type="hidden" asp-for="@Model.ClientId" />
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-group">
-                                @Html.DisplayNameFor(model => model.NewProjectLocation)
-                                <input asp-for="NewProjectLocation" class="form-control" />
-                                <span asp-validation-for="NewProjectLocation" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                @Html.DisplayNameFor(model => model.TemplateLocation)
-                                <input asp-for="TemplateLocation" class="form-control" />
-                                <span asp-validation-for="TemplateLocation" class="text-danger"></span>
-                            </div>
+
                             <div class="form-group">
                                 @Html.DisplayNameFor(model => model.Name)
                                 <input asp-for="Name" class="form-control" />

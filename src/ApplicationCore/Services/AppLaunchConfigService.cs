@@ -16,14 +16,25 @@ namespace ApplicationCore.Services
             this.launchConfigRepository = launchConfigRepository ?? throw new ArgumentNullException(nameof(launchConfigRepository));
         }
 
-        public async Task<LaunchConfig> GetSiteTypeLaunchConfig(string siteTypeId)
+        public async Task AddRepositoryIdAsync(string siteTypeId, string createdHubId)
+        {
+            var specification = new SiteTypeLaunchConfigSpecification(siteTypeId);
+
+            var config = this.launchConfigRepository.GetSingleBySpec(specification);
+
+            config.RepositoryId = createdHubId;
+
+            await this.launchConfigRepository.UpdateAsync(config);
+        }
+
+        public async Task<LaunchConfig> GetSiteTypeLaunchConfigAsync(string siteTypeId)
         {
             var specification = new SiteTypeLaunchConfigSpecification(siteTypeId);
 
             return this.launchConfigRepository.GetSingleBySpec(specification);
         }
 
-        public async Task LaunchSiteTypeLaunchConfig(string siteTypeId)
+        public async Task LaunchSiteTypeLaunchConfigAsync(string siteTypeId)
         {
             var specification = new SiteTypeLaunchConfigSpecification(siteTypeId);
 
@@ -34,7 +45,7 @@ namespace ApplicationCore.Services
             await this.launchConfigRepository.UpdateAsync(config);
         }
 
-        public async Task PushSiteTypeLaunchConfig(string siteTypeId)
+        public async Task PushSiteTypeLaunchConfigAsync(string siteTypeId)
         {
             var specification = new SiteTypeLaunchConfigSpecification(siteTypeId);
 
@@ -45,7 +56,7 @@ namespace ApplicationCore.Services
             await this.launchConfigRepository.UpdateAsync(config);
         }
 
-        public async Task UnLaunchSiteTypeLaunchConfig(string siteTypeId)
+        public async Task UnLaunchSiteTypeLaunchConfigAsync(string siteTypeId)
         {
             var specification = new SiteTypeLaunchConfigSpecification(siteTypeId);
 

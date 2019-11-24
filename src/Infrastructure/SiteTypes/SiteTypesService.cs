@@ -32,11 +32,11 @@ namespace Infrastructure.SiteTypes
 
         private async Task ExecuteCreation(SiteTypesEnum action, string clientProjectId,
             string name, string description, string clientId,
-            string buildInType, string newProjectLocation, string templateLocation,
+            string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository) => await _factories[action].Create(clientProjectId,
              name, description, clientId,
-             buildInType, newProjectLocation, templateLocation,
+             buildInType, templateName,
              cardApiKey, cardServiceGate, hostingServiceGate,
              repository);
 
@@ -64,7 +64,7 @@ namespace Infrastructure.SiteTypes
 
         public async Task CreateAsync(
             string name, string description, string clientId,
-            string buildInType, string newProjectLocation, string templateLocation,
+            string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository)
         {
@@ -76,10 +76,9 @@ namespace Infrastructure.SiteTypes
                 clientId, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(clientId)} : is null/empty");
             Validator.StringIsNullOrEmpty(
                 buildInType, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(buildInType)} : is null/empty");
+
             Validator.StringIsNullOrEmpty(
-                newProjectLocation, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(newProjectLocation)} : is null/empty");
-            Validator.StringIsNullOrEmpty(
-                templateLocation, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(templateLocation)} : is null/empty");
+                templateName, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(templateName)} : is null/empty");
             Validator.StringIsNullOrEmpty(
                 cardApiKey, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(cardApiKey)} : is null/empty");
             Validator.StringIsNullOrEmpty(
@@ -105,7 +104,7 @@ namespace Infrastructure.SiteTypes
 
                 await this.ExecuteCreation(type, clientProjectId,
                            name, description, clientId,
-                           buildInType, newProjectLocation, templateLocation,
+                           buildInType, templateName,
                            cardApiKey, cardServiceGate, hostingServiceGate,
                            repository);
             }

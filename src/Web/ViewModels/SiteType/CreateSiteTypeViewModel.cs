@@ -18,15 +18,7 @@ namespace Web.ViewModels.SiteType
 
         public string BuildInType { get; set; }
 
-        [Required]
-        [StringLength(200, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
-        [Display(Name = "New Project Location")]
-        public string NewProjectLocation { get; set; }
-
-        [Required]
-        [StringLength(200, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
-        [Display(Name = "Template Location")]
-        public string TemplateLocation { get; set; }
+        public string TemplateName { get; set; }
 
         [Display(Name = "Card API Key")]
         public string CardApiKey { get; set; }

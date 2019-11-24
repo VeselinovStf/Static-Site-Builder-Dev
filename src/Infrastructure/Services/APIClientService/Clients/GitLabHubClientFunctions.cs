@@ -1,11 +1,14 @@
 ﻿using Infrastructure.Services.APIClientService.DTOs;
+using Infrastructure.Services.APIClientService.Exceptions;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Services.APIClientService.Clients
 {
     public partial class GitLabHubClient
     {
-        public async Task<bool> PostCreateAsync(string newHubName, string credidentials)
+        public async Task<string> PostCreateAsync(string newHubName, string credidentials)
         {
             //POST
             //CREATE PROJECT
@@ -19,6 +22,40 @@ namespace Infrastructure.Services.APIClientService.Clients
             };
 
             var response = await this.Client.PostAsync($"projects?access_token={credidentials}", base.CreateHttpContent<CreateHubDTO>(model));
+
+            response.EnsureSuccessStatusCode();
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                var resultIdModel = GetCreatedResponse<HubProjectDTO>(responseBody);
+
+                return resultIdModel.id;
+            }
+
+            throw new GitHubClientPostCreateException($"{nameof(GitHubClientPostCreateException)} : Can't create to hub : {response.StatusCode}");
+        }
+
+        public async Task<bool> PushToHubAsync(string hubId, string accesTokken, List<string> filePaths, List<string> fileContents)
+        {
+            var branch = "master";
+            var commitMessage = "Initial";
+            var actions = "create";
+
+            var pushModel = new PushCreateDTO()
+            {
+                Branch = branch,
+                CommitMessage = commitMessage,
+                Actions = new List<HubFileDTO>(filePaths.Zip(fileContents, (fp, fc) => new HubFileDTO()
+                {
+                    Action = actions,
+                    FilePath = fp,
+                    Content = fc
+                }))
+            };
+
+            var response = await this.Client.PostAsync($"projects/{hubId}/repository/commits?access_token={accesTokken}", base.CreateHttpContent<PushCreateDTO>(pushModel));
 
             response.EnsureSuccessStatusCode();
 

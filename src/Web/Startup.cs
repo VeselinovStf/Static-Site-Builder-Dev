@@ -18,6 +18,7 @@ using Infrastructure.Messages.DTOs;
 using Infrastructure.Services.APIClientService;
 using Infrastructure.Services.APIClientService.Clients;
 using Infrastructure.Services.EmailSenderService;
+using Infrastructure.Services.FileReader;
 using Infrastructure.Services.HubConnectorService;
 using Infrastructure.SiteTypes;
 using Infrastructure.SiteTypes.DTOs;
@@ -121,6 +122,7 @@ namespace Web
             //Infrastructure Services
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IHubConnector, HubConnector>();
+            services.AddTransient<IFileReader, FileReader>();
             services.AddTransient<IAPIClientService<GitLabHubClient>, GitLabAPIClientService>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<AuthHubConnectorOptions>(Configuration);

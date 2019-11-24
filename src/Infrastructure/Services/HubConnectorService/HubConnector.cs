@@ -13,23 +13,26 @@ namespace Infrastructure.Services.HubConnectorService
     public class HubConnector : IHubConnector
     {
         private readonly IAPIClientService<GitLabHubClient> clientHub;
+        private readonly IFileReader fileReader;
 
         public HubConnector(
             IOptions<AuthHubConnectorOptions> options,
-            IAPIClientService<GitLabHubClient> clientHub)
+            IAPIClientService<GitLabHubClient> clientHub,
+            IFileReader fileReader)
         {
             this.Options = options.Value;
             this.clientHub = clientHub ?? throw new ArgumentNullException(nameof(clientHub));
+            this.fileReader = fileReader ?? throw new ArgumentNullException(nameof(fileReader));
         }
 
         public AuthHubConnectorOptions Options { get; }
 
-        public async Task<bool> CreateHub(string name)
+        public async Task<string> CreateHub(string name)
         {
             return await ExecuteCreate(name, Options.AccesTokken);
         }
 
-        private async Task<bool> ExecuteCreate(string name, string accesTokken)
+        private async Task<string> ExecuteCreate(string name, string accesTokken)
         {
             Validator.StringIsNullOrEmpty(
               name, $"{nameof(HubConnector)} : {nameof(ExecuteCreate)} : {nameof(name)} : is null/empty");
@@ -39,9 +42,45 @@ namespace Infrastructure.Services.HubConnectorService
 
             try
             {
-                var clientHubCall = await this.clientHub.CreateHubAsync(name, accesTokken);
+                var clientHubCallId = await this.clientHub.CreateHubAsync(name, accesTokken);
 
-                if (clientHubCall)
+                Validator.StringIsNullOrEmpty(
+                        clientHubCallId, $"{nameof(HubConnector)} : {nameof(ExecuteCreate)} : {nameof(clientHubCallId)} : is null/empty");
+
+                return clientHubCallId;
+            }
+            catch (Exception ex)
+            {
+                throw new HubConnectorCreateHubException($"{nameof(HubConnectorCreateHubException)} : Exception : Can't create hub! : {ex.Message}");
+            }
+        }
+
+        public async Task<bool> PushProject(string hubId, string sourceDirName, bool copySubDir = true)
+        {
+            return await ExecutePush(hubId, sourceDirName, Options.AccesTokken, copySubDir);
+        }
+
+        private async Task<bool> ExecutePush(string hubId, string sourceDirName, string accesTokken, bool copySubDirs = true, string destDirName = "")
+        {
+            Validator.StringIsNullOrEmpty(
+              hubId, $"{nameof(HubConnector)} : {nameof(ExecutePush)} : {nameof(hubId)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+             sourceDirName, $"{nameof(HubConnector)} : {nameof(ExecutePush)} : {nameof(sourceDirName)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+              accesTokken, $"{nameof(HubConnector)} : {nameof(ExecutePush)} : {nameof(accesTokken)} : is null/empty");
+
+            try
+            {
+                var filePaths = new List<string>();
+                var fileContents = new List<string>();
+
+                await DirectoryCoppy(sourceDirName, filePaths, fileContents);
+
+                var clientHubResult = await this.clientHub.PushDataToHub(hubId, accesTokken, filePaths, fileContents);
+
+                if (clientHubResult)
                 {
                     return true;
                 }
@@ -50,33 +89,11 @@ namespace Infrastructure.Services.HubConnectorService
             }
             catch (Exception ex)
             {
-                throw new HubConnectorCreateHubException($"{nameof(HubConnectorCreateHubException)} : Exception : Can't create hub! : {ex.Message}");
+                throw new HubConnectorExecutePushException($"{nameof(HubConnectorExecutePushException)} : Can't Execute Push to Hub : {ex.Message}");
             }
         }
 
-        public async Task<bool> PushProject(string hubName, string sourceDirName, bool copySubDir = true)
-        {
-            return await ExecutePush(hubName, sourceDirName, Options.AccesTokken, copySubDir);
-        }
-
-        private async Task<bool> ExecutePush(string hubName, string sourceDirName, string accesTokken, bool copySubDirs = true, string destDirName = "")
-        {
-            var branch = "master";
-            var commitMessage = "Initial";
-            var actions = "create";
-
-            //var filePath = new List<string>();
-            //var contents = new List<string>();
-
-            //USE TWO LISTS TO PASS DATA, if the end function is pre-created to add more to the hub action
-            var directoryCoppy = new List<FileContent>();
-
-            DirectoryCoppy(sourceDirName, directoryCoppy);
-
-            return false;
-        }
-
-        private void DirectoryCoppy(string sourceDirName, List<FileContent> content, string destDirName = "", bool copySubDirs = true)
+        private async Task DirectoryCoppy(string sourceDirName, List<string> filePaths, List<string> fileContents, string destDirName = "", bool copySubDirs = true)
         {
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
@@ -97,21 +114,21 @@ namespace Infrastructure.Services.HubConnectorService
                 {
                     string temppath = destDirName + file.Name;
 
-                    content.Add(new FileContent()
-                    {
-                        FilePath = temppath,
-                        Content = temppath + " 1"
-                    });
+                    filePaths.Add(temppath);
+
+                    var fileContent = await this.fileReader.ReadFileAsync(file.FullName);
+
+                    fileContents.Add(fileContent);
                 }
                 else
                 {
                     string temppath = destDirName + "/" + file.Name;
 
-                    content.Add(new FileContent()
-                    {
-                        FilePath = temppath,
-                        Content = temppath + " 1"
-                    });
+                    filePaths.Add(temppath);
+
+                    var fileContent = await this.fileReader.ReadFileAsync(file.FullName);
+
+                    fileContents.Add(fileContent);
                 }
             }
 
@@ -124,13 +141,13 @@ namespace Infrastructure.Services.HubConnectorService
                     {
                         string temppath = destDirName + subdir.Name;
 
-                        DirectoryCoppy(subdir.FullName, content, temppath, copySubDirs);
+                        await DirectoryCoppy(subdir.FullName, filePaths, fileContents, temppath, copySubDirs);
                     }
                     else
                     {
                         string temppath = destDirName + "/" + subdir.Name;
 
-                        DirectoryCoppy(subdir.FullName, content, temppath, copySubDirs);
+                        await DirectoryCoppy(subdir.FullName, filePaths, fileContents, temppath, copySubDirs);
                     }
                 }
             }

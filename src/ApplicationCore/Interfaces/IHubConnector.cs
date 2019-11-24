@@ -8,8 +8,8 @@ namespace ApplicationCore.Interfaces
         /// Create site project hub
         /// </summary>
         /// <param name="name">Name of the project, used for hub name</param>
-        /// <returns>Created or not bool value</returns>
-        Task<bool> CreateHub(string name);
+        /// <returns>Id of created hub</returns>
+        Task<string> CreateHub(string name);
 
         /// <summary>
         /// Uploading new project directly to hub
@@ -18,7 +18,7 @@ namespace ApplicationCore.Interfaces
         /// <param name="sourceDirName">Source of ptoject template</param>
         /// <param name="copySubDir">copy all or coppy only file</param>
         /// <returns>Pushed or not bool value</returns>
-        Task<bool> PushProject(string hubProjectName, string sourceDirName, bool copySubDir = true);
+        Task<bool> PushProject(string hubProjectId, string sourceDirName, bool copySubDir = true);
 
         /// <summary>
         /// Coppy whole directory from one place to other

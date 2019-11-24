@@ -27,7 +27,7 @@ namespace ApplicationCore.Services
             await this.blogTypeRepository.UpdateAsync(blog);
         }
 
-        public async Task EditClientBlogProjectAsync(string clientId, string name, string description, string newProjectLocation, string templateLocation, string cardApiKey, string cardServiceGate, string hostingServiceGate, string repository)
+        public async Task EditClientBlogProjectAsync(string clientId, string name, string description, string cardApiKey, string cardServiceGate, string hostingServiceGate, string repository)
         {
             var specification = new ClientBlogTypeSiteWithLaunchingConfigSpecification(clientId);
 
@@ -35,12 +35,11 @@ namespace ApplicationCore.Services
 
             blog.Name = name;
             blog.Description = description;
-            blog.NewProjectLocation = newProjectLocation;
-            blog.TemplateLocation = templateLocation;
+
             blog.LaunchingConfig.CardApiKey = cardApiKey;
             blog.LaunchingConfig.CardServiceGate = cardServiceGate;
             blog.LaunchingConfig.HostingServiceGate = hostingServiceGate;
-            blog.LaunchingConfig.Repository = repository;
+            blog.LaunchingConfig.RepositoryId = repository;
 
             await this.blogTypeRepository.UpdateAsync(blog);
         }

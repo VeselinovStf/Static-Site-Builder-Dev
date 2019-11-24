@@ -4,12 +4,14 @@ namespace ApplicationCore.Interfaces
 {
     public interface IAppLaunchConfigService<T>
     {
-        Task<T> GetSiteTypeLaunchConfig(string siteTypeId);
+        Task<T> GetSiteTypeLaunchConfigAsync(string siteTypeId);
 
-        Task LaunchSiteTypeLaunchConfig(string siteTypeId);
+        Task LaunchSiteTypeLaunchConfigAsync(string siteTypeId);
 
-        Task UnLaunchSiteTypeLaunchConfig(string siteTypeId);
+        Task UnLaunchSiteTypeLaunchConfigAsync(string siteTypeId);
 
-        Task PushSiteTypeLaunchConfig(string siteTypeId);
+        Task PushSiteTypeLaunchConfigAsync(string siteTypeId);
+
+        Task AddRepositoryIdAsync(string siteTypeId, string createdHubId);
     }
 }

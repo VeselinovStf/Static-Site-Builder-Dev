@@ -1,0 +1,49 @@
+﻿@model SelectTemplateViewModel
+
+<section class="ftco-section services-section bg-light">
+    <section class="ftco-section ftco-counter img" id="section-counter">
+        <div class="container">
+            <div class="row justify-content-center mb-1">
+                <div class="row">
+                    <div class="col-md-12 text-center heading-section heading-section-white ftco-animate">
+                        <h1>Select Site Template</h1>
+                    </div>
+                </div>
+
+                <div class="row col-lg-12 ">
+                    @foreach (var type in Model.SiteTypeTemplate)
+                    {
+                        <div class="col-lg-6 col-md-6 ftco-animate fadeInUp ftco-animated">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center">@type.Name</h5>
+                                    <p class="card-text text-center">@type.Description</p>
+
+                                    <div class="text-center">
+                                        <a class="btn btn-info " asp-controller="SiteType" asp-action="Create" asp-route-buildInType="@Model.BuildInSiteTypeName" asp-route-clientId="@Model.ClientId" asp-route-templateName="@type.Name">Use</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                    <div class="col-lg-6 col-md-6 ftco-animate fadeInUp ftco-animated">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">Import Template</h5>
+                                <p class="card-text text-center">Import Custom Template</p>
+
+                                <div class="text-center">
+                                    <p>Comming soon!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+<div class="row justify-content-center mb-1">
+    <a class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-dark" asp-controller="Projects" asp-action="Index" asp-route-clientId="@Model.ClientId">Back to Projects</a>
+</div>

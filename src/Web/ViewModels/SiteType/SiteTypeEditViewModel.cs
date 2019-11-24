@@ -11,9 +11,7 @@
 
         public string BuildInType { get; set; }
 
-        public string NewProjectLocation { get; set; }
-
-        public string TemplateLocation { get; set; }
+        public string TemplateName { get; set; }
 
         public string CardApiKey { get; set; }
 

@@ -59,7 +59,7 @@ namespace Infrastructure.SiteTypes
                     }
                     else
                     {
-                        var clientStoreConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfig(clientStoreSiteType.Id);
+                        var clientStoreConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
 
                         if (!clientStoreConfig.IsLaunched)
                         {
@@ -73,7 +73,7 @@ namespace Infrastructure.SiteTypes
                 }
                 else
                 {
-                    var clientBlogConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfig(clientBlogSiteType.Id);
+                    var clientBlogConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
 
                     if (!clientBlogConfig.IsLaunched)
                     {
@@ -91,7 +91,7 @@ namespace Infrastructure.SiteTypes
             }
         }
 
-        public async Task EditSiteTypeAsync(string name, string description, string clientId, string id, string newProjectLocation, string templateLocation, string cardApiKey, string cardServiceGate, string hostingServiceGate, string repository)
+        public async Task EditSiteTypeAsync(string name, string description, string clientId, string id, string cardApiKey, string cardServiceGate, string hostingServiceGate, string repository)
         {
             Validator.StringIsNullOrEmpty(
                 name, $"{nameof(SiteTypeEditorService)} : {nameof(EditSiteTypeAsync)} : {nameof(name)} : is null/empty");
@@ -99,10 +99,7 @@ namespace Infrastructure.SiteTypes
                 description, $"{nameof(SiteTypeEditorService)} : {nameof(EditSiteTypeAsync)} : {nameof(description)} : is null/empty");
             Validator.StringIsNullOrEmpty(
                 clientId, $"{nameof(SiteTypeEditorService)} : {nameof(EditSiteTypeAsync)} : {nameof(clientId)} : is null/empty");
-            Validator.StringIsNullOrEmpty(
-                newProjectLocation, $"{nameof(SiteTypeEditorService)} : {nameof(EditSiteTypeAsync)} : {nameof(newProjectLocation)} : is null/empty");
-            Validator.StringIsNullOrEmpty(
-                templateLocation, $"{nameof(SiteTypeEditorService)} : {nameof(EditSiteTypeAsync)} : {nameof(templateLocation)} : is null/empty");
+
             Validator.StringIsNullOrEmpty(
                 cardApiKey, $"{nameof(SiteTypeEditorService)} : {nameof(EditSiteTypeAsync)} : {nameof(cardApiKey)} : is null/empty");
             Validator.StringIsNullOrEmpty(
@@ -133,11 +130,11 @@ namespace Infrastructure.SiteTypes
                     }
                     else
                     {
-                        var clientStoreConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfig(clientStoreSiteType.Id);
+                        var clientStoreConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
 
                         if (!clientStoreConfig.IsLaunched)
                         {
-                            await this.appStoreTypeService.EditClientStoreProjectAsync(clientId, name, description, newProjectLocation, templateLocation, cardApiKey, cardServiceGate, hostingServiceGate, repository);
+                            await this.appStoreTypeService.EditClientStoreProjectAsync(clientId, name, description, cardApiKey, cardServiceGate, hostingServiceGate, repository);
                         }
                         else
                         {
@@ -147,11 +144,11 @@ namespace Infrastructure.SiteTypes
                 }
                 else
                 {
-                    var clientBlogConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfig(clientBlogSiteType.Id);
+                    var clientBlogConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
 
                     if (!clientBlogConfig.IsLaunched)
                     {
-                        await this.appBlogTypeService.EditClientBlogProjectAsync(clientId, name, description, newProjectLocation, templateLocation, cardApiKey, cardServiceGate, hostingServiceGate, repository);
+                        await this.appBlogTypeService.EditClientBlogProjectAsync(clientId, name, description, cardApiKey, cardServiceGate, hostingServiceGate, repository);
                     }
                     else
                     {
@@ -194,7 +191,7 @@ namespace Infrastructure.SiteTypes
                     }
                     else
                     {
-                        var clientStoreConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfig(clientStoreSiteType.Id);
+                        var clientStoreConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
 
                         if (!clientStoreConfig.IsLaunched)
                         {
@@ -204,8 +201,8 @@ namespace Infrastructure.SiteTypes
                             resultModel.HostingServiceGate = clientStoreConfig.HostingServiceGate;
                             resultModel.Description = clientStoreSiteType.Description;
                             resultModel.Name = clientStoreSiteType.Name;
-                            resultModel.NewProjectLocation = clientStoreSiteType.NewProjectLocation;
-                            resultModel.Repository = clientStoreConfig.Repository;
+
+                            resultModel.Repository = clientStoreConfig.RepositoryId;
                             resultModel.TemplateLocation = clientStoreSiteType.TemplateLocation;
                             resultModel.ClientId = clientStoreSiteType.ClientId;
                             resultModel.IsLaunched = clientStoreConfig.IsLaunched;
@@ -216,7 +213,7 @@ namespace Infrastructure.SiteTypes
                 }
                 else
                 {
-                    var clientBlogConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfig(clientBlogSiteType.Id);
+                    var clientBlogConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
 
                     if (!clientBlogConfig.IsLaunched)
                     {
@@ -226,8 +223,8 @@ namespace Infrastructure.SiteTypes
                         resultModel.HostingServiceGate = clientBlogConfig.HostingServiceGate;
                         resultModel.Description = clientBlogSiteType.Description;
                         resultModel.Name = clientBlogSiteType.Name;
-                        resultModel.NewProjectLocation = clientBlogSiteType.NewProjectLocation;
-                        resultModel.Repository = clientBlogConfig.Repository;
+
+                        resultModel.Repository = clientBlogConfig.RepositoryId;
                         resultModel.TemplateLocation = clientBlogSiteType.TemplateLocation;
                         resultModel.ClientId = clientBlogSiteType.ClientId;
                         resultModel.IsLaunched = clientBlogConfig.IsLaunched;
@@ -273,7 +270,7 @@ namespace Infrastructure.SiteTypes
                     }
                     else
                     {
-                        var clientStoreConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfig(clientStoreSiteType.Id);
+                        var clientStoreConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
 
                         resultModel.Id = clientStoreSiteType.Id;
                         resultModel.CardApiKey = clientStoreConfig.CardApiKey;
@@ -281,8 +278,8 @@ namespace Infrastructure.SiteTypes
                         resultModel.HostingServiceGate = clientStoreConfig.HostingServiceGate;
                         resultModel.Description = clientStoreSiteType.Description;
                         resultModel.Name = clientStoreSiteType.Name;
-                        resultModel.NewProjectLocation = clientStoreSiteType.NewProjectLocation;
-                        resultModel.Repository = clientStoreConfig.Repository;
+
+                        resultModel.Repository = clientStoreConfig.RepositoryId;
                         resultModel.TemplateLocation = clientStoreSiteType.TemplateLocation;
                         resultModel.ClientId = clientStoreSiteType.ClientId;
                         resultModel.IsLaunched = clientStoreConfig.IsLaunched;
@@ -292,7 +289,7 @@ namespace Infrastructure.SiteTypes
                 }
                 else
                 {
-                    var clientBlogConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfig(clientBlogSiteType.Id);
+                    var clientBlogConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
 
                     resultModel.Id = clientBlogSiteType.Id;
                     resultModel.CardApiKey = clientBlogConfig.CardApiKey;
@@ -300,8 +297,8 @@ namespace Infrastructure.SiteTypes
                     resultModel.HostingServiceGate = clientBlogConfig.HostingServiceGate;
                     resultModel.Description = clientBlogSiteType.Description;
                     resultModel.Name = clientBlogSiteType.Name;
-                    resultModel.NewProjectLocation = clientBlogSiteType.NewProjectLocation;
-                    resultModel.Repository = clientBlogConfig.Repository;
+
+                    resultModel.Repository = clientBlogConfig.RepositoryId;
                     resultModel.TemplateLocation = clientBlogSiteType.TemplateLocation;
                     resultModel.ClientId = clientBlogSiteType.ClientId;
                     resultModel.IsLaunched = clientBlogConfig.IsLaunched;

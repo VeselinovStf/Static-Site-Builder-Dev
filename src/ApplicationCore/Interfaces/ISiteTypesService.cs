@@ -23,7 +23,7 @@ namespace ApplicationCore.Interfaces
         /// </summary>
         Task CreateAsync(
             string name, string description, string clientId,
-            string buildInType, string newProjectLocation, string templateLocation,
+            string buildInType, string templateLocation,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository);
     }

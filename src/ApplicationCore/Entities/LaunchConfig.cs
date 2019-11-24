@@ -13,7 +13,9 @@ namespace ApplicationCore.Entities
 
         public string HostingServiceGate { get; set; }
 
-        public string Repository { get; set; }
+        public string RepositoryName { get; set; }
+
+        public string RepositoryId { get; set; }
 
         public string SiteTypeId { get; set; }
     }

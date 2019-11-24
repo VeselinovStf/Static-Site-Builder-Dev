@@ -6,7 +6,7 @@ namespace Infrastructure.SiteTypes
     {
         public abstract Task Create(string clientProjectId,
             string name, string description, string clientId,
-            string buildInType, string newProjectLocation, string templateLocation,
+            string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository);
     }

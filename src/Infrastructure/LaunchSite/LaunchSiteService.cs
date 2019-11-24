@@ -52,21 +52,25 @@ namespace Infrastructure.LaunchSite
                     }
                     else
                     {
-                        var clientStoreConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfig(clientStoreSiteType.Id);
+                        var clientStoreConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
 
                         if (!clientStoreConfig.IsLaunched && !clientStoreConfig.IsPushed)
                         {
-                            //await this.fileTransporter.CreateHub("TestSSB");
-                            //this.fileTransporter.DirectoryCoppy(clientStoreSiteType.TemplateLocation, clientStoreSiteType.NewProjectLocation);
-                            await this.fileTransporter.PushProject("fasas", clientStoreSiteType.TemplateLocation);
+                            var clientProjectName = clientStoreConfig.RepositoryName;
 
-                            await this.appLaunchConfigService.LaunchSiteTypeLaunchConfig(clientStoreSiteType.Id);
-                            await this.appLaunchConfigService.PushSiteTypeLaunchConfig(clientStoreSiteType.Id);
+                            var createdHubId = await this.fileTransporter.CreateHub(clientProjectName);
+
+                            await this.appLaunchConfigService.AddRepositoryIdAsync(clientStoreSiteType.Id, createdHubId);
+
+                            await this.fileTransporter.PushProject(createdHubId, clientStoreSiteType.TemplateLocation);
+
+                            await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
+                            await this.appLaunchConfigService.PushSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
                         }
                         else if (clientStoreConfig.IsPushed)
                         {
                             //Re-Launch
-                            await this.appLaunchConfigService.LaunchSiteTypeLaunchConfig(clientStoreSiteType.Id);
+                            await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
                         }
                         else
                         {
@@ -76,19 +80,25 @@ namespace Infrastructure.LaunchSite
                 }
                 else
                 {
-                    var clientBlogConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfig(clientBlogSiteType.Id);
+                    var clientBlogConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
 
                     if (!clientBlogConfig.IsLaunched && !clientBlogConfig.IsPushed)
                     {
-                        // this.fileTransporter.DirectoryCoppy(clientBlogSiteType.TemplateLocation, clientBlogSiteType.NewProjectLocation);
+                        var clientProjectName = clientBlogConfig.RepositoryName;
 
-                        await this.appLaunchConfigService.LaunchSiteTypeLaunchConfig(clientBlogSiteType.Id);
-                        await this.appLaunchConfigService.PushSiteTypeLaunchConfig(clientBlogSiteType.Id);
+                        var createdHubId = await this.fileTransporter.CreateHub(clientProjectName);
+
+                        await this.appLaunchConfigService.AddRepositoryIdAsync(clientBlogSiteType.Id, createdHubId);
+
+                        await this.fileTransporter.PushProject(createdHubId, clientBlogSiteType.TemplateLocation);
+
+                        await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
+                        await this.appLaunchConfigService.PushSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
                     }
                     else if (clientBlogConfig.IsPushed)
                     {
                         //Re-Launch
-                        await this.appLaunchConfigService.LaunchSiteTypeLaunchConfig(clientBlogSiteType.Id);
+                        await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
                     }
                     else
                     {
@@ -129,13 +139,13 @@ namespace Infrastructure.LaunchSite
                     }
                     else
                     {
-                        var clientStoreConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfig(clientStoreSiteType.Id);
+                        var clientStoreConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
 
                         if (clientStoreConfig.IsLaunched)
                         {
                             //this.fileTransporter.WholeDirectoryTransport()
 
-                            await this.appLaunchConfigService.UnLaunchSiteTypeLaunchConfig(clientStoreSiteType.Id);
+                            await this.appLaunchConfigService.UnLaunchSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
                         }
                         else
                         {
@@ -145,13 +155,13 @@ namespace Infrastructure.LaunchSite
                 }
                 else
                 {
-                    var clientBlogConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfig(clientBlogSiteType.Id);
+                    var clientBlogConfig = await this.appLaunchConfigService.GetSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
 
                     if (clientBlogConfig.IsLaunched)
                     {
                         //this.fileTransporter.WholeDirectoryTransport()
 
-                        await this.appLaunchConfigService.UnLaunchSiteTypeLaunchConfig(clientBlogSiteType.Id);
+                        await this.appLaunchConfigService.UnLaunchSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
                     }
                     else
                     {

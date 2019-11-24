@@ -22,5 +22,12 @@ namespace Infrastructure.Services.APIClientService.Clients
                 };
             }
         }
+
+        protected static T GetCreatedResponse<T>(string responseMessage)
+        {
+            var model = JsonConvert.DeserializeObject<T>(responseMessage);
+
+            return model;
+        }
     }
 }

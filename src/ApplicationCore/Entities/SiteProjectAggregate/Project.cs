@@ -38,7 +38,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
         }
 
         public void AddStoreTypeSite(string clientProjectId, string name, string description, string clientId,
-            string buildInType, string newProjectLocation, string templateLocation,
+            string buildInType, string templateLocation,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository)
         {
@@ -48,8 +48,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
                 Id = newStoreId,
                 Name = name,
                 Description = description,
-                NewProjectLocation = newProjectLocation,
-                TemplateLocation = templateLocation,
+                TemplateLocation = Environment.CurrentDirectory + "\\BuildInTemplates\\StoreTemplates",
                 ClientId = clientId,
                 LaunchingConfig = new LaunchConfig()
                 {
@@ -57,7 +56,8 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
                     CardApiKey = cardApiKey,
                     CardServiceGate = cardServiceGate,
                     HostingServiceGate = hostingServiceGate,
-                    Repository = repository,
+                    RepositoryName = name.Replace(" ", ""),
+                    RepositoryId = repository,
                     IsLaunched = false,
                     IsDeleted = false,
                     CreatedOn = DateTime.Now,
@@ -67,7 +67,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
         }
 
         public void AddBlogTypeSite(string clientProjectId, string name, string description, string clientId,
-            string buildInType, string newProjectLocation, string templateLocation,
+            string buildInType, string templateLocation,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository)
         {
@@ -77,8 +77,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
                 Id = newBlogId,
                 Name = name,
                 Description = description,
-                NewProjectLocation = newProjectLocation,
-                TemplateLocation = templateLocation,
+                TemplateLocation = Environment.CurrentDirectory + "\\BuildInTemplates\\BlogTemplates\\Test",
                 ClientId = clientId,
                 LaunchingConfig = new LaunchConfig()
                 {
@@ -86,7 +85,8 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
                     CardApiKey = cardApiKey,
                     CardServiceGate = cardServiceGate,
                     HostingServiceGate = hostingServiceGate,
-                    Repository = repository,
+                    RepositoryName = name.Replace(" ", ""),
+                    RepositoryId = repository,
                     IsLaunched = false,
                     IsDeleted = false,
                     CreatedOn = DateTime.Now,

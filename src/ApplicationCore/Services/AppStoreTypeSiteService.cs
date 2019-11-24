@@ -29,7 +29,7 @@ namespace ApplicationCore.Services
 
         public async Task EditClientStoreProjectAsync(
             string clientId, string name, string description,
-            string newProjectLocation, string templateLocation,
+
             string cardApiKey, string cardServiceGate,
             string hostingServiceGate, string repository)
         {
@@ -39,12 +39,11 @@ namespace ApplicationCore.Services
 
             store.Name = name;
             store.Description = description;
-            store.NewProjectLocation = newProjectLocation;
-            store.TemplateLocation = templateLocation;
+
             store.LaunchingConfig.CardApiKey = cardApiKey;
             store.LaunchingConfig.CardServiceGate = cardServiceGate;
             store.LaunchingConfig.HostingServiceGate = hostingServiceGate;
-            store.LaunchingConfig.Repository = repository;
+            store.LaunchingConfig.RepositoryId = repository;
 
             await this.storeTypeRepository.UpdateAsync(store);
         }

@@ -1,7 +1,4 @@
 ﻿using Infrastructure.Guard.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Infrastructure.Guard
 {
@@ -47,13 +44,12 @@ namespace Infrastructure.Guard
             }
         }
 
-        public static void ValueMinIsNotValid(int value, string message)
+        public static void ValueMinIsNotValid(int value, int minValue, string message)
         {
-            if (value < 1)
+            if (value < minValue)
             {
                 throw new IntValueIsNegativeException(message);
             }
         }
-
     }
 }

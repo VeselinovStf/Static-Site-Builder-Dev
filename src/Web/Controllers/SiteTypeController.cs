@@ -62,7 +62,7 @@ namespace Web.Controllers
         /// <param name="buildInType">Build in type passed as string from selected site type</param>
         /// <returns>View with model for inputing user info for new project site type</returns>
         [HttpGet]
-        public async Task<IActionResult> Create(string clientId, string buildInType)
+        public async Task<IActionResult> Create(string clientId, string buildInType, string templateName)
         {
             try
             {
@@ -75,7 +75,8 @@ namespace Web.Controllers
                         var model = new CreateSiteTypeViewModel()
                         {
                             ClientId = clientId,
-                            BuildInType = buildInType
+                            BuildInType = buildInType,
+                            TemplateName = templateName
                         };
 
                         return View(model);
@@ -102,9 +103,9 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
             [Bind("Name","Description","ClientId",
-            "BuildInType", "NewProjectLocation", "TemplateLocation",
+            "BuildInType",
             "CardApiKey", "CardServiceGate", "HostingServiceGate",
-            "Repository")]
+            "Repository", "TemplateName")]
             CreateSiteTypeViewModel model)
         {
             if (ModelState.IsValid)
@@ -113,7 +114,7 @@ namespace Web.Controllers
                 {
                     await this.siteTypesService.CreateAsync(
                         model.Name, model.Description, model.ClientId,
-                        model.BuildInType, model.NewProjectLocation, model.TemplateLocation,
+                        model.BuildInType, model.TemplateName,
                         model.CardApiKey, model.CardServiceGate, model.HostingServiceGate,
                         model.Repository);
 
@@ -175,7 +176,7 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditSite([Bind("Name","Description","ClientId", "Id",
-            "BuildInType", "NewProjectLocation", "TemplateLocation",
+            "BuildInType",
             "CardApiKey", "CardServiceGate", "HostingServiceGate",
             "Repository")]SiteTypeEditViewModel model)
         {
@@ -185,7 +186,7 @@ namespace Web.Controllers
                 {
                     await this.siteTypeEditorService.EditSiteTypeAsync(
                         model.Name, model.Description, model.ClientId,
-                        model.Id, model.NewProjectLocation, model.TemplateLocation,
+                        model.Id,
                         model.CardApiKey, model.CardServiceGate, model.HostingServiceGate,
                         model.Repository);
 
