@@ -1,75 +1,79 @@
 ﻿using ApplicationCore.Interfaces;
 using Infrastructure.Guard;
 using Infrastructure.Services.APIClientService.Clients;
-using Infrastructure.Services.HubConnectorService.Exceptions;
+using Infrastructure.Services.HostingHubConnectorService;
+using Infrastructure.Services.RepoHubConnectorService.Exceptions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Services.HubConnectorService
+namespace Infrastructure.Services.RepoHubConnectorService
 {
-    public class HubConnector : IHubConnector
+    public class RepoHubConnector : IHubConnector, IHubConnectorRepoOption
     {
-        private readonly IAPIClientService<GitLabHubClient> clientHub;
+        private readonly IAPIRepoClientService<GitLabHubClient> clientHub;
         private readonly IFileReader fileReader;
 
-        public HubConnector(
-            IOptions<AuthHubConnectorOptions> options,
-            IAPIClientService<GitLabHubClient> clientHub,
+        public RepoHubConnector(
+            IOptions<AuthRepoHubConnectorOptions> repoOptions,
+            IOptions<AuthHostingConnectorOptions> hostingOptions,
+            IAPIRepoClientService<GitLabHubClient> clientHub,
             IFileReader fileReader)
         {
-            this.Options = options.Value;
+            this.HostingOptions = hostingOptions.Value;
+            this.RepoOptions = repoOptions.Value;
             this.clientHub = clientHub ?? throw new ArgumentNullException(nameof(clientHub));
             this.fileReader = fileReader ?? throw new ArgumentNullException(nameof(fileReader));
         }
 
-        public AuthHubConnectorOptions Options { get; }
+        public AuthRepoHubConnectorOptions RepoOptions { get; }
+        public AuthHostingConnectorOptions HostingOptions { get; }
 
         public async Task<string> CreateHub(string name)
         {
-            return await ExecuteCreate(name, Options.AccesTokken);
+            return await ExecuteCreate(name, RepoOptions.AccesTokken);
         }
 
         private async Task<string> ExecuteCreate(string name, string accesTokken)
         {
             Validator.StringIsNullOrEmpty(
-              name, $"{nameof(HubConnector)} : {nameof(ExecuteCreate)} : {nameof(name)} : is null/empty");
+              name, $"{nameof(RepoHubConnector)} : {nameof(ExecuteCreate)} : {nameof(name)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-              accesTokken, $"{nameof(HubConnector)} : {nameof(ExecuteCreate)} : {nameof(accesTokken)} : is null/empty");
+              accesTokken, $"{nameof(RepoHubConnector)} : {nameof(ExecuteCreate)} : {nameof(accesTokken)} : is null/empty");
 
             try
             {
                 var clientHubCallId = await this.clientHub.CreateHubAsync(name, accesTokken);
 
                 Validator.StringIsNullOrEmpty(
-                        clientHubCallId, $"{nameof(HubConnector)} : {nameof(ExecuteCreate)} : {nameof(clientHubCallId)} : is null/empty");
+                        clientHubCallId, $"{nameof(RepoHubConnector)} : {nameof(ExecuteCreate)} : {nameof(clientHubCallId)} : is null/empty");
 
                 return clientHubCallId;
             }
             catch (Exception ex)
             {
-                throw new HubConnectorCreateHubException($"{nameof(HubConnectorCreateHubException)} : Exception : Can't create hub! : {ex.Message}");
+                throw new RepoHubConnectorCreateHubException($"{nameof(RepoHubConnectorCreateHubException)} : Exception : Can't create repo hub! : {ex.Message}");
             }
         }
 
         public async Task<bool> PushProject(string hubId, string sourceDirName, bool copySubDir = true)
         {
-            return await ExecutePush(hubId, sourceDirName, Options.AccesTokken, copySubDir);
+            return await ExecutePush(hubId, sourceDirName, RepoOptions.AccesTokken, copySubDir);
         }
 
         private async Task<bool> ExecutePush(string hubId, string sourceDirName, string accesTokken, bool copySubDirs = true, string destDirName = "")
         {
             Validator.StringIsNullOrEmpty(
-              hubId, $"{nameof(HubConnector)} : {nameof(ExecutePush)} : {nameof(hubId)} : is null/empty");
+              hubId, $"{nameof(RepoHubConnector)} : {nameof(ExecutePush)} : {nameof(hubId)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-             sourceDirName, $"{nameof(HubConnector)} : {nameof(ExecutePush)} : {nameof(sourceDirName)} : is null/empty");
+             sourceDirName, $"{nameof(RepoHubConnector)} : {nameof(ExecutePush)} : {nameof(sourceDirName)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-              accesTokken, $"{nameof(HubConnector)} : {nameof(ExecutePush)} : {nameof(accesTokken)} : is null/empty");
+              accesTokken, $"{nameof(RepoHubConnector)} : {nameof(ExecutePush)} : {nameof(accesTokken)} : is null/empty");
 
             try
             {
@@ -89,7 +93,7 @@ namespace Infrastructure.Services.HubConnectorService
             }
             catch (Exception ex)
             {
-                throw new HubConnectorExecutePushException($"{nameof(HubConnectorExecutePushException)} : Can't Execute Push to Hub : {ex.Message}");
+                throw new RepoHubConnectorExecutePushException($"{nameof(RepoHubConnectorExecutePushException)} : Can't Execute Push to Hub : {ex.Message}");
             }
         }
 
@@ -153,37 +157,34 @@ namespace Infrastructure.Services.HubConnectorService
             }
         }
 
-        public void WholeDirectoryTransport(string newLocation, string dirToTransportLocation)
+        public async Task<bool> AddCiCDVariables(string hubId, string hostingId)
         {
-            if (Directory.Exists(dirToTransportLocation))
+            return await this.AddVariables(hubId, HostingOptions.HostAccesToken, hostingId);
+        }
+
+        private async Task<bool> AddVariables(string hubId, string hostingAccesToken, string hostingId)
+        {
+            Validator.StringIsNullOrEmpty(
+             hubId, $"{nameof(RepoHubConnector)} : {nameof(AddCiCDVariables)} : {nameof(hubId)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+              hostingId, $"{nameof(RepoHubConnector)} : {nameof(AddCiCDVariables)} : {nameof(hostingId)} : is null/empty");
+
+            try
             {
-                if (Directory.Exists(newLocation))
+                var clientHubCall = await this.clientHub.AddVariables(hubId, hostingAccesToken, hostingId);
+
+                if (clientHubCall)
                 {
-                    throw new FileTransporterNewLocationExistsExeption($"{nameof(FileTransporterNewLocationExistsExeption)} : New Location Folder exists - {newLocation}");
+                    return true;
                 }
-                else
-                {
-                    try
-                    {
-                        Directory.Move(dirToTransportLocation, newLocation);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new FileTransporterContentNotExistException($"{nameof(FileTransporterContentNotExistException)} : FATAL ERROR : params - {newLocation}, {dirToTransportLocation} : {ex.Message}");
-                    }
-                }
+
+                return false;
             }
-            else
+            catch (Exception ex)
             {
-                throw new FileTransporterDirectoryToTransportNotExistExeption($"{nameof(FileTransporterDirectoryToTransportNotExistExeption)} : No Files Directory to transport From");
+                throw new RepoHubConnectorAddCiCDVariablesException($"{nameof(RepoHubConnectorAddCiCDVariablesException)} : Exception : Can't add valiebles to CI/CD repo hub! : {ex.Message}");
             }
         }
-    }
-
-    public class FileContent
-    {
-        public string FilePath { get; set; }
-
-        public string Content { get; set; }
     }
 }

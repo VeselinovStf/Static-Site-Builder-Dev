@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Services.APIClientService.DTOs;
 using Infrastructure.Services.APIClientService.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace Infrastructure.Services.APIClientService.Clients
                 return resultIdModel.id;
             }
 
-            throw new GitHubClientPostCreateException($"{nameof(GitHubClientPostCreateException)} : Can't create to hub : {response.StatusCode}");
+            throw new GitHubClientPostCreateException($"{nameof(GitHubClientPostCreateException)} : Can't create post to repo hub : {response.StatusCode}");
         }
 
         public async Task<bool> PushToHubAsync(string hubId, string accesTokken, List<string> filePaths, List<string> fileContents)
@@ -65,6 +66,14 @@ namespace Infrastructure.Services.APIClientService.Clients
             }
 
             return false;
+        }
+
+        public async Task<bool> AddHubVariables(string hubId, string accesToken, string hostingId)
+        {
+            //POST /projects/:id/variables
+            //key	string
+            //value	string
+            throw new NotImplementedException();
         }
     }
 }

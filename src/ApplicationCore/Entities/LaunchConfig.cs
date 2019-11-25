@@ -17,6 +17,8 @@ namespace ApplicationCore.Entities
 
         public string RepositoryId { get; set; }
 
+        public string HostingId { get; set; }
+
         public string SiteTypeId { get; set; }
     }
 }

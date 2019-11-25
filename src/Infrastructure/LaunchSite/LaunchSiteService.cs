@@ -12,16 +12,22 @@ namespace Infrastructure.LaunchSite
     public class LaunchSiteService : ILaunchSiteService
     {
         private readonly IAppProjectsService<Project> appProjectService;
-        private readonly IHubConnector fileTransporter;
+        private readonly IHubConnector repoHubConnector;
+        private readonly IHubConnector hostingHubConnector;
+        private readonly IHubConnectorRepoOption repoOptions;
         private readonly IAppLaunchConfigService<LaunchConfig> appLaunchConfigService;
 
         public LaunchSiteService(
            IAppProjectsService<Project> appProjectService,
-           IHubConnector fileTransporter,
+           IHubConnector repoHubConnector,
+           IHubConnector hostingHubConnector,
+           IHubConnectorRepoOption repoOptions,
            IAppLaunchConfigService<LaunchConfig> appLaunchConfigService)
         {
             this.appProjectService = appProjectService ?? throw new ArgumentNullException(nameof(appProjectService));
-            this.fileTransporter = fileTransporter ?? throw new ArgumentNullException(nameof(fileTransporter));
+            this.repoHubConnector = repoHubConnector ?? throw new ArgumentNullException(nameof(repoHubConnector));
+            this.hostingHubConnector = hostingHubConnector ?? throw new ArgumentNullException(nameof(hostingHubConnector));
+            this.repoOptions = repoOptions ?? throw new ArgumentNullException(nameof(repoOptions));
             this.appLaunchConfigService = appLaunchConfigService ?? throw new ArgumentNullException(nameof(appLaunchConfigService));
         }
 
@@ -58,13 +64,17 @@ namespace Infrastructure.LaunchSite
                         {
                             var clientProjectName = clientStoreConfig.RepositoryName;
 
-                            var createdHubId = await this.fileTransporter.CreateHub(clientProjectName);
+                            var repoHubId = await this.repoHubConnector.CreateHub(clientProjectName);
+                            await this.appLaunchConfigService.AddRepositoryIdAsync(clientStoreSiteType.Id, repoHubId);
 
-                            await this.appLaunchConfigService.AddRepositoryIdAsync(clientStoreSiteType.Id, createdHubId);
+                            var hostHubId = await this.hostingHubConnector.CreateHub(clientProjectName);
+                            await this.appLaunchConfigService.AddHostingIdAsync(clientStoreSiteType.Id, hostHubId);
 
-                            await this.fileTransporter.PushProject(createdHubId, clientStoreSiteType.TemplateLocation);
+                            await this.repoOptions.AddCiCDVariables(repoHubId, hostHubId);
+                            //TODO: A1- ADD -> Variables to gitlab-ci.yml
+                            //TODO: A1? - Where are stored all templates??
 
-                            //TODO: ADD TO HOSTING
+                            await this.repoHubConnector.PushProject(repoHubId, clientStoreSiteType.TemplateLocation);
 
                             await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
                             await this.appLaunchConfigService.PushSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
@@ -88,11 +98,11 @@ namespace Infrastructure.LaunchSite
                     {
                         var clientProjectName = clientBlogConfig.RepositoryName;
 
-                        var createdHubId = await this.fileTransporter.CreateHub(clientProjectName);
+                        var createdHubId = await this.repoHubConnector.CreateHub(clientProjectName);
 
                         await this.appLaunchConfigService.AddRepositoryIdAsync(clientBlogSiteType.Id, createdHubId);
 
-                        await this.fileTransporter.PushProject(createdHubId, clientBlogSiteType.TemplateLocation);
+                        await this.repoHubConnector.PushProject(createdHubId, clientBlogSiteType.TemplateLocation);
 
                         await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
                         await this.appLaunchConfigService.PushSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);

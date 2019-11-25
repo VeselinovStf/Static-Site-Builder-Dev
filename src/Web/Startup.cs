@@ -19,7 +19,8 @@ using Infrastructure.Services.APIClientService;
 using Infrastructure.Services.APIClientService.Clients;
 using Infrastructure.Services.EmailSenderService;
 using Infrastructure.Services.FileReader;
-using Infrastructure.Services.HubConnectorService;
+using Infrastructure.Services.HostingHubConnectorService;
+using Infrastructure.Services.RepoHubConnectorService;
 using Infrastructure.SiteTypes;
 using Infrastructure.SiteTypes.DTOs;
 using Microsoft.AspNetCore.Builder;
@@ -121,15 +122,23 @@ namespace Web
 
             //Infrastructure Services
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<IHubConnector, HubConnector>();
+            services.AddTransient<IHubConnector, RepoHubConnector>();
+            services.AddTransient<IHubConnectorRepoOption, RepoHubConnector>();
+            services.AddTransient<IHubConnector, HostingHubConnector>();
             services.AddTransient<IFileReader, FileReader>();
-            services.AddTransient<IAPIClientService<GitLabHubClient>, GitLabAPIClientService>();
+            services.AddTransient<IAPIRepoClientService<GitLabHubClient>, GitLabAPIClientService>();
+            services.AddTransient<IAPIHostClientService<NetlifyHubClient>, NetlifyApiClientService>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
-            services.Configure<AuthHubConnectorOptions>(Configuration);
+            services.Configure<AuthRepoHubConnectorOptions>(Configuration);
+            services.Configure<AuthHostingConnectorOptions>(Configuration);
 
             services.AddHttpClient<GitLabHubClient>(c =>
                 c.BaseAddress = new Uri("https://gitlab.com/api/v4/")
                 );
+
+            services.AddHttpClient<NetlifyHubClient>(c =>
+               c.BaseAddress = new Uri("https://api.netlify.com/api/v1/")
+               );
 
             services.AddHttpContextAccessor();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

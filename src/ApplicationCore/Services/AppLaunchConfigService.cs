@@ -16,6 +16,17 @@ namespace ApplicationCore.Services
             this.launchConfigRepository = launchConfigRepository ?? throw new ArgumentNullException(nameof(launchConfigRepository));
         }
 
+        public async Task AddHostingIdAsync(string siteTypeId, string hostHubId)
+        {
+            var specification = new SiteTypeLaunchConfigSpecification(siteTypeId);
+
+            var config = this.launchConfigRepository.GetSingleBySpec(specification);
+
+            config.HostingId = hostHubId;
+
+            await this.launchConfigRepository.UpdateAsync(config);
+        }
+
         public async Task AddRepositoryIdAsync(string siteTypeId, string createdHubId)
         {
             var specification = new SiteTypeLaunchConfigSpecification(siteTypeId);

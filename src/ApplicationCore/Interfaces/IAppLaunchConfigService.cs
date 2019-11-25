@@ -13,5 +13,7 @@ namespace ApplicationCore.Interfaces
         Task PushSiteTypeLaunchConfigAsync(string siteTypeId);
 
         Task AddRepositoryIdAsync(string siteTypeId, string createdHubId);
+
+        Task AddHostingIdAsync(string siteTypeId, string hostHubId);
     }
 }

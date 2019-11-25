@@ -1,0 +1,25 @@
+image: ruby:2.6
+
+cache:
+  paths:
+  - vendor/
+  
+pages:
+  stage: build
+  script:
+    - bundle install --path vendor
+    - bundle exec jekyll build -d public
+  only:
+  - master
+
+deploy:
+  stage: deploy
+  environment:
+    name: production
+  only:
+    - master
+  script:
+    - npm i
+    # your build command
+    - npm run build
+    - npx netlify-cli deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod
