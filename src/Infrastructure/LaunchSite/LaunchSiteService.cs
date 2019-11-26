@@ -71,22 +71,22 @@ namespace Infrastructure.LaunchSite
                             var clientBuildInSiteType = clientStoreSiteType.SiteTypeSpecification.ToString();
 
                             //Create Repository Hub
-                            //           var repoHubId = await this.repoHubConnectorAPI.CreateHub(clientProjectName);
+                            var repoHubId = await this.repoHubConnectorAPI.CreateHub(clientProjectName);
                             //Save to db Repo Hub Id
-                            //            await this.appLaunchConfigService.AddRepositoryIdAsync(clientStoreSiteType.Id, repoHubId);
+                            await this.appLaunchConfigService.AddRepositoryIdAsync(clientStoreSiteType.Id, repoHubId);
 
                             //Create Hosting Project
-                            //           var hostHubId = await this.hostingHubConnectorAPI.CreateHub(clientProjectName);
+                            var hostHubId = await this.hostingHubConnectorAPI.CreateHub(clientProjectName);
                             //Save Hosting created project id to db
-                            //            await this.appLaunchConfigService.AddHostingIdAsync(clientStoreSiteType.Id, hostHubId);
+                            await this.appLaunchConfigService.AddHostingIdAsync(clientStoreSiteType.Id, hostHubId);
 
                             //Add CiCd variables to Repo Hub
-                            //           await this.repoOptionsAPI.AddCiCDVariables(repoHubId, hostHubId);
+                            await this.repoOptionsAPI.AddCiCDVariables(repoHubId, hostHubId);
                             //Add Variables to Db Template
                             //           await this.templateService.ConfigureCiCdVariables(hostHubId, clientBuildInSiteType, clientTemplateName);
 
                             //Push Project template do Repository
-                            await this.repoHubConnectorAPI.PushProject("15544450", "DefaultStoreTemplate");
+                            await this.repoHubConnectorAPI.PushProject(repoHubId, clientStoreSiteType.TemplateName);
 
                             //Mark IsLanched
                             await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
