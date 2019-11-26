@@ -203,7 +203,7 @@ namespace Infrastructure.SiteTypes
                             resultModel.Name = clientStoreSiteType.Name;
 
                             resultModel.Repository = clientStoreConfig.RepositoryId;
-                            resultModel.TemplateLocation = clientStoreSiteType.TemplateLocation;
+                            resultModel.TemplateLocation = clientStoreSiteType.TemplateName;
                             resultModel.ClientId = clientStoreSiteType.ClientId;
                             resultModel.IsLaunched = clientStoreConfig.IsLaunched;
 
@@ -225,7 +225,7 @@ namespace Infrastructure.SiteTypes
                         resultModel.Name = clientBlogSiteType.Name;
 
                         resultModel.Repository = clientBlogConfig.RepositoryId;
-                        resultModel.TemplateLocation = clientBlogSiteType.TemplateLocation;
+                        resultModel.TemplateLocation = clientBlogSiteType.TemplateName;
                         resultModel.ClientId = clientBlogSiteType.ClientId;
                         resultModel.IsLaunched = clientBlogConfig.IsLaunched;
 
@@ -280,7 +280,7 @@ namespace Infrastructure.SiteTypes
                         resultModel.Name = clientStoreSiteType.Name;
 
                         resultModel.Repository = clientStoreConfig.RepositoryId;
-                        resultModel.TemplateLocation = clientStoreSiteType.TemplateLocation;
+                        resultModel.TemplateLocation = clientStoreSiteType.TemplateName;
                         resultModel.ClientId = clientStoreSiteType.ClientId;
                         resultModel.IsLaunched = clientStoreConfig.IsLaunched;
 
@@ -299,7 +299,7 @@ namespace Infrastructure.SiteTypes
                     resultModel.Name = clientBlogSiteType.Name;
 
                     resultModel.Repository = clientBlogConfig.RepositoryId;
-                    resultModel.TemplateLocation = clientBlogSiteType.TemplateLocation;
+                    resultModel.TemplateLocation = clientBlogSiteType.TemplateName;
                     resultModel.ClientId = clientBlogSiteType.ClientId;
                     resultModel.IsLaunched = clientBlogConfig.IsLaunched;
 

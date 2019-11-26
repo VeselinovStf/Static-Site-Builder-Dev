@@ -4,14 +4,16 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SSBDbContext))]
-    partial class SSBDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191126061401_SiteTemplates")]
+    partial class SiteTemplates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,7 +48,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("ProjectId");
 
-                    b.Property<string>("TemplateName");
+                    b.Property<string>("TemplateLocation")
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.HasKey("Id");
 
@@ -555,7 +559,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("ProjectId");
 
-                    b.Property<string>("TemplateName");
+                    b.Property<string>("TemplateLocation")
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.HasKey("Id");
 

@@ -24,7 +24,7 @@ namespace ApplicationCore.Services
         }
 
         public async Task AddStoreTypeSite(string clientProjectId, string name, string description, string clientId,
-            string buildInType, string templateLocation,
+            string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository)
         {
@@ -33,7 +33,7 @@ namespace ApplicationCore.Services
             var projectStores = this.projectRepository.GetSingleBySpec(specification);
 
             projectStores.AddStoreTypeSite(clientProjectId, name, description, clientId,
-             buildInType, templateLocation,
+             buildInType, templateName,
              cardApiKey, cardServiceGate, hostingServiceGate,
              repository);
 
@@ -41,7 +41,7 @@ namespace ApplicationCore.Services
         }
 
         public async Task AddBlogTypeSite(string clientProjectId, string name, string description, string clientId,
-            string buildInType, string templateLocation,
+            string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository)
         {
@@ -50,7 +50,7 @@ namespace ApplicationCore.Services
             var projectStores = this.projectRepository.GetSingleBySpec(specification);
 
             projectStores.AddBlogTypeSite(clientProjectId, name, description, clientId,
-             buildInType, templateLocation,
+             buildInType, templateName,
              cardApiKey, cardServiceGate, hostingServiceGate,
              repository);
 

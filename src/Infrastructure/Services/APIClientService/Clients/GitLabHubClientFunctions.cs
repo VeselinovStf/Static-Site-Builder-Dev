@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Services.APIClientService.DTOs;
 using Infrastructure.Services.APIClientService.Exceptions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +8,8 @@ namespace Infrastructure.Services.APIClientService.Clients
 {
     public partial class GitLabHubClient
     {
+        private readonly List<string> ImageExtensions = new List<string> { ".img", ".jpg", ".png" };
+
         public async Task<string> PostCreateAsync(string newHubName, string credidentials)
         {
             //POST
@@ -52,7 +53,8 @@ namespace Infrastructure.Services.APIClientService.Clients
                 {
                     Action = actions,
                     FilePath = fp,
-                    Content = fc
+                    Content = fc,
+                    Encoding = this.ImageExtensions.Any(e => fp.Contains(e)) ? "base64" : "text"
                 }))
             };
 
@@ -68,12 +70,47 @@ namespace Infrastructure.Services.APIClientService.Clients
             return false;
         }
 
-        public async Task<bool> AddHubVariables(string hubId, string accesToken, string hostingId)
+        public async Task<bool> AddHubVariables(string hubId, string repoAccesToken, string value, string key)
         {
             //POST /projects/:id/variables
             //key	string
             //value	string
-            throw new NotImplementedException();
+            //$NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN
+
+            //var idVariablesModel = new RepoHubVariablesDTO()
+            //{
+            //    Key = "NETLIFY_SITE_ID",
+            //    VariableType = "env_var",
+            //    Value = hostingId
+            //};
+
+            //var authTokenVariablesModel = new RepoHubVariablesDTO()
+            //{
+            //    Key = "NETLIFY_AUTH_TOKEN",
+            //    VariableType = "env_var",
+            //    Value = hostingAccesToken
+            //};
+
+            var pushModel = new RepoHubVariablesDTO()
+            {
+                Key = key,
+                VariableType = "env_var",
+                Value = value,
+                Environment_scope = "*",
+                Masked = false,
+                Protected = false
+            };
+
+            var response = await this.Client.PostAsync($"projects/{hubId}/variables?access_token={repoAccesToken}", base.CreateHttpContent<RepoHubVariablesDTO>(pushModel));
+
+            response.EnsureSuccessStatusCode();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

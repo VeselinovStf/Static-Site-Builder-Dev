@@ -4,6 +4,7 @@ using ApplicationCore.Entities.BlogTypeSiteEntitiesAggregate;
 using ApplicationCore.Entities.MessageAggregate;
 using ApplicationCore.Entities.PostAggregate;
 using ApplicationCore.Entities.SiteProjectAggregate;
+using ApplicationCore.Entities.SitesTemplates;
 using ApplicationCore.Entities.SiteType;
 using ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate;
 using ApplicationCore.Entities.WidjetsEntityAggregate;
@@ -35,6 +36,8 @@ namespace Infrastructure.Data
         public DbSet<Widjet> Widjets { get; set; }
         public DbSet<LaunchConfig> LaunchConfigs { get; set; }
         public DbSet<SiteType> SiteTypes { get; set; }
+        public DbSet<SiteTemplate> SiteTemplates { get; set; }
+        public DbSet<SiteTemplateElement> SiteTemplateElements { get; set; }
 
         //Application Messaging System
         public DbSet<Message> Messages { get; set; }

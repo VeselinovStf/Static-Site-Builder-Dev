@@ -16,9 +16,16 @@ namespace Infrastructure.Services.APIClientService
             this.client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public async Task<bool> AddVariables(string hubId, string accesToken, string hostingId)
+        public async Task<bool> AddVariables(string hubId, string accesToken, string hostingId, string hostingAccesToken)
         {
-            return await client.AddHubVariables(hubId, accesToken, hostingId);
+            var idCall = await client.AddHubVariables(hubId, accesToken, hostingId, "NETLIFY_SITE_ID");
+
+            if (idCall)
+            {
+                return await client.AddHubVariables(hubId, accesToken, hostingAccesToken, "NETLIFY_AUTH_TOKEN");
+            }
+
+            return false;
         }
 
         public async Task<string> CreateHubAsync(string name, string accesTokken)

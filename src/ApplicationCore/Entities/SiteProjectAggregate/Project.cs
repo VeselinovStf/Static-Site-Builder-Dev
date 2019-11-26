@@ -38,7 +38,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
         }
 
         public void AddStoreTypeSite(string clientProjectId, string name, string description, string clientId,
-            string buildInType, string templateLocation,
+            string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository)
         {
@@ -48,7 +48,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
                 Id = newStoreId,
                 Name = name,
                 Description = description,
-                TemplateLocation = Environment.CurrentDirectory + "\\BuildInTemplates\\StoreTemplates\\Default",
+                TemplateName = templateName,
                 ClientId = clientId,
                 LaunchingConfig = new LaunchConfig()
                 {
@@ -67,7 +67,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
         }
 
         public void AddBlogTypeSite(string clientProjectId, string name, string description, string clientId,
-            string buildInType, string templateLocation,
+            string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository)
         {
@@ -77,7 +77,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
                 Id = newBlogId,
                 Name = name,
                 Description = description,
-                TemplateLocation = Environment.CurrentDirectory + "\\BuildInTemplates\\BlogTemplates\\",
+                TemplateName = templateName,
                 ClientId = clientId,
                 LaunchingConfig = new LaunchConfig()
                 {

@@ -1,7 +1,10 @@
 ﻿using ApplicationCore.Entities.SiteProjectAggregate;
+using ApplicationCore.Entities.SitesTemplates;
 using ApplicationCore.Entities.SiteType;
 using ApplicationCore.Entities.WidjetsEntityAggregate;
+using ApplicationCore.Interfaces;
 using Infrastructure.Identity;
+using Infrastructure.Services.FileTransferrer.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -16,6 +19,7 @@ namespace Infrastructure.Data
         public static async Task SeedAsync(
             SSBDbContext ssbDbContext,
             ILoggerFactory loggerFactory,
+            IFileTransferrer<ConvertedFileElement> fileTransporter,
             int? retry = 0)
         {
             int retryAvailibility = retry.Value;
@@ -51,10 +55,18 @@ namespace Infrastructure.Data
                     await ssbDbContext.SaveChangesAsync();
                 }
 
-                if (!ssbDbContext.SiteTypes.Any())
+                //if (!ssbDbContext.SiteTypes.Any())
+                //{
+                //    await ssbDbContext.SiteTypes.AddRangeAsync(
+                //        GetPreconfiguredSiteTypes());
+
+                //    await ssbDbContext.SaveChangesAsync();
+                //}
+
+                if (!ssbDbContext.SiteTemplates.Any())
                 {
-                    await ssbDbContext.SiteTypes.AddRangeAsync(
-                        GetPreconfiguredSiteTypes());
+                    await ssbDbContext.SiteTemplates.AddRangeAsync(
+                        await DevelopmentAddPreBuildSiteTemplatesFromDirectory(fileTransporter, ssbDbContext));
 
                     await ssbDbContext.SaveChangesAsync();
                 }
@@ -66,30 +78,55 @@ namespace Infrastructure.Data
                     retryAvailibility++;
                     var log = loggerFactory.CreateLogger<SSBDbContextSeed>();
                     log.LogError(ex.Message);
-                    await SeedAsync(ssbDbContext, loggerFactory, retryAvailibility);
+                    await SeedAsync(ssbDbContext, loggerFactory, fileTransporter, retryAvailibility);
                 }
             }
         }
 
-        private static SiteType[] GetPreconfiguredSiteTypes()
+        private static async Task<SiteTemplate[]> DevelopmentAddPreBuildSiteTemplatesFromDirectory(
+            IFileTransferrer<ConvertedFileElement> fileTransporter, SSBDbContext dbContext)
         {
+            var defaultStoreTypeSiteFileRead = await fileTransporter.FilesToList("D:\\STORE\\Static_Store_Builder-SSB-\\Dev_V03\\src\\Web\\BuildInTemplates\\StoreTemplates\\Default");
+
+            var storeTypeId = Guid.NewGuid().ToString();
             var storeType = new SiteType()
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = storeTypeId,
                 Name = "Multipurpose eCommerce Site",
                 Description = "Build you owne eCommersce site, sell one nich or many all depends on you. Use build in Widjets to customize and optimize your new application. Start earning in few hours.",
                 Type = SiteTypesEnum.StoreType
             };
 
+            var blogTypeId = Guid.NewGuid().ToString();
             var blogType = new SiteType()
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = blogTypeId,
                 Name = "Blog Site",
                 Description = "Build you owne blog site. Use build in Widjets to customize and optimize your new application. Create your first posts in minutes. Start posting now.",
                 Type = SiteTypesEnum.BlogType
             };
 
-            return new SiteType[] { storeType, blogType };
+            await dbContext.SiteTypes.AddAsync(storeType);
+            await dbContext.SiteTypes.AddAsync(blogType);
+
+            var defaultStoreSiteTemplate = new SiteTemplate()
+            {
+                Name = "DefaultStoreTemplate",
+                Description = "Build in Default Multy Type Store Template",
+                SiteTypeId = storeTypeId,
+                SiteType = storeType
+            };
+
+            defaultStoreTypeSiteFileRead
+                .ToList()
+                .ForEach(
+                    d => defaultStoreSiteTemplate
+                    .AddElement(
+                        d.FilePath, d.FileContent
+                        )
+                 );
+
+            return new SiteTemplate[] { defaultStoreSiteTemplate };
         }
 
         private static Widjet[] GetPreconfiguredWidjets()

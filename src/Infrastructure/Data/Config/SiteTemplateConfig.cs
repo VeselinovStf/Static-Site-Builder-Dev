@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Config
 {
-    public class ClientWidjetConfig : IEntityTypeConfiguration<SiteTemplate>
+    public class SiteTemplateConfig : IEntityTypeConfiguration<SiteTemplate>
     {
         public void Configure(EntityTypeBuilder<SiteTemplate> builder)
         {

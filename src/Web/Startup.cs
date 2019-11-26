@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Entities.BlogSiteTypeEntities;
 using ApplicationCore.Entities.SiteProjectAggregate;
+using ApplicationCore.Entities.SitesTemplates;
 using ApplicationCore.Entities.SiteType;
 using ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate;
 using ApplicationCore.Interfaces;
@@ -19,10 +20,14 @@ using Infrastructure.Services.APIClientService;
 using Infrastructure.Services.APIClientService.Clients;
 using Infrastructure.Services.EmailSenderService;
 using Infrastructure.Services.FileReader;
+using Infrastructure.Services.FileTransferrer;
+using Infrastructure.Services.FileTransferrer.DTOs;
 using Infrastructure.Services.HostingHubConnectorService;
 using Infrastructure.Services.RepoHubConnectorService;
 using Infrastructure.SiteTypes;
 using Infrastructure.SiteTypes.DTOs;
+using Infrastructure.Templates;
+using Infrastructure.Templates.DTOs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -32,6 +37,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using Web.ModelFatories.AccountManageModelFactory;
 using Web.ModelFatories.AccountManageModelFactory.Abstraction;
 using Web.ModelFatories.AdminModelFactory;
@@ -48,6 +54,8 @@ using Web.ModelFatories.ProjectsModelFactory;
 using Web.ModelFatories.ProjectsModelFactory.Abstraction;
 using Web.ModelFatories.SiteTypeModelFactory;
 using Web.ModelFatories.SiteTypeModelFactory.Abstraction;
+using Web.ModelFatories.TemplateModelFactory;
+using Web.ModelFatories.TemplateModelFactory.Abstraction;
 
 namespace Web
 {
@@ -111,6 +119,10 @@ namespace Web
             //LaunchSite
             services.AddScoped<ILaunchSiteService, LaunchSiteService>();
 
+            //Templates
+            services.AddScoped<ITemplateService<SiteTemplateDTO>, TemplateService>();
+            services.AddScoped<ITemplateModelFactory, TemplateModelFactory>();
+
             //Client
             services.AddScoped<IClientModelFactory, ClientModelFactory>();
 
@@ -122,12 +134,20 @@ namespace Web
 
             //Infrastructure Services
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<IHubConnector, RepoHubConnector>();
+            services.AddTransient<IRepoHubConnector, RepoHubConnector>();
             services.AddTransient<IHubConnectorRepoOption, RepoHubConnector>();
-            services.AddTransient<IHubConnector, HostingHubConnector>();
+            services.AddTransient<IHostingHubConnector, HostingHubConnector>();
             services.AddTransient<IFileReader, FileReader>();
+
+            services.AddTransient<IFileTransferrer<ConvertedFileElement>>(r => new FileTransferrer(
+                r.GetRequiredService<IFileReader>(),
+                new List<string> { ".img", ".jpg", ".png" }
+                ));
+
             services.AddTransient<IAPIRepoClientService<GitLabHubClient>, GitLabAPIClientService>();
             services.AddTransient<IAPIHostClientService<NetlifyHubClient>, NetlifyApiClientService>();
+            services.AddTransient<IAppSiteTemplatesService<SiteTemplate>, AppSiteTemplatesService>();
+
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<AuthRepoHubConnectorOptions>(Configuration);
             services.Configure<AuthHostingConnectorOptions>(Configuration);

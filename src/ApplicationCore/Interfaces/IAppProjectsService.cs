@@ -7,12 +7,12 @@ namespace ApplicationCore.Interfaces
         Task<T> GetClientProject(string clientId);
 
         Task AddStoreTypeSite(string clientProjectId, string name, string description, string clientId,
-            string buildInType, string templateLocation,
+            string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository);
 
         Task AddBlogTypeSite(string clientProjectId, string name, string description, string clientId,
-            string buildInType, string templateLocation,
+            string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository);
     }

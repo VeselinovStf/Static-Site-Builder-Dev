@@ -13,5 +13,8 @@ namespace Infrastructure.Services.APIClientService.DTOs
 
         [DataMember(Name = "content")]
         public string Content { get; set; }
+
+        [DataMember(Name = "encoding")]
+        public string Encoding { get; set; }
     }
 }

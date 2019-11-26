@@ -3,6 +3,7 @@ using ApplicationCore.Entities.SiteProjectAggregate;
 using ApplicationCore.Interfaces;
 using Infrastructure.Guard;
 using Infrastructure.LaunchSite.Exceptions;
+using Infrastructure.Templates.DTOs;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,22 +13,25 @@ namespace Infrastructure.LaunchSite
     public class LaunchSiteService : ILaunchSiteService
     {
         private readonly IAppProjectsService<Project> appProjectService;
-        private readonly IHubConnector repoHubConnector;
-        private readonly IHubConnector hostingHubConnector;
-        private readonly IHubConnectorRepoOption repoOptions;
+        private readonly IRepoHubConnector repoHubConnectorAPI;
+        private readonly IHostingHubConnector hostingHubConnectorAPI;
+        private readonly IHubConnectorRepoOption repoOptionsAPI;
+        private readonly ITemplateService<SiteTemplateDTO> templateService;
         private readonly IAppLaunchConfigService<LaunchConfig> appLaunchConfigService;
 
         public LaunchSiteService(
            IAppProjectsService<Project> appProjectService,
-           IHubConnector repoHubConnector,
-           IHubConnector hostingHubConnector,
-           IHubConnectorRepoOption repoOptions,
+           IRepoHubConnector repoHubConnectorAPI,
+           IHostingHubConnector hostingHubConnectorAPI,
+           IHubConnectorRepoOption repoOptionsAPI,
+           ITemplateService<SiteTemplateDTO> templateService,
            IAppLaunchConfigService<LaunchConfig> appLaunchConfigService)
         {
             this.appProjectService = appProjectService ?? throw new ArgumentNullException(nameof(appProjectService));
-            this.repoHubConnector = repoHubConnector ?? throw new ArgumentNullException(nameof(repoHubConnector));
-            this.hostingHubConnector = hostingHubConnector ?? throw new ArgumentNullException(nameof(hostingHubConnector));
-            this.repoOptions = repoOptions ?? throw new ArgumentNullException(nameof(repoOptions));
+            this.repoHubConnectorAPI = repoHubConnectorAPI ?? throw new ArgumentNullException(nameof(repoHubConnectorAPI));
+            this.hostingHubConnectorAPI = hostingHubConnectorAPI ?? throw new ArgumentNullException(nameof(hostingHubConnectorAPI));
+            this.repoOptionsAPI = repoOptionsAPI ?? throw new ArgumentNullException(nameof(repoOptionsAPI));
+            this.templateService = templateService ?? throw new ArgumentNullException(nameof(templateService));
             this.appLaunchConfigService = appLaunchConfigService ?? throw new ArgumentNullException(nameof(appLaunchConfigService));
         }
 
@@ -63,20 +67,30 @@ namespace Infrastructure.LaunchSite
                         if (!clientStoreConfig.IsLaunched && !clientStoreConfig.IsPushed)
                         {
                             var clientProjectName = clientStoreConfig.RepositoryName;
+                            var clientTemplateName = clientStoreSiteType.TemplateName;
+                            var clientBuildInSiteType = clientStoreSiteType.SiteTypeSpecification.ToString();
 
-                            var repoHubId = await this.repoHubConnector.CreateHub(clientProjectName);
-                            await this.appLaunchConfigService.AddRepositoryIdAsync(clientStoreSiteType.Id, repoHubId);
+                            //Create Repository Hub
+                            //           var repoHubId = await this.repoHubConnectorAPI.CreateHub(clientProjectName);
+                            //Save to db Repo Hub Id
+                            //            await this.appLaunchConfigService.AddRepositoryIdAsync(clientStoreSiteType.Id, repoHubId);
 
-                            var hostHubId = await this.hostingHubConnector.CreateHub(clientProjectName);
-                            await this.appLaunchConfigService.AddHostingIdAsync(clientStoreSiteType.Id, hostHubId);
+                            //Create Hosting Project
+                            //           var hostHubId = await this.hostingHubConnectorAPI.CreateHub(clientProjectName);
+                            //Save Hosting created project id to db
+                            //            await this.appLaunchConfigService.AddHostingIdAsync(clientStoreSiteType.Id, hostHubId);
 
-                            await this.repoOptions.AddCiCDVariables(repoHubId, hostHubId);
-                            //TODO: A1- ADD -> Variables to gitlab-ci.yml
-                            //TODO: A1? - Where are stored all templates??
+                            //Add CiCd variables to Repo Hub
+                            //           await this.repoOptionsAPI.AddCiCDVariables(repoHubId, hostHubId);
+                            //Add Variables to Db Template
+                            //           await this.templateService.ConfigureCiCdVariables(hostHubId, clientBuildInSiteType, clientTemplateName);
 
-                            await this.repoHubConnector.PushProject(repoHubId, clientStoreSiteType.TemplateLocation);
+                            //Push Project template do Repository
+                            await this.repoHubConnectorAPI.PushProject("15544450", "DefaultStoreTemplate");
 
+                            //Mark IsLanched
                             await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
+                            //Mark IsPushed
                             await this.appLaunchConfigService.PushSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
                         }
                         else if (clientStoreConfig.IsPushed)
@@ -98,11 +112,11 @@ namespace Infrastructure.LaunchSite
                     {
                         var clientProjectName = clientBlogConfig.RepositoryName;
 
-                        var createdHubId = await this.repoHubConnector.CreateHub(clientProjectName);
+                        var createdHubId = await this.repoHubConnectorAPI.CreateHub(clientProjectName);
 
                         await this.appLaunchConfigService.AddRepositoryIdAsync(clientBlogSiteType.Id, createdHubId);
 
-                        await this.repoHubConnector.PushProject(createdHubId, clientBlogSiteType.TemplateLocation);
+                        await this.repoHubConnectorAPI.PushProject(createdHubId, clientBlogSiteType.TemplateName);
 
                         await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
                         await this.appLaunchConfigService.PushSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);

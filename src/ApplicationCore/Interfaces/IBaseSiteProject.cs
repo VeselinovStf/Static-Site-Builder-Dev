@@ -6,7 +6,7 @@ namespace ApplicationCore.Interfaces
 {
     public interface IBaseSiteProject
     {
-        string TemplateLocation { get; set; }
+        string TemplateName { get; set; }
 
         string ClientId { get; set; }
 

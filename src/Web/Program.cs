@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ApplicationCore.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Services.FileTransferrer.DTOs;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Web
 {
@@ -24,12 +20,12 @@ namespace Web
             {
                 var services = scope.ServiceProvider;
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-                
+                var fileTransporter = services.GetRequiredService<IFileTransferrer<ConvertedFileElement>>();
+
                 try
                 {
                     var ssbDbContext = services.GetRequiredService<SSBDbContext>();
-                    SSBDbContextSeed.SeedAsync(ssbDbContext,loggerFactory).Wait();
-                   
+                    SSBDbContextSeed.SeedAsync(ssbDbContext, loggerFactory, fileTransporter).Wait();
                 }
                 catch (Exception ex)
                 {

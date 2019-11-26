@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Services.HostingHubConnectorService
 {
-    public class HostingHubConnector : IHubConnector
+    public class HostingHubConnector : IHostingHubConnector
     {
-        private readonly IAPIRepoClientService<NetlifyHubClient> hubClient;
+        private readonly IAPIHostClientService<NetlifyHubClient> hubClient;
 
         public HostingHubConnector(
             IOptions<AuthHostingConnectorOptions> options,
-            IAPIRepoClientService<NetlifyHubClient> hubClient)
+            IAPIHostClientService<NetlifyHubClient> hubClient)
         {
             this.Options = options.Value;
             this.hubClient = hubClient ?? throw new ArgumentNullException(nameof(hubClient));
@@ -48,11 +48,6 @@ namespace Infrastructure.Services.HostingHubConnectorService
             {
                 throw new HostingHubConnectorCreateHubException($"{nameof(HostingHubConnectorCreateHubException)} : Exception : Can't create hosting hub! : {ex.Message}");
             }
-        }
-
-        public Task<bool> PushProject(string hubProjectId, string sourceDirName, bool copySubDir = true)
-        {
-            throw new NotImplementedException();
         }
     }
 }
