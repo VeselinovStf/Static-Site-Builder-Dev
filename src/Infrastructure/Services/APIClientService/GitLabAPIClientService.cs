@@ -23,18 +23,6 @@ namespace Infrastructure.Services.APIClientService
             return await this.client.AddRepoKey(accesToken, key, title);
         }
 
-        public async Task<bool> AddVariables(string hubId, string accesToken, string hostingId, string hostingAccesToken)
-        {
-            var idCall = await client.AddHubVariables(hubId, accesToken, hostingId, "NETLIFY_SITE_ID");
-
-            if (idCall)
-            {
-                return await client.AddHubVariables(hubId, accesToken, hostingAccesToken, "NETLIFY_AUTH_TOKEN");
-            }
-
-            return false;
-        }
-
         public async Task<string> CreateHubAsync(string name, string accesTokken)
         {
             return await client.PostCreateAsync(name, accesTokken);

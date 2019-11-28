@@ -1,4 +1,3 @@
-
 <!-- section -->
 <div class="section">
     <!-- container -->
@@ -9,7 +8,7 @@
                     <!-- section title -->
                     <div class="col-md-12">
                         <div class="section-title">
-                            <h2 class="title">Products Of The Day</h2>
+                            <h2 class="title">Deals Of The Day</h2>
                             <div class="pull-right">
                                 <div class="product-slick-dots-2 custom-dots">
                                 </div>
@@ -20,10 +19,8 @@
     
                     <!-- Product Single -->
                     <div class="col-md-3 col-sm-6 col-xs-6">
-                        {% for product in site.data.products.products  %}
-                        {% if product.product-of-the-day %}
-                            {% include _building-blocks/_product-display/single-product-banner.html  %}   
-                        {% endif %}
+                        {% for product in site.c-product-of-the-day %}
+                            {% include _building-blocks/_product-display/single-product-banner.html  %}        
                         {% endfor %}                
                     </div>
                     <!-- /Product Single -->
@@ -33,7 +30,7 @@
                         <div class="row">
                             <div id="product-slick-2" class="product-slick">
                                 <!-- Product Single -->
-                                {% for product in site.data.products.products %}
+                                {% for product in site.c-products%}
 							{% include _building-blocks/_product-display/single-product-banner.html %}
 						{% endfor %}
     

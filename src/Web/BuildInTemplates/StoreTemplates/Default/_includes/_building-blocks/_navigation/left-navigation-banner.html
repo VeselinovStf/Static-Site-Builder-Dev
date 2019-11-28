@@ -1,27 +1,27 @@
 {% if category.subcategories %}
 
 <li class="dropdown side-dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-        {{ category.name }} <i class="fa fa-angle-right"></i>
-    </a>
+    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">{{ category.name }} <i
+            class="fa fa-angle-right"></i></a>
     <div class="custom-menu">
         <div class="row">
             {% for sub-category in category.subcategories %}
             <div class="col-md-4">
                 <ul class="list-links">
 
+                    {% for sub-sub-category in sub-category.list %}
                     <li>
-                        <h3 class="list-links-title">{{ sub-category.name }}</h3>
+                        <h3 class="list-links-title">{{ sub-sub-category.name }}</h3>
                     </li>
-
-                    {% for sub-category-list in sub-category.list %}
-
-                    <li><a href="{{ sub-category-list.link }}">{{ sub-category-list.name }}</a></li>
+                    {% for sub-sub-sub-category in sub-sub-category.list %}
+                    <li><a href="{{ sub-sub-sub-category.link }}">{{ sub-sub-sub-category.name }}</a></li>
+                    {% endfor %}
                     {% endfor %}
                 </ul>
                 <hr class="hidden-md hidden-lg">
             </div>
             {% endfor %}
+
         </div>
         <div class="row hidden-sm hidden-xs">
             <div class="col-md-12">

@@ -1,5 +1,5 @@
 ---
-  layout: default
+layout: home
 ---
 
-  {% include page-structure.html param='home' %}
+

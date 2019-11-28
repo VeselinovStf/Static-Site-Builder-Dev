@@ -1,5 +1,6 @@
-{% for config in site.data.site-structure.elements %}
 
+{% for config in site.data.site-front %}
+    
     {% if config.name == include.param %}
         {% if config.display %}
 
@@ -16,9 +17,7 @@
                 {% if include.productId %}
                   {% include {{ page-element.element }} productId=include.productId %}
                 {% else %}
-                  {% if page-element.display == true %}
-                     {% include {{ page-element.element }} %}
-                  {% endif %}
+                  {% include {{ page-element.element }} %}
                 {% endif %}
 
             {% endif %}

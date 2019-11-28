@@ -1,11 +1,10 @@
-
 <div class="section">
 	<!-- container -->
 	<div class="container">
 		<!-- row -->
 		<div class="row">
 			<!-- banner -->
-			{% for collection in site.data.top-products.c-front-collections.products %}
+			{% for collection in site.c-front-collections %}
 			<div class="col-md-4 col-sm-6">
 				<a class="banner banner-1" href="{{ collection.link }}">
 					<img src="{{ collection.image }}" alt="">

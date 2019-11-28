@@ -1,5 +1,6 @@
 <!-- Product Single -->
-{% assign productId = product.detailsLink %}
+{% assign productIdElements = product.id | split: '/' %}
+{% assign productId = productIdElements[2] %}
 <div class="product product-single {% if product.hot%} product-hot {% endif %}">
     <div class="product-thumb">
         <div class="product-label">

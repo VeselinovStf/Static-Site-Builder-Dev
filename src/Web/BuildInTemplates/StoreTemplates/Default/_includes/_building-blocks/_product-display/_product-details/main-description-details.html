@@ -1,5 +1,7 @@
-{% for product in site.data.products.products%}
-   {% if product.id  == include.productId %}
+{% for product in site.c-products%}
+    {% assign productIdElements = product.id | split: '/' %}
+    {% assign productId = productIdElements[2] %}    
+    {% if productId  == include.productId %}
 <div class="col-md-6">
     <div class="product-body">
         <div class="product-label">

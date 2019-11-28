@@ -3,7 +3,6 @@ using ApplicationCore.Entities.SiteProjectAggregate;
 using ApplicationCore.Interfaces;
 using Infrastructure.Guard;
 using Infrastructure.LaunchSite.Exceptions;
-using Infrastructure.Templates.DTOs;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,27 +12,15 @@ namespace Infrastructure.LaunchSite
     public class LaunchSiteService : ILaunchSiteService
     {
         private readonly IAppProjectsService<Project> appProjectService;
-        private readonly IRepoHubConnector repoHubConnectorAPI;
-        private readonly IHostingHubConnector hostingHubConnectorAPI;
-        private readonly IHubConnectorRepoOption repoOptionsAPI;
-        private readonly ITemplateService<SiteTemplateDTO> templateService;
         private readonly IAppLaunchConfigService<LaunchConfig> appLaunchConfigService;
         private readonly ISiteStorageCreatorService siteStorageCreator;
 
         public LaunchSiteService(
            IAppProjectsService<Project> appProjectService,
-           IRepoHubConnector repoHubConnectorAPI,
-           IHostingHubConnector hostingHubConnectorAPI,
-           IHubConnectorRepoOption repoOptionsAPI,
-           ITemplateService<SiteTemplateDTO> templateService,
            IAppLaunchConfigService<LaunchConfig> appLaunchConfigService,
            ISiteStorageCreatorService siteStorageCreator)
         {
             this.appProjectService = appProjectService ?? throw new ArgumentNullException(nameof(appProjectService));
-            this.repoHubConnectorAPI = repoHubConnectorAPI ?? throw new ArgumentNullException(nameof(repoHubConnectorAPI));
-            this.hostingHubConnectorAPI = hostingHubConnectorAPI ?? throw new ArgumentNullException(nameof(hostingHubConnectorAPI));
-            this.repoOptionsAPI = repoOptionsAPI ?? throw new ArgumentNullException(nameof(repoOptionsAPI));
-            this.templateService = templateService ?? throw new ArgumentNullException(nameof(templateService));
             this.appLaunchConfigService = appLaunchConfigService ?? throw new ArgumentNullException(nameof(appLaunchConfigService));
             this.siteStorageCreator = siteStorageCreator ?? throw new ArgumentNullException(nameof(siteStorageCreator));
         }
@@ -71,26 +58,9 @@ namespace Infrastructure.LaunchSite
                         {
                             var clientProjectName = clientStoreConfig.RepositoryName;
                             var clientTemplateName = clientStoreSiteType.TemplateName;
-                            var clientBuildInSiteType = clientStoreSiteType.SiteTypeSpecification.ToString();
+                            // var clientBuildInSiteType = clientStoreSiteType.SiteTypeSpecification.ToString();
 
-                            var siteStorageCreaton = await this.siteStorageCreator.StorageCreatorExecute();
-                            ////Create Repository Hub
-                            //var repoHubId = await this.repoHubConnectorAPI.CreateHub(clientProjectName);
-                            ////Save to db Repo Hub Id
-                            //await this.appLaunchConfigService.AddRepositoryIdAsync(clientStoreSiteType.Id, repoHubId);
-
-                            ////Create Hosting Project
-                            //var hostHubId = await this.hostingHubConnectorAPI.CreateHub(clientProjectName);
-                            ////Save Hosting created project id to db
-                            //await this.appLaunchConfigService.AddHostingIdAsync(clientStoreSiteType.Id, hostHubId);
-
-                            ////Add CiCd variables to Repo Hub
-                            //await this.repoOptionsAPI.AddCiCDVariables(repoHubId, hostHubId);
-                            ////Add Variables to Db Template
-                            ////           await this.templateService.ConfigureCiCdVariables(hostHubId, clientBuildInSiteType, clientTemplateName);
-
-                            ////Push Project template do Repository
-                            //await this.repoHubConnectorAPI.PushProject(repoHubId, clientStoreSiteType.TemplateName);
+                            var siteStorageCreaton = await this.siteStorageCreator.StorageCreatorExecute(clientProjectName, clientTemplateName);
 
                             //Mark IsLanched
                             await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
@@ -114,16 +84,16 @@ namespace Infrastructure.LaunchSite
 
                     if (!clientBlogConfig.IsLaunched && !clientBlogConfig.IsPushed)
                     {
-                        var clientProjectName = clientBlogConfig.RepositoryName;
+                        //var clientProjectName = clientBlogConfig.RepositoryName;
 
-                        var createdHubId = await this.repoHubConnectorAPI.CreateHub(clientProjectName);
+                        //var createdHubId = await this.repoHubConnectorAPI.CreateHub(clientProjectName);
 
-                        await this.appLaunchConfigService.AddRepositoryIdAsync(clientBlogSiteType.Id, createdHubId);
+                        //await this.appLaunchConfigService.AddRepositoryIdAsync(clientBlogSiteType.Id, createdHubId);
 
-                        await this.repoHubConnectorAPI.PushProject(createdHubId, clientBlogSiteType.TemplateName);
+                        //await this.repoHubConnectorAPI.PushProject(createdHubId, clientBlogSiteType.TemplateName);
 
-                        await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
-                        await this.appLaunchConfigService.PushSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
+                        //await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
+                        //await this.appLaunchConfigService.PushSiteTypeLaunchConfigAsync(clientBlogSiteType.Id);
                     }
                     else if (clientBlogConfig.IsPushed)
                     {

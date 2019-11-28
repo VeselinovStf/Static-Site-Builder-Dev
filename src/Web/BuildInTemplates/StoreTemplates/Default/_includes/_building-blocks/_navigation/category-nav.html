@@ -1,10 +1,9 @@
-
 <!-- show on click  -->
 <div class="category-nav {% if page.url != '/' %}show-on-click{% endif %}">
     <span class="category-header">Categories <i class="fa fa-list"></i></span>
     <ul class="category-list">
-        {% for category in site.data.menu-display.leftMenu %}
-        {% include  _building-blocks/_navigation/left-navigation-banner.html %}
+        {% for category in site.c-left-menu-categories %}
+            {% include  _building-blocks/_navigation/left-navigation-banner.html %}
         {% endfor %}
     </ul>
 </div> 

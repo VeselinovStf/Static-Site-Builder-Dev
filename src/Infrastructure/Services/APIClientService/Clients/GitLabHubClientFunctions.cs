@@ -89,48 +89,5 @@ namespace Infrastructure.Services.APIClientService.Clients
 
             return false;
         }
-
-        public async Task<bool> AddHubVariables(string hubId, string repoAccesToken, string value, string key)
-        {
-            //POST /projects/:id/variables
-            //key	string
-            //value	string
-            //$NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN
-
-            //var idVariablesModel = new RepoHubVariablesDTO()
-            //{
-            //    Key = "NETLIFY_SITE_ID",
-            //    VariableType = "env_var",
-            //    Value = hostingId
-            //};
-
-            //var authTokenVariablesModel = new RepoHubVariablesDTO()
-            //{
-            //    Key = "NETLIFY_AUTH_TOKEN",
-            //    VariableType = "env_var",
-            //    Value = hostingAccesToken
-            //};
-
-            var pushModel = new RepoHubVariablesDTO()
-            {
-                Key = key,
-                VariableType = "env_var",
-                Value = value,
-                Environment_scope = "*",
-                Masked = false,
-                Protected = false
-            };
-
-            var response = await this.Client.PostAsync($"projects/{hubId}/variables?access_token={repoAccesToken}", base.CreateHttpContent<RepoHubVariablesDTO>(pushModel));
-
-            response.EnsureSuccessStatusCode();
-
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
-
-            return false;
-        }
     }
 }

@@ -8,7 +8,7 @@ namespace Infrastructure.Services.APIClientService.DTOs
         [DataMember(Name = "key")]
         public string Key { get; set; }
 
-        [DataMember(Name = "Title")]
+        [DataMember(Name = "title")]
         public string Title { get; set; }
     }
 }

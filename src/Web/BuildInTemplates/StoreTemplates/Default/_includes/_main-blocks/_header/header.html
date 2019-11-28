@@ -1,0 +1,37 @@
+<header>
+		<!-- top Header -->
+		{% include page-structure.html param='header' param2='top-header' %}
+
+		<!-- header -->
+		<div id="header">
+			<div class="container">
+				<div class="pull-left">
+					<!-- Logo -->
+					{% include page-structure.html param='header' param2='logo' %}
+					<!-- /Logo -->
+
+					<!-- Search -->
+					{% include page-structure.html param='header' param2='search' %}
+					<!-- /Search -->
+				</div>
+				<div class="pull-right">
+					<ul class="header-btns">
+						
+
+						<!-- Cart -->
+						
+							{% include page-structure.html param='header' param2='cart' %}							
+						
+						<!-- /Cart -->
+
+						<!-- Mobile nav toggle-->
+						{% include page-structure.html param='header' param2='mobile' %}		
+						<!-- / Mobile nav toggle -->
+					</ul>
+				</div>
+			</div>
+			<!-- header -->
+		</div>
+		<!-- container -->
+	</header>
+	<!-- /HEADER -->

@@ -151,6 +151,7 @@ namespace Web
                 ));
 
             services.AddScoped<IAPIRepoClientService<GitLabHubClient>, GitLabAPIClientService>();
+            services.AddScoped<IRepoUserKey, GitLabAPIClientService>();
             services.AddScoped<IAPIHostClientService<NetlifyHubClient>, NetlifyApiClientService>();
             services.AddScoped<IHostDeployToken<DeployKeyDTO>, NetlifyApiClientService>();
             services.AddScoped<IAppSiteTemplatesService<SiteTemplate>, AppSiteTemplatesService>();

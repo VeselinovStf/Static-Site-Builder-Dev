@@ -1,4 +1,3 @@
-
 <!-- section -->
 <div class="section section-grey">
 	<!-- container -->
@@ -6,15 +5,14 @@
 		<!-- row -->
 		<div class="row">
 			<!-- banner -->
-          
-		
-			    {% include _building-blocks/_hot-deals/hot-deals-main-banner.html %}
-		
+			{% for deal in site.c-hot-deals-main-banner %}
+			{% include _building-blocks/_hot-deals/hot-deals-main-banner.html %}
+			{% endfor %}
 			<!-- /banner -->
 
 			<!-- banner -->
-			{% for deal in site.data.top-products.c-hot-deal-collection.products %}
-			    {% include _building-blocks/_hot-deals/hot-deal-collection-item.html %}
+			{% for deal in site.c-hot-deal-collection %}
+			{% include _building-blocks/_hot-deals/hot-deal-collection-item.html %}
 			{% endfor %}
 			
 
