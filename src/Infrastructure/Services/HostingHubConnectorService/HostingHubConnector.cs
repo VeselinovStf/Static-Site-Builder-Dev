@@ -2,7 +2,6 @@
 using Infrastructure.Guard;
 using Infrastructure.Services.APIClientService.Clients;
 using Infrastructure.Services.HostingHubConnectorService.Exceptions;
-using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 
@@ -13,35 +12,27 @@ namespace Infrastructure.Services.HostingHubConnectorService
         private readonly IAPIHostClientService<NetlifyHubClient> hubClient;
 
         public HostingHubConnector(
-            IOptions<AuthHostingConnectorOptions> options,
+
             IAPIHostClientService<NetlifyHubClient> hubClient
             )
         {
-            this.Options = options.Value;
             this.hubClient = hubClient ?? throw new ArgumentNullException(nameof(hubClient));
         }
 
-        public AuthHostingConnectorOptions Options { get; }
-
-        public async Task<string> CreateHub(string name, string deployKeyId)
-        {
-            return await ExecuteCreate(name, Options.HostAccesToken);
-        }
-
-        private async Task<string> ExecuteCreate(string name, string hostAccesToken)
+        public async Task<string> CreateHub(string netlifySiteName, string repositoryName, string repositoryId, string deployKeyId, string accesToken)
         {
             Validator.StringIsNullOrEmpty(
-             name, $"{nameof(HostingHubConnector)} : {nameof(ExecuteCreate)} : {nameof(name)} : is null/empty");
+             netlifySiteName, $"{nameof(HostingHubConnector)} : {nameof(CreateHub)} : {nameof(netlifySiteName)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-              hostAccesToken, $"{nameof(HostingHubConnector)} : {nameof(ExecuteCreate)} : {nameof(hostAccesToken)} : is null/empty");
+              deployKeyId, $"{nameof(HostingHubConnector)} : {nameof(CreateHub)} : {nameof(deployKeyId)} : is null/empty");
 
             try
             {
-                var clientHubCallId = await this.hubClient.CreateHubAsync(name, hostAccesToken);
+                var clientHubCallId = await this.hubClient.CreateHubAsync(netlifySiteName, repositoryName, repositoryId, deployKeyId, accesToken);
 
                 Validator.StringIsNullOrEmpty(
-                        clientHubCallId, $"{nameof(HostingHubConnector)} : {nameof(ExecuteCreate)} : {nameof(clientHubCallId)} : is null/empty");
+                        clientHubCallId, $"{nameof(HostingHubConnector)} : {nameof(CreateHub)} : {nameof(clientHubCallId)} : is null/empty");
 
                 return clientHubCallId;
             }

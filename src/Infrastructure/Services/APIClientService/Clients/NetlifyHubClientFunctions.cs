@@ -24,19 +24,40 @@ namespace Infrastructure.Services.APIClientService.Clients
             throw new NetlifyClientDeployKeysException($"{nameof(NetlifyClientDeployKeysException)} : Can't create deploy key to host hub : {response.StatusCode}");
         }
 
-        public async Task<string> PostCreateAsync(string newHubName, string credidentials)
+        public async Task<string> PostCreateAsync(string netlifySiteName, string repositoryName, string repositoryId, string deployKeyId, string accesToken)
         {
-            //Create - POST
-            //https://api.netlify.com/api/v1/sites?access_token={token}
-            //        {
-            //	        "name" : "TESTingMore"
-            //        }
-            var model = new CreateHubDTO()
+            //  POST        https://api.netlify.com/api/v1/sites?access_token={token}
+
+            //{
+            //   "repo":
+            //      {
+            //          "provider":"gitlab",
+            //          "id":15568698,
+            //          "repo":"VeselinovStf/finaltestnetlify",
+            //          "private":true,
+            //          "branch":"master",
+            //          "cmd":"jekyll build",
+            //          "dir":"_site/",
+            //          "deploy_key_id":"5ddeaa5d59b987ba6113587a"
+            //       }
+            // }
+
+            var model = new DeploySiteDTO()
             {
-                Name = newHubName
+                Repo = new DeployRepoDTO()
+                {
+                    Provider = "gitlab",
+                    Id = repositoryId,
+                    Repo = "VeselinovStf/" + repositoryName,
+                    Private = true,
+                    Branch = "master",
+                    CMD = "jekyll build",
+                    Dir = "_site/",
+                    DeployKeyId = deployKeyId
+                }
             };
 
-            var response = await this.Client.PostAsync($"sites?access_token={credidentials}", base.CreateHttpContent<CreateHubDTO>(model));
+            var response = await this.Client.PostAsync($"sites?access_token={accesToken}", base.CreateHttpContent<DeploySiteDTO>(model));
 
             response.EnsureSuccessStatusCode();
 

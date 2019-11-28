@@ -18,9 +18,9 @@ namespace Infrastructure.Services.APIClientService
             this.client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public async Task<string> CreateHubAsync(string name, string accesTokken)
+        public async Task<string> CreateHubAsync(string netlifySiteName, string repositoryName, string repositoryId, string deployKeyId, string accesToken)
         {
-            return await client.PostCreateAsync(name, accesTokken);
+            return await client.PostCreateAsync(netlifySiteName, repositoryName, repositoryId, deployKeyId, accesToken);
         }
 
         public async Task<DeployKeyDTO> CreateDeployKey(string accesToken)

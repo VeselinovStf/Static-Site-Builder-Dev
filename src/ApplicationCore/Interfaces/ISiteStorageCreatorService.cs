@@ -4,6 +4,6 @@ namespace ApplicationCore.Interfaces
 {
     public interface ISiteStorageCreatorService
     {
-        Task<bool> StorageCreatorExecute();
+        Task<bool> StorageCreatorExecute(string newRepositoryCreateName, string templateName);
     }
 }
