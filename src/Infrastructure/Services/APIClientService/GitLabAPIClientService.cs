@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Services.APIClientService
 {
-    public class GitLabAPIClientService : IAPIRepoClientService<GitLabHubClient>
+    public class GitLabAPIClientService :
+        IAPIRepoClientService<GitLabHubClient>,
+        IRepoUserKey
     {
         private readonly GitLabHubClient client;
 
@@ -14,6 +16,11 @@ namespace Infrastructure.Services.APIClientService
             GitLabHubClient client)
         {
             this.client = client ?? throw new ArgumentNullException(nameof(client));
+        }
+
+        public async Task<bool> AddKey(string accesToken, string key, string title)
+        {
+            return await this.client.AddRepoKey(accesToken, key, title);
         }
 
         public async Task<bool> AddVariables(string hubId, string accesToken, string hostingId, string hostingAccesToken)

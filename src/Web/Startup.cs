@@ -28,6 +28,7 @@ using Infrastructure.Services.HostingHubConnectorService.DTOs;
 using Infrastructure.Services.RepoHubConnectorService;
 using Infrastructure.SiteTypes;
 using Infrastructure.SiteTypes.DTOs;
+using Infrastructure.Storage;
 using Infrastructure.Templates;
 using Infrastructure.Templates.DTOs;
 using Microsoft.AspNetCore.Builder;
@@ -138,9 +139,11 @@ namespace Web
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IRepoHubConnector, RepoHubConnector>();
             services.AddScoped<IHubConnectorRepoOption, RepoHubConnector>();
+            services.AddScoped<IRepoHubKeyMaker, RepoHubKeyMaker>();
             services.AddScoped<IHostingHubConnector, HostingHubConnector>();
-            services.AddScoped<IHostingHubKeyMaker<HostingCreatePrepDTO>, HostingHubKeyMaker>();
+            services.AddScoped<IHubKeyMaker<HostingCreatePrepDTO>, HostingHubKeyMaker>();
             services.AddScoped<IFileReader, FileReader>();
+            services.AddScoped<ISiteStorageCreatorService, SiteStorageCreatorService>();
 
             services.AddTransient<IFileTransferrer<ConvertedFileElement>>(r => new FileTransferrer(
                 r.GetRequiredService<IFileReader>(),

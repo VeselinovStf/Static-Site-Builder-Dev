@@ -39,6 +39,26 @@ namespace Infrastructure.Services.APIClientService.Clients
             throw new GitHubClientPostCreateException($"{nameof(GitHubClientPostCreateException)} : Can't create post to repo hub : {response.StatusCode}");
         }
 
+        public async Task<bool> AddRepoKey(string accesToken, string key, string title)
+        {
+            var model = new RepoUserKeyDTO()
+            {
+                Key = key,
+                Title = title
+            };
+
+            var response = await this.Client.PostAsync($"user/keys?access_token={accesToken}", base.CreateHttpContent<RepoUserKeyDTO>(model));
+
+            response.EnsureSuccessStatusCode();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            throw new GitHubClientPostCreateException($"{nameof(GitHubClientPostCreateException)} : Can't create post to repo hub : {response.StatusCode} : {response.RequestMessage}");
+        }
+
         public async Task<bool> PushToHubAsync(string hubId, string accesTokken, List<string> filePaths, List<string> fileContents)
         {
             var branch = "master";

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Services.HostingHubConnectorService
 {
-    public class HostingHubKeyMaker : IHostingHubKeyMaker<HostingCreatePrepDTO>
+    public class HostingHubKeyMaker : IHubKeyMaker<HostingCreatePrepDTO>
     {
         private readonly IHostDeployToken<DeployKeyDTO> hostingDeployKeyMaker;
 

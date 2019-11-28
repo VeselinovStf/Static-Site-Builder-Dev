@@ -2,7 +2,7 @@
 
 namespace ApplicationCore.Interfaces
 {
-    public interface IHostingHubKeyMaker<T>
+    public interface IHubKeyMaker<T>
     {
         Task<T> CreateKey(string accesToken);
     }
