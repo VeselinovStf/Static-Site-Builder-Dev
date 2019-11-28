@@ -138,7 +138,7 @@ namespace Web
             //Infrastructure Services
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IRepoHubConnector, RepoHubConnector>();
-            services.AddScoped<IHubConnectorRepoOption, RepoHubConnector>();
+
             services.AddScoped<IRepoHubKeyMaker, RepoHubKeyMaker>();
             services.AddScoped<IHostingHubConnector, HostingHubConnector>();
             services.AddScoped<IHubKeyMaker<HostingCreatePrepDTO>, HostingHubKeyMaker>();

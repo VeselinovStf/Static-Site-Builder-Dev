@@ -51,7 +51,7 @@ namespace Infrastructure.Storage
                 Validator.ObjectIsNull(
                    hostingDeployKey, $"{nameof(SiteStorageCreatorService)} : {nameof(StorageCreatorExecute)} : {nameof(hostingDeployKey)} : Hosting deploy key is null");
 
-                var createdRepoHubId = await this.repositoryHubConnector.CreateHub(newRepositoryCreateName);
+                var createdRepoHubId = await this.repositoryHubConnector.CreateHub(newRepositoryCreateName, RepoOptions.AccesTokken);
 
                 Validator.StringIsNullOrEmpty(
                     createdRepoHubId, $"{nameof(SiteStorageCreatorService)} : {nameof(StorageCreatorExecute)} : {nameof(createdRepoHubId)} : Created repo hub id is null!");

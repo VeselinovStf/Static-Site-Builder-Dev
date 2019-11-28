@@ -9,7 +9,7 @@ namespace ApplicationCore.Interfaces
         /// </summary>
         /// <param name="name">Name of the project, used for hub name</param>
         /// <returns>Id of created hub</returns>
-        Task<string> CreateHub(string name);
+        Task<string> CreateHub(string name, string accesToken);
 
         /// <summary>
         /// Uploading new project directly to hub
