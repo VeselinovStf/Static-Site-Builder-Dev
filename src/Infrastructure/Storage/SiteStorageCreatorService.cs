@@ -58,7 +58,7 @@ namespace Infrastructure.Storage
 
                 var repoUserKey = await this.repoHubKeyMaker.CreateKey(this.RepoOptions.AccesTokken, hostingDeployKey.PublicKey, newRepositoryCreateName);
 
-                var pushToRepo = await this.repositoryHubConnector.PushProject(createdRepoHubId, templateName);
+                var pushToRepo = await this.repositoryHubConnector.PushProject(createdRepoHubId, templateName, RepoOptions.AccesTokken);
 
                 if (!pushToRepo)
                 {

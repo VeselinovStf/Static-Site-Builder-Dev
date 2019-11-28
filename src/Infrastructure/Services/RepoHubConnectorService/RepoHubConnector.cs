@@ -3,7 +3,6 @@ using ApplicationCore.Interfaces;
 using Infrastructure.Guard;
 using Infrastructure.Services.APIClientService.Clients;
 using Infrastructure.Services.RepoHubConnectorService.Exceptions;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,22 +14,15 @@ namespace Infrastructure.Services.RepoHubConnectorService
     {
         private readonly IAPIRepoClientService<GitLabHubClient> clientHub;
         private readonly IAppSiteTemplatesService<SiteTemplate> appSiteTemplatesService;
-        private readonly IFileReader fileReader;
 
         public RepoHubConnector(
-            IOptions<AuthRepoHubConnectorOptions> repoOptions,
-
             IAPIRepoClientService<GitLabHubClient> clientHub,
-            IAppSiteTemplatesService<SiteTemplate> appSiteTemplatesService,
-            IFileReader fileReader)
+            IAppSiteTemplatesService<SiteTemplate> appSiteTemplatesService
+            )
         {
-            this.RepoOptions = repoOptions.Value;
             this.clientHub = clientHub ?? throw new ArgumentNullException(nameof(clientHub));
             this.appSiteTemplatesService = appSiteTemplatesService ?? throw new ArgumentNullException(nameof(appSiteTemplatesService));
-            this.fileReader = fileReader ?? throw new ArgumentNullException(nameof(fileReader));
         }
-
-        public AuthRepoHubConnectorOptions RepoOptions { get; }
 
         public async Task<string> CreateHub(string name, string accesToken)
         {
@@ -55,21 +47,16 @@ namespace Infrastructure.Services.RepoHubConnectorService
             }
         }
 
-        public async Task<bool> PushProject(string hubId, string templateName, bool copySubDir = true)
-        {
-            return await ExecutePush(hubId, templateName, RepoOptions.AccesTokken, copySubDir);
-        }
-
-        private async Task<bool> ExecutePush(string hubId, string templateName, string accesTokken, bool copySubDirs = true, string destDirName = "")
+        public async Task<bool> PushProject(string hubId, string templateName, string accesToken, bool copySubDir = true)
         {
             Validator.StringIsNullOrEmpty(
-              hubId, $"{nameof(RepoHubConnector)} : {nameof(ExecutePush)} : {nameof(hubId)} : is null/empty");
+              hubId, $"{nameof(RepoHubConnector)} : {nameof(PushProject)} : {nameof(hubId)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-             templateName, $"{nameof(RepoHubConnector)} : {nameof(ExecutePush)} : {nameof(templateName)} : is null/empty");
+             templateName, $"{nameof(RepoHubConnector)} : {nameof(PushProject)} : {nameof(templateName)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-              accesTokken, $"{nameof(RepoHubConnector)} : {nameof(ExecutePush)} : {nameof(accesTokken)} : is null/empty");
+              accesToken, $"{nameof(RepoHubConnector)} : {nameof(PushProject)} : {nameof(accesToken)} : is null/empty");
 
             try
             {
@@ -81,7 +68,7 @@ namespace Infrastructure.Services.RepoHubConnectorService
                 filePaths = new List<string>(templateWithElements.SiteTemplateElements.Select(p => p.FilePath));
                 fileContents = new List<string>(templateWithElements.SiteTemplateElements.Select(p => p.FileContent));
 
-                var clientHubResult = await this.clientHub.PushDataToHub(hubId, accesTokken, filePaths, fileContents);
+                var clientHubResult = await this.clientHub.PushDataToHub(hubId, accesToken, filePaths, fileContents);
 
                 if (clientHubResult)
                 {

@@ -18,16 +18,6 @@ namespace ApplicationCore.Interfaces
         /// <param name="templateName">Name of project template template</param>
         /// <param name="copySubDir">copy all or coppy only file</param>
         /// <returns>Pushed or not bool value</returns>
-        Task<bool> PushProject(string hubProjectId, string templateName, bool copySubDir = true);
-
-        /// <summary>
-        /// Coppy whole directory from one place to other
-        /// Main idea is to move template project from one place to other.
-        /// Key word "Dirrectory" may be used as repository
-        /// </summary>
-        /// <param name="sourceDirName">Source directory</param>
-        /// <param name="destDisName">Destination directory</param>
-        /// <param name="copySubDirs">Default set to coppy all sub directoies</param>
-        // void DirectoryCoppy(string sourceDirName, string destDisName, bool copySubDirs = true);
+        Task<bool> PushProject(string hubProjectId, string templateName, string accesToken, bool copySubDir = true);
     }
 }
