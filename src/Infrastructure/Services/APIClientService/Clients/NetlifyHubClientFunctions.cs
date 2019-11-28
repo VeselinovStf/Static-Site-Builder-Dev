@@ -6,6 +6,24 @@ namespace Infrastructure.Services.APIClientService.Clients
 {
     public partial class NetlifyHubClient
     {
+        public async Task<DeployKeyDTO> DeployKeys(string accesToken)
+        {
+            var response = await this.Client.PostAsync($"deploy_keys?access_token={accesToken}", base.CreateHttpContent<string>(""));
+
+            response.EnsureSuccessStatusCode();
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                var resultIdModel = GetCreatedResponse<DeployKeyDTO>(responseBody);
+
+                return resultIdModel;
+            }
+
+            throw new NetlifyClientDeployKeysException($"{nameof(NetlifyClientDeployKeysException)} : Can't create deploy key to host hub : {response.StatusCode}");
+        }
+
         public async Task<string> PostCreateAsync(string newHubName, string credidentials)
         {
             //Create - POST

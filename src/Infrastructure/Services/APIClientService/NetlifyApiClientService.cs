@@ -1,11 +1,14 @@
 ﻿using ApplicationCore.Interfaces;
 using Infrastructure.Services.APIClientService.Clients;
+using Infrastructure.Services.APIClientService.DTOs;
 using System;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Services.APIClientService
 {
-    public class NetlifyApiClientService : IAPIHostClientService<NetlifyHubClient>
+    public class NetlifyApiClientService :
+        IAPIHostClientService<NetlifyHubClient>,
+        IHostDeployToken<DeployKeyDTO>
     {
         private readonly NetlifyHubClient client;
 
@@ -18,6 +21,11 @@ namespace Infrastructure.Services.APIClientService
         public async Task<string> CreateHubAsync(string name, string accesTokken)
         {
             return await client.PostCreateAsync(name, accesTokken);
+        }
+
+        public async Task<DeployKeyDTO> CreateDeployKey(string accesToken)
+        {
+            return await client.DeployKeys(accesToken);
         }
     }
 }

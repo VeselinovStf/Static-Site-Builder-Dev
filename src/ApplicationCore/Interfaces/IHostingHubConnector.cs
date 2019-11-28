@@ -4,6 +4,6 @@ namespace ApplicationCore.Interfaces
 {
     public interface IHostingHubConnector
     {
-        Task<string> CreateHub(string name);
+        Task<string> CreateHub(string name, string deployKeyId);
     }
 }

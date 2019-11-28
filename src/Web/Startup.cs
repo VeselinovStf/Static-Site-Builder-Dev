@@ -18,6 +18,7 @@ using Infrastructure.Messages;
 using Infrastructure.Messages.DTOs;
 using Infrastructure.Services.APIClientService;
 using Infrastructure.Services.APIClientService.Clients;
+using Infrastructure.Services.APIClientService.DTOs;
 using Infrastructure.Services.EmailSenderService;
 using Infrastructure.Services.FileReader;
 using Infrastructure.Services.FileTransferrer;
@@ -133,20 +134,21 @@ namespace Web
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
 
             //Infrastructure Services
-            services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<IRepoHubConnector, RepoHubConnector>();
-            services.AddTransient<IHubConnectorRepoOption, RepoHubConnector>();
-            services.AddTransient<IHostingHubConnector, HostingHubConnector>();
-            services.AddTransient<IFileReader, FileReader>();
+            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IRepoHubConnector, RepoHubConnector>();
+            services.AddScoped<IHubConnectorRepoOption, RepoHubConnector>();
+            services.AddScoped<IHostingHubConnector, HostingHubConnector>();
+            services.AddScoped<IFileReader, FileReader>();
 
             services.AddTransient<IFileTransferrer<ConvertedFileElement>>(r => new FileTransferrer(
                 r.GetRequiredService<IFileReader>(),
                 new List<string> { ".img", ".jpg", ".png" }
                 ));
 
-            services.AddTransient<IAPIRepoClientService<GitLabHubClient>, GitLabAPIClientService>();
-            services.AddTransient<IAPIHostClientService<NetlifyHubClient>, NetlifyApiClientService>();
-            services.AddTransient<IAppSiteTemplatesService<SiteTemplate>, AppSiteTemplatesService>();
+            services.AddScoped<IAPIRepoClientService<GitLabHubClient>, GitLabAPIClientService>();
+            services.AddScoped<IAPIHostClientService<NetlifyHubClient>, NetlifyApiClientService>();
+            services.AddScoped<IHostDeployToken<DeployKeyDTO>, NetlifyApiClientService>();
+            services.AddScoped<IAppSiteTemplatesService<SiteTemplate>, AppSiteTemplatesService>();
 
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<AuthRepoHubConnectorOptions>(Configuration);
