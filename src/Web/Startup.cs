@@ -24,6 +24,7 @@ using Infrastructure.Services.FileReader;
 using Infrastructure.Services.FileTransferrer;
 using Infrastructure.Services.FileTransferrer.DTOs;
 using Infrastructure.Services.HostingHubConnectorService;
+using Infrastructure.Services.HostingHubConnectorService.DTOs;
 using Infrastructure.Services.RepoHubConnectorService;
 using Infrastructure.SiteTypes;
 using Infrastructure.SiteTypes.DTOs;
@@ -138,6 +139,7 @@ namespace Web
             services.AddScoped<IRepoHubConnector, RepoHubConnector>();
             services.AddScoped<IHubConnectorRepoOption, RepoHubConnector>();
             services.AddScoped<IHostingHubConnector, HostingHubConnector>();
+            services.AddScoped<IHostingHubKeyMaker<HostingCreatePrepDTO>, HostingHubKeyMaker>();
             services.AddScoped<IFileReader, FileReader>();
 
             services.AddTransient<IFileTransferrer<ConvertedFileElement>>(r => new FileTransferrer(
