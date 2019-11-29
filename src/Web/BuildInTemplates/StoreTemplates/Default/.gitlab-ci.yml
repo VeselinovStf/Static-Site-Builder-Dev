@@ -2,24 +2,9 @@ image: ruby:2.6
 
 stages:
   - test
-  - prep
-  - build
 
 testApp:
   stage: test
   script: echo "Testing..."
 
-prep:
-  stage: prep
-  script:
-  - gem install bundler:2.0.2
-  - bundle update --bundler
-  - bundle update
 
-buildApp:
-  stage: build
-  script:
-  - bundle exec jekyll build -d public
-  artifacts:
-    paths:
-    - public
