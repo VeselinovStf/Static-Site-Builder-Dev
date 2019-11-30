@@ -46,17 +46,17 @@ namespace Infrastructure.Storage
                 Validator.StringIsNullOrEmpty(
                     templateName, $"{nameof(SiteStorageCreatorService)} : {nameof(StorageCreatorExecute)} : {nameof(templateName)} : is null/empty");
 
-                var hostingDeployKey = await this.hostingHubDeployKeyMaker.CreateKey(this.HostingOptions.HostAccesToken);
+                // var hostingDeployKey = await this.hostingHubDeployKeyMaker.CreateKey(this.HostingOptions.HostAccesToken);
 
-                Validator.ObjectIsNull(
-                   hostingDeployKey, $"{nameof(SiteStorageCreatorService)} : {nameof(StorageCreatorExecute)} : {nameof(hostingDeployKey)} : Hosting deploy key is null");
+                //Validator.ObjectIsNull(
+                //   hostingDeployKey, $"{nameof(SiteStorageCreatorService)} : {nameof(StorageCreatorExecute)} : {nameof(hostingDeployKey)} : Hosting deploy key is null");
 
                 var createdRepoHubId = await this.repositoryHubConnector.CreateHub(newRepositoryCreateName, RepoOptions.AccesTokken);
 
-                Validator.StringIsNullOrEmpty(
-                    createdRepoHubId, $"{nameof(SiteStorageCreatorService)} : {nameof(StorageCreatorExecute)} : {nameof(createdRepoHubId)} : Created repo hub id is null!");
+                //Validator.StringIsNullOrEmpty(
+                //    createdRepoHubId, $"{nameof(SiteStorageCreatorService)} : {nameof(StorageCreatorExecute)} : {nameof(createdRepoHubId)} : Created repo hub id is null!");
 
-                var repoUserKey = await this.repoHubKeyMaker.CreateKey(this.RepoOptions.AccesTokken, hostingDeployKey.PublicKey, newRepositoryCreateName);
+                //   var repoUserKey = await this.repoHubKeyMaker.CreateKey(this.RepoOptions.AccesTokken, hostingDeployKey.PublicKey, newRepositoryCreateName);
 
                 var pushToRepo = await this.repositoryHubConnector.PushProject(createdRepoHubId, templateName, RepoOptions.AccesTokken);
 
@@ -65,10 +65,10 @@ namespace Infrastructure.Storage
                     throw new SiteStorageCreatorService_StorageCreatorExecute_PushToRepo_Exception($"{nameof(SiteStorageCreatorService_StorageCreatorExecute_PushToRepo_Exception)} : Error : Can't push to repository!!");
                 }
 
-                var deployCall = await this.hostingHubConnector.CreateHub(newRepositoryCreateName, newRepositoryCreateName, createdRepoHubId, hostingDeployKey.Id, HostingOptions.HostAccesToken);
+                //   var deployCall = await this.hostingHubConnector.CreateHub(newRepositoryCreateName, newRepositoryCreateName, createdRepoHubId, hostingDeployKey.Id, HostingOptions.HostAccesToken);
 
-                Validator.StringIsNullOrEmpty(
-                   deployCall, $"{nameof(SiteStorageCreatorService)} : {nameof(StorageCreatorExecute)} : {nameof(deployCall)} : Can't deploy site to hosting!");
+                //Validator.StringIsNullOrEmpty(
+                //   deployCall, $"{nameof(SiteStorageCreatorService)} : {nameof(StorageCreatorExecute)} : {nameof(deployCall)} : Can't deploy site to hosting!");
 
                 return true;
             }

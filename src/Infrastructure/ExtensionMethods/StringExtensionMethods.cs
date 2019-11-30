@@ -1,12 +1,14 @@
-﻿namespace Infrastructure.ExtensionMethods
+﻿using System;
+
+namespace Infrastructure.ExtensionMethods
 {
     public static class StringExtensionMethods
     {
-        public static string StringToBase64(this string str)
+        public static string GetBase64StringForImage(this string imgPath)
         {
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(str);
-
-            return System.Convert.ToBase64String(plainTextBytes);
+            byte[] imageBytes = System.IO.File.ReadAllBytes(imgPath);
+            string base64String = Convert.ToBase64String(imageBytes);
+            return base64String;
         }
     }
 }

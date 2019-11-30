@@ -63,9 +63,9 @@ namespace Infrastructure.LaunchSite
                             var siteStorageCreaton = await this.siteStorageCreator.StorageCreatorExecute(clientProjectName, clientTemplateName);
 
                             //Mark IsLanched
-                            await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
+                            //  await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
                             //Mark IsPushed
-                            await this.appLaunchConfigService.PushSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
+                            //  await this.appLaunchConfigService.PushSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);
                         }
                         else if (clientStoreConfig.IsPushed)
                         {

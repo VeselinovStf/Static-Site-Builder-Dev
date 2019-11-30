@@ -76,7 +76,9 @@ namespace Infrastructure.Services.FileTransferrer
 
                     if (this.imageExtensions.Any(e => temppath.Contains(e)))
                     {
-                        fileContents.Add(fileContent.StringToBase64());
+                        fileContents.Add(file.FullName.GetBase64StringForImage());
+
+                        //fileContents.Add(fileContent.StringToBase64());
                     }
                     else
                     {
@@ -93,7 +95,9 @@ namespace Infrastructure.Services.FileTransferrer
 
                     if (this.imageExtensions.Any(e => temppath.Contains(e)))
                     {
-                        fileContents.Add(fileContent.StringToBase64());
+                        fileContents.Add(file.FullName.GetBase64StringForImage());
+
+                        //fileContents.Add(fileContent.StringToBase64());
                     }
                     else
                     {
