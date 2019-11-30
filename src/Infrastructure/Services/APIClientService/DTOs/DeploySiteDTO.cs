@@ -7,5 +7,8 @@ namespace Infrastructure.Services.APIClientService.DTOs
     {
         [DataMember(Name = "repo")]
         public DeployRepoDTO Repo { get; set; }
+
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
     }
 }

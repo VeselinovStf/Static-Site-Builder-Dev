@@ -44,6 +44,7 @@ namespace Infrastructure.Services.APIClientService.Clients
 
             var model = new DeploySiteDTO()
             {
+                Name = netlifySiteName,
                 Repo = new DeployRepoDTO()
                 {
                     Provider = "gitlab",
