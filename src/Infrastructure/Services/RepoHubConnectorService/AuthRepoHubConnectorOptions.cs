@@ -2,6 +2,6 @@
 {
     public class AuthRepoHubConnectorOptions
     {
-        public string AccesTokken { get; set; }
+        public string RepoAccesTokken { get; set; }
     }
 }

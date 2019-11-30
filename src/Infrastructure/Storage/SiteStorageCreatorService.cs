@@ -51,14 +51,14 @@ namespace Infrastructure.Storage
                 Validator.ObjectIsNull(
                    hostingDeployKey, $"{nameof(SiteStorageCreatorService)} : {nameof(StorageCreatorExecute)} : {nameof(hostingDeployKey)} : Hosting deploy key is null");
 
-                var createdRepoHubId = await this.repositoryHubConnector.CreateHub(newRepositoryCreateName, RepoOptions.AccesTokken);
+                var createdRepoHubId = await this.repositoryHubConnector.CreateHub(newRepositoryCreateName, RepoOptions.RepoAccesTokken);
 
                 Validator.StringIsNullOrEmpty(
                     createdRepoHubId, $"{nameof(SiteStorageCreatorService)} : {nameof(StorageCreatorExecute)} : {nameof(createdRepoHubId)} : Created repo hub id is null!");
 
-                var repoUserKey = await this.repoHubKeyMaker.CreateKey(this.RepoOptions.AccesTokken, hostingDeployKey.PublicKey, newRepositoryCreateName);
+                var repoUserKey = await this.repoHubKeyMaker.CreateKey(this.RepoOptions.RepoAccesTokken, hostingDeployKey.PublicKey, newRepositoryCreateName);
 
-                var pushToRepo = await this.repositoryHubConnector.PushProject(createdRepoHubId, templateName, RepoOptions.AccesTokken);
+                var pushToRepo = await this.repositoryHubConnector.PushProject(createdRepoHubId, templateName, RepoOptions.RepoAccesTokken);
 
                 if (!pushToRepo)
                 {
