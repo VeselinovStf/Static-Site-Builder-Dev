@@ -147,7 +147,7 @@ namespace Web
 
             services.AddTransient<IFileTransferrer<ConvertedFileElement>>(r => new FileTransferrer(
                 r.GetRequiredService<IFileReader>(),
-                new List<string> { ".img", ".jpg", ".png" }
+                new List<string> { ".img", ".jpg", ".png", ".otf", ".eot", ".ttf", ".woff", ".woff2" }
                 ));
 
             services.AddScoped<IAPIRepoClientService<GitLabHubClient>, GitLabAPIClientService>();

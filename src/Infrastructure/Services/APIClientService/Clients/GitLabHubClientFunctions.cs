@@ -8,7 +8,7 @@ namespace Infrastructure.Services.APIClientService.Clients
 {
     public partial class GitLabHubClient
     {
-        private readonly List<string> ImageExtensions = new List<string> { ".img", ".jpg", ".png" };
+        private readonly List<string> ImageExtensions = new List<string> { ".img", ".jpg", ".png", ".otf", ".eot", ".ttf", ".woff", ".woff2" };
 
         public async Task<string> PostCreateAsync(string newHubName, string credidentials)
         {
