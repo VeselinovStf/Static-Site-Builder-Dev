@@ -31,6 +31,8 @@ using Infrastructure.SiteTypes.DTOs;
 using Infrastructure.Storage;
 using Infrastructure.Templates;
 using Infrastructure.Templates.DTOs;
+using Infrastructure.Widgets;
+using Infrastructure.Widgets.DTOs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -59,6 +61,8 @@ using Web.ModelFatories.SiteTypeModelFactory;
 using Web.ModelFatories.SiteTypeModelFactory.Abstraction;
 using Web.ModelFatories.TemplateModelFactory;
 using Web.ModelFatories.TemplateModelFactory.Abstraction;
+using Web.ModelFatories.WidgetsModelFactory;
+using Web.ModelFatories.WidgetsModelFactory.Abstraction;
 
 namespace Web
 {
@@ -118,6 +122,12 @@ namespace Web
             services.AddScoped<IAppBlogTypeSiteService<BlogTypeSite>, AppBlogTypeSiteService>();
             services.AddScoped<SiteTypesFactory, BlogTypeSiteFactory>();
             services.AddScoped<SiteTypesFactory, StoreTypeSiteFactory>();
+
+            //Widgets
+            services.AddScoped<IAppClientWidgetService, AppClientWidgetService>();
+            services.AddScoped<IAppWidgetService, AppWidgetService>();
+            services.AddScoped<IWidgetService<ClientWidgetListDTO>, WidgetService>();
+            services.AddScoped<IWidgetModelFactory, WidgetModelFactory>();
 
             //LaunchSite
             services.AddScoped<ILaunchSiteService, LaunchSiteService>();

@@ -24,21 +24,7 @@ namespace Infrastructure.Templates
             this.appTemplateService = appTemplateService ?? throw new ArgumentNullException(nameof(appTemplateService));
             this.hostingOptions = hostingOptions ?? throw new ArgumentNullException(nameof(hostingOptions));
         }
-
-        public async Task ConfigureCiCdVariables(string siteId, string buildInSiteType, string templateName)
-        {
-            try
-            {
-                Validator.StringIsNullOrEmpty(
-                  siteId, $"{nameof(TemplateService)} : {nameof(ConfigureCiCdVariables)} : {nameof(siteId)} : is null/empty");
-
-                await this.appTemplateService.AddVariablesAsync(buildInSiteType, templateName, siteId, this.hostingOptions.Value.ToString());
-            }
-            catch (Exception ex)
-            {
-                throw new TemplateServiceConfigureCiCdVariablesException($"{nameof(TemplateServiceConfigureCiCdVariablesException)} : Exception : Can't change Ci/Cd Template variables : {ex.Message}");
-            }
-        }
+    
 
         public async Task<IList<SiteTemplateDTO>> GetAllAsync(string buildInType, string clientId)
         {

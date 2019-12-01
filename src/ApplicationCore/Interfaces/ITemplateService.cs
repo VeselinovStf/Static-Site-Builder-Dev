@@ -7,6 +7,6 @@ namespace ApplicationCore.Interfaces
     {
         Task<IList<T>> GetAllAsync(string buildInType, string clientId);
 
-        Task ConfigureCiCdVariables(string siteId, string buildInSiteType, string templateName);
+        
     }
 }
