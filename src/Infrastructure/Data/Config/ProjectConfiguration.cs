@@ -8,13 +8,7 @@ namespace Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<Project> builder)
         {
-            builder.HasMany(b => b.AvailibleWidjets)
-               .WithOne(w => w.AvailibleSiteWidjet)
-               .HasForeignKey(w => w.AvailibleSiteWidjetId);
-
-            builder.HasMany(b => b.UsedWidjets)
-               .WithOne(w => w.UsedSiteWidjet)
-               .HasForeignKey(w => w.UsedSiteWidjetId);
+            
 
             var elementMetadata = builder.Metadata.FindNavigation(nameof(Project.BlogSiteTypes));
             elementMetadata.SetField("_blogSiteTypes");
