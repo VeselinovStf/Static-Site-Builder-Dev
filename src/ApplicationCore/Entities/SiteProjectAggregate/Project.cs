@@ -14,10 +14,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
         private readonly List<StoreTypeSite> _storeSiteTypes = new List<StoreTypeSite>();
 
         private readonly List<BlogTypeSite> _blogSiteTypes = new List<BlogTypeSite>();
-
-        public ICollection<WidjetElement> AvailibleWidjets { get; set; }
-
-        public ICollection<WidjetElement> UsedWidjets { get; set; }
+     
 
         public string ClientId { get; set; }
 

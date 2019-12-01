@@ -11,13 +11,6 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
         public string ClientWidjetId { get; private set; }
 
         public ClientWidjet ClientWidjet { get; set; }
-
-        public string AvailibleSiteWidjetId { get; private set; }
-
-        public Project AvailibleSiteWidjet { get; set; }
-
-        public string UsedSiteWidjetId { get; private set; }
-
-        public Project UsedSiteWidjet { get; set; }
+      
     }
 }
