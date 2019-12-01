@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -36,6 +37,14 @@ namespace Infrastructure.Data
                     await ssbDbContext.SaveChangesAsync();
                 }
 
+                if (!ssbDbContext.Widjets.Any())
+                {
+                    await ssbDbContext.Widjets.AddRangeAsync(
+                        GetPreconfiguredWidjets());
+
+                    await ssbDbContext.SaveChangesAsync();
+                }
+
                 if (!ssbDbContext.Users.Any())
                 {
                     await ssbDbContext.Users.AddAsync(
@@ -46,14 +55,7 @@ namespace Infrastructure.Data
 
                     await ssbDbContext.SaveChangesAsync();
                 }
-
-                if (!ssbDbContext.Widjets.Any())
-                {
-                    await ssbDbContext.Widjets.AddRangeAsync(
-                        GetPreconfiguredWidjets());
-
-                    await ssbDbContext.SaveChangesAsync();
-                }
+               
 
                 //if (!ssbDbContext.SiteTypes.Any())
                 //{
@@ -88,13 +90,16 @@ namespace Infrastructure.Data
         {
             var defaultStoreTypeSiteFileRead = await fileTransporter.FilesToList("D:\\STORE\\Static_Store_Builder-SSB-\\Dev_V03\\src\\Web\\BuildInTemplates\\StoreTemplates\\Default");
 
+            var storePreconfirmedWidjets =  dbContext.Widjets;
+
             var storeTypeId = Guid.NewGuid().ToString();
             var storeType = new SiteType()
             {
                 Id = storeTypeId,
                 Name = "Multipurpose eCommerce Site",
                 Description = "Build you owne eCommersce site, sell one nich or many all depends on you. Use build in Widjets to customize and optimize your new application. Start earning in few hours.",
-                Type = SiteTypesEnum.StoreType
+                Type = SiteTypesEnum.StoreType,
+                UsebleWidjets = new List<Widjet>(storePreconfirmedWidjets.Where(w => w.SiteTypeSpecification == SiteTypesEnum.StoreType))
             };
 
             var blogTypeId = Guid.NewGuid().ToString();
@@ -103,7 +108,8 @@ namespace Infrastructure.Data
                 Id = blogTypeId,
                 Name = "Blog Site",
                 Description = "Build you owne blog site. Use build in Widjets to customize and optimize your new application. Create your first posts in minutes. Start posting now.",
-                Type = SiteTypesEnum.BlogType
+                Type = SiteTypesEnum.BlogType,
+                UsebleWidjets = new List<Widjet>(storePreconfirmedWidjets.Where(w => w.SiteTypeSpecification == SiteTypesEnum.BlogType))
             };
 
             await dbContext.SiteTypes.AddAsync(storeType);
@@ -143,9 +149,63 @@ namespace Infrastructure.Data
                 Price = 0m,
                 Version = 1,
                 Votes = 0,
+                SiteTypeSpecification = SiteTypesEnum.StoreType,
+                SystemName = SiteWidjetEnum.MenuDisplay,
+                Dependency = SiteWidjetEnum.None
             };
 
-            return new Widjet[] { menuConfigWidjet };
+            var siteStructureWidjet = new Widjet()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Description = "This widjet gives you the ability to change the structure of site",
+                Functionality = "site-structure",
+                IsFree = true,
+                IsOn = true,
+                Key = "",
+                Name = "SiteStructure",
+                Price = 0m,
+                Version = 1,
+                Votes = 0,
+                SiteTypeSpecification = SiteTypesEnum.StoreType,
+                SystemName = SiteWidjetEnum.SiteStructure,
+                Dependency = SiteWidjetEnum.None
+            };
+
+            var productsWidjet = new Widjet()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Description = "This widjet gives you the ability add sellible products to your site",
+                Functionality = "products",
+                IsFree = true,
+                IsOn = true,
+                Key = "",
+                Name = "Products",
+                Price = 0m,
+                Version = 1,
+                Votes = 0,
+                SiteTypeSpecification = SiteTypesEnum.StoreType,
+                SystemName = SiteWidjetEnum.Products,
+                Dependency = SiteWidjetEnum.None
+            };
+
+            var topProductsWidjet = new Widjet()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Description = "This widjet gives you the ability to display sellible products in different ways",
+                Functionality = "top-products",
+                IsFree = true,
+                IsOn = true,
+                Key = "",
+                Name = "TopProducts",
+                Price = 0m,
+                Version = 1,
+                Votes = 0,
+                SiteTypeSpecification = SiteTypesEnum.StoreType,
+                SystemName = SiteWidjetEnum.TopProducts,
+                Dependency = SiteWidjetEnum.Products
+            };
+
+            return new Widjet[] { menuConfigWidjet, siteStructureWidjet, productsWidjet, topProductsWidjet };
         }
 
         private static IdentityRole[] GetPreconfiguredRoles()
@@ -160,6 +220,8 @@ namespace Infrastructure.Data
         {
             var clientId = Guid.NewGuid().ToString();
             var projectId = Guid.NewGuid().ToString();
+
+            var clientUserBuildInWidjets = dbContext.Widjets.Where(w => w.IsFree == true).ToList();           
 
             var mailBox = new ApplicationCore.Entities.MessageAggregate.MailBox()
             {
@@ -191,7 +253,11 @@ namespace Infrastructure.Data
                 AccessFailedCount = 0,
                 LockoutEnabled = false,
                 MailBox = mailBox,
-                Project = clientProject
+                Project = clientProject,
+                ClientWidjets = new ClientWidjet(clientUserBuildInWidjets)
+                {
+                    ClientId = clientId
+                }
             };
 
             var hashePass = new PasswordHasher<ApplicationUser>().HashPassword(clientUser, "!Aa12345678");
@@ -213,6 +279,8 @@ namespace Infrastructure.Data
         {
             var adminId = Guid.NewGuid().ToString();
             var projectId = Guid.NewGuid().ToString();
+
+            var adminBuildInWidjets = dbContext.Widjets.ToList();
 
             var mailBox = new ApplicationCore.Entities.MessageAggregate.MailBox()
             {
@@ -244,7 +312,11 @@ namespace Infrastructure.Data
                 AccessFailedCount = 0,
                 LockoutEnabled = false,
                 MailBox = mailBox,
-                Project = adminProject
+                Project = adminProject,
+                ClientWidjets = new ClientWidjet(adminBuildInWidjets)
+                {
+                    ClientId = adminId
+                }
             };
 
             var hashePass = new PasswordHasher<ApplicationUser>().HashPassword(adminUser, "!Aa12345678");

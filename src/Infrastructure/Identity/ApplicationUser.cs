@@ -30,6 +30,7 @@ namespace Infrastructure.Identity
 
         public Project Project { get; set; }
 
-        public ICollection<ClientWidjet> ClientWidjets { get; set; }
+        public string ClientWidjetId { get; set; }
+        public ClientWidjet ClientWidjets { get; set; }
     }
 }

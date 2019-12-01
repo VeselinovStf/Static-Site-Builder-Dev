@@ -32,7 +32,7 @@ namespace Infrastructure.Data
         public DbSet<BlogPost> BlogPosts { get; set; }
         public DbSet<BlogPostFrontMatter> BlogPostFrontMatters { get; set; }
         public DbSet<ClientWidjet> ClientWidjets { get; set; }
-        public DbSet<WidjetElement> WidjetElements { get; set; }
+       
         public DbSet<Widjet> Widjets { get; set; }
         public DbSet<LaunchConfig> LaunchConfigs { get; set; }
         public DbSet<SiteType> SiteTypes { get; set; }

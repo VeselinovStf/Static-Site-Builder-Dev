@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Entities.BaseEntities;
 using ApplicationCore.Entities.SiteType;
+using System.Collections.Generic;
 
 namespace ApplicationCore.Entities.WidjetsEntityAggregate
 {
@@ -24,5 +25,8 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
         public string UsebleSiteTypeId { get; set; }
 
         public SiteType.SiteType UsebleSiteType { get; set; }
+
+        public SiteWidjetEnum SystemName { get; set; }
+        public SiteWidjetEnum Dependency { get; set; }
     }
 }

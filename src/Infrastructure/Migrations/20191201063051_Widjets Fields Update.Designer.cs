@@ -4,14 +4,16 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SSBDbContext))]
-    partial class SSBDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191201063051_Widjets Fields Update")]
+    partial class WidjetsFieldsUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -572,6 +574,8 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ApplicationUserId");
+
                     b.Property<string>("ClientId");
 
                     b.Property<DateTime?>("CreatedOn");
@@ -584,6 +588,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.ToTable("ClientWidjets");
                 });
 
@@ -593,8 +599,6 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("BlogTypeSiteId");
-
-                    b.Property<string>("ClientWidjetId");
 
                     b.Property<DateTime?>("CreatedOn");
 
@@ -637,17 +641,41 @@ namespace Infrastructure.Migrations
 
                     b.Property<double>("Votes");
 
+                    b.Property<string>("WidjetElementId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BlogTypeSiteId");
-
-                    b.HasIndex("ClientWidjetId");
 
                     b.HasIndex("StoreTypeSiteId");
 
                     b.HasIndex("UsebleSiteTypeId");
 
+                    b.HasIndex("WidjetElementId");
+
                     b.ToTable("Widjets");
+                });
+
+            modelBuilder.Entity("ApplicationCore.Entities.WidjetsEntityAggregate.WidjetElement", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ClientWidjetId");
+
+                    b.Property<DateTime?>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("ModifiedOn");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientWidjetId");
+
+                    b.ToTable("WidjetElements");
                 });
 
             modelBuilder.Entity("Infrastructure.Identity.ApplicationUser", b =>
@@ -656,8 +684,6 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
-
-                    b.Property<string>("ClientWidjetId");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -703,8 +729,6 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClientWidjetId");
 
                     b.HasIndex("MailBoxId");
 
@@ -920,15 +944,18 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("ProjectId");
                 });
 
+            modelBuilder.Entity("ApplicationCore.Entities.WidjetsEntityAggregate.ClientWidjet", b =>
+                {
+                    b.HasOne("Infrastructure.Identity.ApplicationUser")
+                        .WithMany("ClientWidjets")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
             modelBuilder.Entity("ApplicationCore.Entities.WidjetsEntityAggregate.Widjet", b =>
                 {
                     b.HasOne("ApplicationCore.Entities.BlogSiteTypeEntities.BlogTypeSite")
                         .WithMany("TemplateUsableWidjets")
                         .HasForeignKey("BlogTypeSiteId");
-
-                    b.HasOne("ApplicationCore.Entities.WidjetsEntityAggregate.ClientWidjet")
-                        .WithMany("ClientWidjets")
-                        .HasForeignKey("ClientWidjetId");
 
                     b.HasOne("ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate.StoreTypeSite")
                         .WithMany("TemplateUsableWidjets")
@@ -937,14 +964,21 @@ namespace Infrastructure.Migrations
                     b.HasOne("ApplicationCore.Entities.SiteType.SiteType", "UsebleSiteType")
                         .WithMany("UsebleWidjets")
                         .HasForeignKey("UsebleSiteTypeId");
+
+                    b.HasOne("ApplicationCore.Entities.WidjetsEntityAggregate.WidjetElement")
+                        .WithMany("Widjets")
+                        .HasForeignKey("WidjetElementId");
+                });
+
+            modelBuilder.Entity("ApplicationCore.Entities.WidjetsEntityAggregate.WidjetElement", b =>
+                {
+                    b.HasOne("ApplicationCore.Entities.WidjetsEntityAggregate.ClientWidjet", "ClientWidjet")
+                        .WithMany("ClientWidjets")
+                        .HasForeignKey("ClientWidjetId");
                 });
 
             modelBuilder.Entity("Infrastructure.Identity.ApplicationUser", b =>
                 {
-                    b.HasOne("ApplicationCore.Entities.WidjetsEntityAggregate.ClientWidjet", "ClientWidjets")
-                        .WithMany()
-                        .HasForeignKey("ClientWidjetId");
-
                     b.HasOne("ApplicationCore.Entities.MessageAggregate.MailBox", "MailBox")
                         .WithMany()
                         .HasForeignKey("MailBoxId");
