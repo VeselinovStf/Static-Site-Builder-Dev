@@ -1,0 +1,113 @@
+﻿@model WidgetsListViewModel
+
+<section class="ftco-section services-section bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 py-5 offset-1">
+                <div class="row">
+                    <div class="col-md-10 ftco-animate fadeInUp ftco-animated">
+                        <a onclick="openCity(event, 'ClientWidgets')" id="defaultOpen">
+                            <div class="media block-3 services border text-center">
+                                <div class="icon d-flex align-items-center justify-content-center">
+                                    <span class="flaticon-cloud-computing"></span>
+                                </div>
+                                <div class="mt-3 media-body media-body-2">
+                                    <h3 class="heading">Your Widgets</h3>
+                                    <p>Awailible widgets to use</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 ftco-animate fadeInUp ftco-animated">
+                        <a onclick="openCity(event, 'AvailibleNewWidgets')">
+                            <div class="media block-3 services border text-center">
+                                <div class="icon d-flex align-items-center justify-content-center">
+                                    <span class="flaticon-cloud"></span>
+                                </div>
+                                <div class="mt-3 media-body media-body-2">
+                                    <h3 class="heading">New Widgets</h3>
+                                    <p>Get newest widgets</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 ftco-animate fadeInUp ftco-animated">
+                        <div class="media block-3 services border text-center">
+                            <a onclick="openCity(event, 'Create')">
+                                <div class="icon d-flex align-items-center justify-content-center">
+                                    <span class="flaticon-server"></span>
+                                </div>
+                                <div class="mt-3 media-body media-body-2">
+                                    <h3 class="heading">Create Widget</h3>
+                                    <p>Create your owne widget</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 py-5">
+                <div class="row">
+                    <div id="ClientWidgets" class="tabcontent">
+                        <div class="col-lg-24 py-5">
+                            <div class="row">
+                                @*@foreach (var item in Model.ClientWidjets)
+                                {*@
+                                    <div class="col-md-6 ftco-animate fadeInUp ftco-animated">
+                                        <a onclick="openCity(event, 'UserInformation')" id="defaultOpen">
+                                            <div class="media block-6 services border text-center">
+                                                <div class="icon d-flex align-items-center justify-content-center">
+                                                    <span class="flaticon-cloud-computing"></span>
+                                                </div>
+                                                <div class="mt-3 media-body media-body-2">
+                                                    <h3 class="heading">User Information</h3>
+                                                    <p>Change your basic information</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @*}*@
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="Password" class="tabcontent">
+
+
+                    </div>
+
+                    <div id="Delete" class="tabcontent">
+
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+</script>
