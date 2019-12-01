@@ -23,7 +23,9 @@ namespace ApplicationCore.Services
         {
             var specification = new ClientWidgetsWithWidgetsSpecification(clientId);
 
-            return this.clientWidgetRepository.GetSingleBySpec(specification);
+            var result =  this.clientWidgetRepository.GetSingleBySpec(specification);
+
+            return result;
         }
     }
 }

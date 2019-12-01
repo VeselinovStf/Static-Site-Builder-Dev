@@ -12,6 +12,7 @@ namespace ApplicationCore.Specifications
             : base(cw => cw.ClientId == clientId)
         {
             AddInclude(cw => cw.ClientWidjets);
+            
         }
     }
 }

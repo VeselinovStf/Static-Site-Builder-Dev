@@ -16,7 +16,7 @@ namespace Web.Controllers
         private readonly IAppLogger<WidgetController> logger;
 
         public WidgetController(
-            IWidgetService<ClientWidgetListDTO> clientWidgetService,
+            IWidgetService<ClientWidgetListDTO> widgetService,
             IWidgetModelFactory modelFactory,
             IAppLogger<WidgetController> logger)
         {

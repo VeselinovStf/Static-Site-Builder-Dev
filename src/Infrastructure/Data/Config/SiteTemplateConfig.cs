@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Config
 {
-    public class SiteTemplateConfig : IEntityTypeConfiguration<ClientWidjet>
+    public class SiteTemplateConfig : IEntityTypeConfiguration<SiteTemplate>
     {
-        public void Configure(EntityTypeBuilder<ClientWidjet> builder)
+        public void Configure(EntityTypeBuilder<SiteTemplate> builder)
         {
-            var navigation = builder.Metadata.FindNavigation(nameof(ClientWidjet.ClientWidjets));
+            var navigation = builder.Metadata.FindNavigation(nameof(SiteTemplate.SiteTemplateElements));
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }

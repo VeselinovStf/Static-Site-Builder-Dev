@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Infrastructure.Widgets.DTOs;
 using Web.ModelFatories.WidgetsModelFactory.Abstraction;
 using Web.ViewModels.Widget;

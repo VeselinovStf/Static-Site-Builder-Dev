@@ -42,6 +42,9 @@ namespace Infrastructure.Widgets
 
                 var availibleWidgets = widgetsCall.Where(w => clientWidgets.ClientWidjets.Any(x => x.Id != w.Id));
 
+                Validator.ObjectIsNull(
+                  availibleWidgets, $"{nameof(WidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : Can't find any availible widgets for this user.");
+               
                 var resultModel = new ClientWidgetListDTO()
                 {
                     ClientId = clientId,
@@ -55,11 +58,11 @@ namespace Infrastructure.Widgets
                         IsOn = w.IsOn,
                         Price = w.Price,
                         SiteTypeSpecification = w.SiteTypeSpecification.ToString(),
-                        UsebleSiteType = w.UsebleSiteType.ToString(),
+                        
                         Version = w.Version,
                         Votes = w.Votes
                     })),
-                    AvailibleWidgets = new List<WidgetDTO>(availibleWidgets.Select(w => new WidgetDTO() 
+                    AvailibleWidgets = availibleWidgets.Count() < 1 ? new List<WidgetDTO>() : new List<WidgetDTO>(availibleWidgets.Select(w => new WidgetDTO() 
                     {
                         Name = w.Name,
                         Description = w.Description,
@@ -69,7 +72,7 @@ namespace Infrastructure.Widgets
                         IsOn = w.IsOn,
                         Price = w.Price,
                         SiteTypeSpecification = w.SiteTypeSpecification.ToString(),
-                        UsebleSiteType = w.UsebleSiteType.ToString(),
+                        
                         Version = w.Version,
                         Votes = w.Votes
                     }))                    
