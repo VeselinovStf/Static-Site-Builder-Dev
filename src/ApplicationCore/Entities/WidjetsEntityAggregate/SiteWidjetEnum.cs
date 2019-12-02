@@ -10,6 +10,7 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
         MenuDisplay = 1,
         Products = 2,
         SiteStructure = 3,
-        TopProducts = 4
+        TopProducts = 4,
+        Testing = 5
     }
 }

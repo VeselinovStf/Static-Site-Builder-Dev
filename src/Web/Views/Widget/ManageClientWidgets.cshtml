@@ -1,9 +1,18 @@
 ﻿@model WidgetsListViewModel
 
 <section class="ftco-section services-section bg-light">
-    <div class="container">
+    <section class="ftco-section ftco-counter img" id="section-counter">
+        <div class="container">           
+            <div class="row justify-content-center mb-1">
+                <div class="col-md-5 text-center heading-section heading-section-white ftco-animate">
+                    <h1>Sonic Widgets</h1>                
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container py-5">
         <div class="row">
-            <div class="col-lg-4 py-5 offset-1">
+            <div class="col-lg-4 offset-1">
                 <div class="row">
                     <div class="col-md-10 ftco-animate fadeInUp ftco-animated">
                         <a onclick="openCity(event, 'ClientWidgets')" id="defaultOpen">
@@ -70,6 +79,9 @@
             </div>
         </div>
     </div>
+</section>
+<section class="">
+    
 </section>
 <script>
     function openCity(evt, cityName) {

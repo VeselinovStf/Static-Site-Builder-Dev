@@ -72,6 +72,9 @@ namespace Infrastructure.Data
 
                     await ssbDbContext.SaveChangesAsync();
                 }
+
+              
+                await CustomWidgetUpdater(ssbDbContext);
             }
             catch (Exception ex)
             {
@@ -82,6 +85,37 @@ namespace Infrastructure.Data
                     log.LogError(ex.Message);
                     await SeedAsync(ssbDbContext, loggerFactory, fileTransporter, retryAvailibility);
                 }
+            }
+        }
+
+       
+        private static async Task CustomWidgetUpdater(SSBDbContext ssbDbContext)
+        {
+            //Add new wid
+            var widjet = new Widjet()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Description = "Test Widjet01",
+                Functionality = "test-widget",
+                IsFree = false,
+                IsOn = false,
+                Key = "",
+                Name = "TestWidget",
+                Price = 2.0m,
+                Version = 1,
+                Votes = 0,
+                SiteTypeSpecification = SiteTypesEnum.StoreType,
+                SystemName = SiteWidjetEnum.Testing,
+                Dependency = SiteWidjetEnum.None
+            };
+
+            
+
+            if (ssbDbContext.Widjets.FirstOrDefault(w => w.Name == widjet.Name) == null)
+            {
+                await ssbDbContext.Widjets.AddAsync(widjet);
+
+                await ssbDbContext.SaveChangesAsync();
             }
         }
 
