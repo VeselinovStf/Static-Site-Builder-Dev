@@ -1,0 +1,103 @@
+﻿@model WidgetsListViewModel
+
+<section class="ftco-section services-section bg-light">
+    <section class="ftco-section ftco-counter img" id="section-counter">
+        <div class="container">           
+            <div class="row justify-content-center mb-1">
+                <div class="col-md-5 text-center heading-section heading-section-white ftco-animate">
+                    <h1>Admin Widgets</h1>                
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-4 offset-1">
+                <div class="row">
+                    <div class="col-md-10 ftco-animate fadeInUp ftco-animated">
+                        <a onclick="openCity(event, 'ClientWidgets')" id="defaultOpen">
+                            <div class="media block-3 services border text-center">
+                                <div class="icon d-flex align-items-center justify-content-center">
+                                    <span class="flaticon-cloud-computing"></span>
+                                </div>
+                                <div class="mt-3 media-body media-body-2">
+                                    <h3 class="heading">Your Widgets</h3>
+                                    <p>Awailible widgets to use</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 ftco-animate fadeInUp ftco-animated">
+                        <a onclick="openCity(event, 'AvailibleNewWidgets')">
+                            <div class="media block-3 services border text-center">
+                                <div class="icon d-flex align-items-center justify-content-center">
+                                    <span class="flaticon-cloud"></span>
+                                </div>
+                                <div class="mt-3 media-body media-body-2">
+                                    <h3 class="heading">System Availible Widgets</h3>
+                                    <p>System newest widgets</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 ftco-animate fadeInUp ftco-animated">
+                        <div class="media block-3 services border text-center">
+                            <a onclick="openCity(event, 'CreateWidget')">
+                                <div class="icon d-flex align-items-center justify-content-center">
+                                    <span class="flaticon-server"></span>
+                                </div>
+                                <div class="mt-3 media-body media-body-2">
+                                    <h3 class="heading">Create Widget</h3>
+                                    <p>Create your owne widget</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 py-5">
+                <div class="row">
+                    <div id="ClientWidgets" class="tabcontent">
+                        @await Component.InvokeAsync("ClientWidgets" , new { model = Model.ClientWidgets })
+                    </div>
+
+                    <div id="AvailibleNewWidgets" class="tabcontent">
+                        @await Component.InvokeAsync("AvailibleWidgets",  new { model = Model.AvailibleWidgets })
+                    </div>
+
+                    <div id="CreateWidget" class="tabcontent">
+                        @await Component.InvokeAsync("CreateWidget")
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="">
+    
+</section>
+<script>
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+</script>
