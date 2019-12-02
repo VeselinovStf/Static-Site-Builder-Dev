@@ -1,6 +1,6 @@
-﻿namespace Infrastructure.Widgets.DTOs
+﻿namespace Web.ViewModels.Widget
 {
-    public class WidgetDTO
+    public class WidgetViewModel
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -17,10 +17,10 @@
 
         public bool IsFree { get; set; }
 
-        public string SiteTypeSpecification { get; set; }       
+        public string SiteTypeSpecification { get; set; }
 
         public string UsebleSiteType { get; set; }
-      
+
         public string Dependency { get; set; }
     }
 }

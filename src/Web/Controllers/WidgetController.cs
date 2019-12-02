@@ -26,24 +26,24 @@ namespace Web.Controllers
         }
         public async Task<IActionResult> ManageClientWidgets(string clientId)
         {
-            //try
-            //{
-            //    var serviceCall = await this.widgetService.GetAllAsync(clientId);
+            try
+            {
+                var serviceCall = await this.widgetService.GetAllAsync(clientId);
 
-            //    this.logger.LogInformation($"{nameof(WidgetController)} : {nameof(ManageClientWidgets)} : Sucess - Getting Client Widgets");
+                this.logger.LogInformation($"{nameof(WidgetController)} : {nameof(ManageClientWidgets)} : Sucess - Getting Client Widgets");
 
-            //    var model = this.modelFactory.Create(serviceCall);
+                var model = this.modelFactory.Create(serviceCall);
 
-            //    return View(model);
-            //}
-            //catch (Exception ex)
-            //{
-            //    this.logger.LogWarning($"{nameof(WidgetController)} : {nameof(ManageClientWidgets)} : Exception - {ex.Message}");
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(WidgetController)} : {nameof(ManageClientWidgets)} : Exception - {ex.Message}");
 
-            //    return RedirectToAction("Error", "Home", new { message = "Can't display Client Widgets. Contact support" });
-            //}
+                return RedirectToAction("Error", "Home", new { message = "Can't display Client Widgets. Contact support" });
+            }
 
-            return View();
+            
         }
     }
 }

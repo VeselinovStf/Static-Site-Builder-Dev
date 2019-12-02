@@ -1,0 +1,29 @@
+﻿@model WidgetViewModel
+
+<div id="@Model.Name" class="modal fade py-5" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        
+        <h4 class="modal-title">Widget : @Model.Name</h4>
+      </div>
+      <div class="modal-body">
+        <p>@Html.DisplayNameFor(m => m.Name) : @Html.DisplayFor(m => m.Name)</p>
+         <p>@Html.DisplayNameFor(m => m.Description) : @Html.DisplayFor(m => m.Description)</p>
+         <p>@Html.DisplayNameFor(m => m.Price) : @Html.DisplayFor(m => m.Price)</p>
+         <p>@Html.DisplayNameFor(m => m.Version) : @Html.DisplayFor(m => m.Version)</p>
+         <p>@Html.DisplayNameFor(m => m.Votes) : @Html.DisplayFor(m => m.Votes)</p>
+         <p>@Html.DisplayNameFor(m => m.IsOn) : @Html.DisplayFor(m => m.IsOn)</p>
+         <p>@Html.DisplayNameFor(m => m.IsFree) : @Html.DisplayFor(m => m.IsFree)</p>
+         <p>@Html.DisplayNameFor(m => m.SiteTypeSpecification) : @Html.DisplayFor(m => m.SiteTypeSpecification)</p>
+         <p>@Html.DisplayNameFor(m => m.Dependency) : @Html.DisplayFor(m => m.Dependency)</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -7,5 +7,10 @@ namespace Web.ViewModels.Widget
 {
     public class WidgetsListViewModel
     {
+        public string ClientId { get; set; }
+
+        public IEnumerable<WidgetViewModel> ClientWidgets { get; set; }
+
+        public IEnumerable<WidgetViewModel> AvailibleWidgets { get; set; }
     }
 }

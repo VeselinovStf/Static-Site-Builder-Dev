@@ -40,7 +40,7 @@ namespace Infrastructure.Widgets
                 Validator.ObjectIsNull(
                    clientWidgets, $"{nameof(WidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : Can't find any client widgets with this id.");
 
-                var availibleWidgets = widgetsCall.Where(w => clientWidgets.ClientWidjets.Any(x => x.Id != w.Id));
+                var availibleWidgets = widgetsCall.Except(clientWidgets.ClientWidjets).ToList();
 
                 Validator.ObjectIsNull(
                   availibleWidgets, $"{nameof(WidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : Can't find any availible widgets for this user.");
@@ -50,6 +50,7 @@ namespace Infrastructure.Widgets
                     ClientId = clientId,
                     ClientWidgets = new List<WidgetDTO>(clientWidgets.ClientWidjets.Select(w => new WidgetDTO()
                     {
+                        Id = w.Id,
                         Name = w.Name,
                         Description = w.Description,
                         Dependency = w.Dependency.ToString(),
@@ -64,6 +65,7 @@ namespace Infrastructure.Widgets
                     })),
                     AvailibleWidgets = availibleWidgets.Count() < 1 ? new List<WidgetDTO>() : new List<WidgetDTO>(availibleWidgets.Select(w => new WidgetDTO() 
                     {
+                        Id = w.Id,
                         Name = w.Name,
                         Description = w.Description,
                         Dependency = w.Dependency.ToString(),
