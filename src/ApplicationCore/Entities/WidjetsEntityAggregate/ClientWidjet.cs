@@ -26,6 +26,9 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
             }
         }
 
+        public ICollection<WidgetClientWidget> WidgetClientWidget { get; set; }
+
+
         public void AddWidjet(string name, string description, string functionality,
             decimal price, int version, double votes,
            bool isOn, bool isFree, 

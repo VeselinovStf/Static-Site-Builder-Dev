@@ -254,6 +254,7 @@ namespace Infrastructure.Data
         {
             var clientId = Guid.NewGuid().ToString();
             var projectId = Guid.NewGuid().ToString();
+            var clientClientWidgetId = Guid.NewGuid().ToString();
 
             var clientUserBuildInWidjets = dbContext.Widjets.Where(w => w.IsFree == true).ToList();           
 
@@ -288,11 +289,25 @@ namespace Infrastructure.Data
                 LockoutEnabled = false,
                 MailBox = mailBox,
                 Project = clientProject,
-                ClientWidjets = new ClientWidjet(clientUserBuildInWidjets)
+                ClientWidjets = new ClientWidjet()
                 {
-                    ClientId = clientId
+                   
+                    ClientId = clientId,
+                    WidgetClientWidget = new List<WidgetClientWidget>(clientUserBuildInWidjets.Select(a => new WidgetClientWidget()
+                    {
+                        WidgetId = a.Id,
+                        
+                    }))
+
                 }
             };
+
+            //foreach (var widget in clientUserBuildInWidjets)
+            //{
+            //    clientUser.ClientWidjets.AddWidjet(widget.Name, widget.Description, widget.Functionality,
+            //        widget.Price, widget.Version, widget.Votes, widget.IsOn, widget.IsFree, widget.SystemName, widget.Dependency,
+            //        widget.SiteTypeSpecification, widget.Key, widget.UsebleSiteTypeId);
+            //}
 
             var hashePass = new PasswordHasher<ApplicationUser>().HashPassword(clientUser, "!Aa12345678");
             clientUser.PasswordHash = hashePass;
@@ -313,6 +328,7 @@ namespace Infrastructure.Data
         {
             var adminId = Guid.NewGuid().ToString();
             var projectId = Guid.NewGuid().ToString();
+            var adminClientWidgetId = Guid.NewGuid().ToString();
 
             var adminBuildInWidjets = dbContext.Widjets.ToList();
 
@@ -347,11 +363,26 @@ namespace Infrastructure.Data
                 LockoutEnabled = false,
                 MailBox = mailBox,
                 Project = adminProject,
-                ClientWidjets = new ClientWidjet(adminBuildInWidjets)
+                ClientWidjets = new ClientWidjet()
                 {
-                    ClientId = adminId
+                    
+                    ClientId = adminId,
+                    WidgetClientWidget = new List<WidgetClientWidget>(adminBuildInWidjets.Select(a => new WidgetClientWidget()
+                    {
+                         WidgetId = a.Id,
+                        
+                    }))
+                   
                 }
+
             };
+
+            //foreach (var widget in adminBuildInWidjets)
+            //{
+            //    adminUser.ClientWidjets.AddWidjet(widget.Name, widget.Description, widget.Functionality,
+            //        widget.Price, widget.Version, widget.Votes, widget.IsOn, widget.IsFree, widget.SystemName, widget.Dependency,
+            //        widget.SiteTypeSpecification, widget.Key, widget.UsebleSiteTypeId);
+            //}
 
             var hashePass = new PasswordHasher<ApplicationUser>().HashPassword(adminUser, "!Aa12345678");
             adminUser.PasswordHash = hashePass;
