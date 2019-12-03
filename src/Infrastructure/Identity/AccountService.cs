@@ -1,8 +1,10 @@
-﻿using ApplicationCore.Interfaces;
+﻿using ApplicationCore.Entities.WidjetsEntityAggregate;
+using ApplicationCore.Interfaces;
 using Infrastructure.Guard;
 using Infrastructure.Identity.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -12,13 +14,16 @@ namespace Infrastructure.Identity
     {
         private readonly IAppUserManager<ApplicationUser> userManager;
         private readonly IAppSignInManager<ApplicationUser> signInManager;
+        private readonly IAppWidgetService appWidgetService;
 
         public AccountService(
             IAppUserManager<ApplicationUser> userManager,
-            IAppSignInManager<ApplicationUser> signInManager)
+            IAppSignInManager<ApplicationUser> signInManager,
+            IAppWidgetService appWidgetService)
         {
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+            this.appWidgetService = appWidgetService ?? throw new ArgumentNullException(nameof(appWidgetService));
         }
 
         public async Task AddToRoleAsync(ApplicationUser user, string role)
@@ -276,11 +281,40 @@ namespace Infrastructure.Identity
             Validator.StringIsNullOrEmpty(
                 password, $"{nameof(AccountService)} : {nameof(RegisterAccountAsync)} : {nameof(password)} : is null/empty");
 
+            var systemWidgets = await this.appWidgetService.GetAllWidgetsAsync();
+
+            Validator.ObjectIsNull(
+                systemWidgets, $"{nameof(AccountService)} : {nameof(RegisterAccountAsync)} : {nameof(systemWidgets)} : Creating account - Can't find build in free wedgets");
+
+            //System Build In Free Widgets
+            var clientUserBuildInWidjets = systemWidgets.Where(w => w.IsFree == true).ToList();
+
+            var newClientId = Guid.NewGuid().ToString();
             //TODO: DON'T FORGET TO ADD MAIL BOX AND PROJECT TO USER !!!!
             var newUser = new ApplicationUser()
             {
+                Id = newClientId,
                 UserName = userName,
                 Email = email,
+                MailBox = new ApplicationCore.Entities.MessageAggregate.MailBox()
+                {
+                    ClientId = newClientId,
+                    CreatedOn = DateTime.Now,
+                    ModifiedOn = DateTime.Now,
+                    IsDeleted = false
+                },
+                Project = new ApplicationCore.Entities.SiteProjectAggregate.Project() 
+                {
+                    ClientId = newClientId,
+                },             
+                ClientWidjets = new ApplicationUserWidgets()
+                {                 
+                    ClientId = newClientId,
+                    ClientWidgets = new List<ClientWidgets>(clientUserBuildInWidjets.Select(a => new ClientWidgets()
+                    {
+                        WidgetId = a.Id,
+                    }))
+                }
             };
 
             var result = await this.userManager.CreateAsync(newUser, password);
