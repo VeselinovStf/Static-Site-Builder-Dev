@@ -8,6 +8,6 @@ namespace ApplicationCore.Interfaces
 {
     public interface IAppWidgetService
     {
-        Task<IEnumerable<Widjet>> GetAllWidgetsAsync();
+        Task<IEnumerable<Widget>> GetAllWidgetsAsync();
     }
 }

@@ -57,20 +57,20 @@ namespace Infrastructure.Widgets
             var resultModel = new ClientWidgetListDTO()
             {
                 ClientId = clientId,
-                ClientWidgets = new List<WidgetDTO>(adminWidgets.ClientWidjets.Select(w => new WidgetDTO()
+                ClientWidgets = new List<WidgetDTO>(adminWidgets.ClientWidgets.Select(w => new WidgetDTO()
                 {
-                    Id = w.Id,
-                    Name = w.Name,
-                    Description = w.Description,
-                    Dependency = w.Dependency.ToString(),
-                    Functionality = w.Functionality,
-                    IsFree = w.IsFree,
-                    IsOn = w.IsOn,
-                    Price = w.Price,
-                    SiteTypeSpecification = w.SiteTypeSpecification.ToString(),
+                    Id = w.Widget.Id,
+                    Name = w.Widget.Name,
+                    Description = w.Widget.Description,
+                    Dependency = w.Widget.Dependency.ToString(),
+                    Functionality = w.Widget.Functionality,
+                    IsFree = w.Widget.IsFree,
+                    IsOn = w.Widget.IsOn,
+                    Price = w.Widget.Price,
+                    SiteTypeSpecification = w.Widget.SiteTypeSpecification.ToString(),
 
-                    Version = w.Version,
-                    Votes = w.Votes
+                    Version = w.Widget.Version,
+                    Votes = w.Widget.Votes
                 })),
                 AvailibleWidgets = availibleSystemWidgets.Count() < 1 ? new List<WidgetDTO>() : new List<WidgetDTO>(availibleSystemWidgets.Select(w => new WidgetDTO()
                 {
@@ -109,30 +109,30 @@ namespace Infrastructure.Widgets
                 Validator.ObjectIsNull(
                    clientWidgets, $"{nameof(WidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : Can't find any client widgets with this id.");
 
-                var availibleWidgets = widgetsCall.Except(clientWidgets.ClientWidjets).ToList();
+                var availibleWidgets = widgetsCall.Except(clientWidgets.ClientWidgets.Select(w => w.Widget));
 
                 Validator.ObjectIsNull(
                   availibleWidgets, $"{nameof(WidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : Can't find any availible widgets for this user.");
-               
+
                 var resultModel = new ClientWidgetListDTO()
                 {
                     ClientId = clientId,
-                    ClientWidgets = new List<WidgetDTO>(clientWidgets.ClientWidjets.Select(w => new WidgetDTO()
+                    ClientWidgets = new List<WidgetDTO>(clientWidgets.ClientWidgets.Select(w => new WidgetDTO()
                     {
-                        Id = w.Id,
-                        Name = w.Name,
-                        Description = w.Description,
-                        Dependency = w.Dependency.ToString(),
-                        Functionality = w.Functionality,
-                        IsFree = w.IsFree,
-                        IsOn = w.IsOn,
-                        Price = w.Price,
-                        SiteTypeSpecification = w.SiteTypeSpecification.ToString(),
-                        
-                        Version = w.Version,
-                        Votes = w.Votes
+                        Id = w.Widget.Id,
+                        Name = w.Widget.Name,
+                        Description = w.Widget.Description,
+                        Dependency = w.Widget.Dependency.ToString(),
+                        Functionality = w.Widget.Functionality,
+                        IsFree = w.Widget.IsFree,
+                        IsOn = w.Widget.IsOn,
+                        Price = w.Widget.Price,
+                        SiteTypeSpecification = w.Widget.SiteTypeSpecification.ToString(),
+
+                        Version = w.Widget.Version,
+                        Votes = w.Widget.Votes
                     })),
-                    AvailibleWidgets = availibleWidgets.Count() < 1 ? new List<WidgetDTO>() : new List<WidgetDTO>(availibleWidgets.Select(w => new WidgetDTO() 
+                    AvailibleWidgets = availibleWidgets.Count() < 1 ? new List<WidgetDTO>() : new List<WidgetDTO>(availibleWidgets.Select(w => new WidgetDTO()
                     {
                         Id = w.Id,
                         Name = w.Name,
@@ -143,14 +143,14 @@ namespace Infrastructure.Widgets
                         IsOn = w.IsOn,
                         Price = w.Price,
                         SiteTypeSpecification = w.SiteTypeSpecification.ToString(),
-                        
+
                         Version = w.Version,
                         Votes = w.Votes
-                    }))                    
+                    }))
                 };
 
                 return resultModel;
-                
+
             }
             catch (Exception ex)
             {

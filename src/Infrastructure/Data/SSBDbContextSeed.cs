@@ -92,7 +92,7 @@ namespace Infrastructure.Data
         private static async Task CustomWidgetUpdater(SSBDbContext ssbDbContext)
         {
             //Add new wid
-            var widjet = new Widjet()
+            var widjet = new Widget()
             {
                 Id = Guid.NewGuid().ToString(),
                 Description = "Test Widjet01",
@@ -105,8 +105,8 @@ namespace Infrastructure.Data
                 Version = 1,
                 Votes = 0,
                 SiteTypeSpecification = SiteTypesEnum.StoreType,
-                SystemName = SiteWidjetEnum.Testing,
-                Dependency = SiteWidjetEnum.None
+                SystemName = SiteWidgetEnum.Testing,
+                Dependency = SiteWidgetEnum.None
             };
 
             
@@ -133,7 +133,7 @@ namespace Infrastructure.Data
                 Name = "Multipurpose eCommerce Site",
                 Description = "Build you owne eCommersce site, sell one nich or many all depends on you. Use build in Widjets to customize and optimize your new application. Start earning in few hours.",
                 Type = SiteTypesEnum.StoreType,
-                UsebleWidjets = new List<Widjet>(storePreconfirmedWidjets.Where(w => w.SiteTypeSpecification == SiteTypesEnum.StoreType))
+                UsebleWidjets = new List<Widget>(storePreconfirmedWidjets.Where(w => w.SiteTypeSpecification == SiteTypesEnum.StoreType))
             };
 
             var blogTypeId = Guid.NewGuid().ToString();
@@ -143,7 +143,7 @@ namespace Infrastructure.Data
                 Name = "Blog Site",
                 Description = "Build you owne blog site. Use build in Widjets to customize and optimize your new application. Create your first posts in minutes. Start posting now.",
                 Type = SiteTypesEnum.BlogType,
-                UsebleWidjets = new List<Widjet>(storePreconfirmedWidjets.Where(w => w.SiteTypeSpecification == SiteTypesEnum.BlogType))
+                UsebleWidjets = new List<Widget>(storePreconfirmedWidjets.Where(w => w.SiteTypeSpecification == SiteTypesEnum.BlogType))
             };
 
             await dbContext.SiteTypes.AddAsync(storeType);
@@ -169,9 +169,9 @@ namespace Infrastructure.Data
             return new SiteTemplate[] { defaultStoreSiteTemplate };
         }
 
-        private static Widjet[] GetPreconfiguredWidjets()
+        private static Widget[] GetPreconfiguredWidjets()
         {
-            var menuConfigWidjet = new Widjet()
+            var menuConfigWidjet = new Widget()
             {
                 Id = Guid.NewGuid().ToString(),
                 Description = "This widjet gives you the ability to change the display of meny",
@@ -184,11 +184,11 @@ namespace Infrastructure.Data
                 Version = 1,
                 Votes = 0,
                 SiteTypeSpecification = SiteTypesEnum.StoreType,
-                SystemName = SiteWidjetEnum.MenuDisplay,
-                Dependency = SiteWidjetEnum.None
+                SystemName = SiteWidgetEnum.MenuDisplay,
+                Dependency = SiteWidgetEnum.None
             };
 
-            var siteStructureWidjet = new Widjet()
+            var siteStructureWidjet = new Widget()
             {
                 Id = Guid.NewGuid().ToString(),
                 Description = "This widjet gives you the ability to change the structure of site",
@@ -201,11 +201,11 @@ namespace Infrastructure.Data
                 Version = 1,
                 Votes = 0,
                 SiteTypeSpecification = SiteTypesEnum.StoreType,
-                SystemName = SiteWidjetEnum.SiteStructure,
-                Dependency = SiteWidjetEnum.None
+                SystemName = SiteWidgetEnum.SiteStructure,
+                Dependency = SiteWidgetEnum.None
             };
 
-            var productsWidjet = new Widjet()
+            var productsWidjet = new Widget()
             {
                 Id = Guid.NewGuid().ToString(),
                 Description = "This widjet gives you the ability add sellible products to your site",
@@ -218,11 +218,11 @@ namespace Infrastructure.Data
                 Version = 1,
                 Votes = 0,
                 SiteTypeSpecification = SiteTypesEnum.StoreType,
-                SystemName = SiteWidjetEnum.Products,
-                Dependency = SiteWidjetEnum.None
+                SystemName = SiteWidgetEnum.Products,
+                Dependency = SiteWidgetEnum.None
             };
 
-            var topProductsWidjet = new Widjet()
+            var topProductsWidjet = new Widget()
             {
                 Id = Guid.NewGuid().ToString(),
                 Description = "This widjet gives you the ability to display sellible products in different ways",
@@ -235,11 +235,11 @@ namespace Infrastructure.Data
                 Version = 1,
                 Votes = 0,
                 SiteTypeSpecification = SiteTypesEnum.StoreType,
-                SystemName = SiteWidjetEnum.TopProducts,
-                Dependency = SiteWidjetEnum.Products
+                SystemName = SiteWidgetEnum.TopProducts,
+                Dependency = SiteWidgetEnum.Products
             };
 
-            return new Widjet[] { menuConfigWidjet, siteStructureWidjet, productsWidjet, topProductsWidjet };
+            return new Widget[] { menuConfigWidjet, siteStructureWidjet, productsWidjet, topProductsWidjet };
         }
 
         private static IdentityRole[] GetPreconfiguredRoles()
@@ -289,11 +289,11 @@ namespace Infrastructure.Data
                 LockoutEnabled = false,
                 MailBox = mailBox,
                 Project = clientProject,
-                ClientWidjets = new ClientWidjet()
+                ClientWidjets = new ApplicationUserWidgets()
                 {
                    
                     ClientId = clientId,
-                    WidgetClientWidget = new List<WidgetClientWidget>(clientUserBuildInWidjets.Select(a => new WidgetClientWidget()
+                    ClientWidgets = new List<ClientWidgets>(clientUserBuildInWidjets.Select(a => new ClientWidgets()
                     {
                         WidgetId = a.Id,
                         
@@ -363,11 +363,11 @@ namespace Infrastructure.Data
                 LockoutEnabled = false,
                 MailBox = mailBox,
                 Project = adminProject,
-                ClientWidjets = new ClientWidjet()
+                ClientWidjets = new ApplicationUserWidgets()
                 {
                     
                     ClientId = adminId,
-                    WidgetClientWidget = new List<WidgetClientWidget>(adminBuildInWidjets.Select(a => new WidgetClientWidget()
+                    ClientWidgets = new List<ClientWidgets>(adminBuildInWidjets.Select(a => new ClientWidgets()
                     {
                          WidgetId = a.Id,
                         

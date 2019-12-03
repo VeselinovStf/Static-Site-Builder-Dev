@@ -31,6 +31,6 @@ namespace Infrastructure.Identity
         public Project Project { get; set; }
 
         public string ClientWidjetId { get; set; }
-        public ClientWidjet ClientWidjets { get; set; }
+        public ApplicationUserWidgets ClientWidjets { get; set; }
     }
 }

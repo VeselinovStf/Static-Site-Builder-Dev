@@ -9,14 +9,14 @@ namespace ApplicationCore.Services
 {
     public class AppWidgetService : IAppWidgetService
     {
-        private readonly IAsyncRepository<Widjet> appWidgetRepository;
+        private readonly IAsyncRepository<Widget> appWidgetRepository;
 
         public AppWidgetService(
-            IAsyncRepository<Widjet> appWidgetRepository)
+            IAsyncRepository<Widget> appWidgetRepository)
         {
             this.appWidgetRepository = appWidgetRepository ?? throw new ArgumentNullException(nameof(appWidgetRepository));
         }
-        public async Task<IEnumerable<Widjet>> GetAllWidgetsAsync()
+        public async Task<IEnumerable<Widget>> GetAllWidgetsAsync()
         {
             return await this.appWidgetRepository.ListAllAsync();
         }

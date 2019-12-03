@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Config
 {
-    public class WidjetConfiguration : IEntityTypeConfiguration<Widjet>
+    public class WidjetConfiguration : IEntityTypeConfiguration<Widget>
     {
-        public void Configure(EntityTypeBuilder<Widjet> builder)
+        public void Configure(EntityTypeBuilder<Widget> builder)
         {
             builder.Property(p => p.Price)
                .HasColumnType("decimal(5, 2)");

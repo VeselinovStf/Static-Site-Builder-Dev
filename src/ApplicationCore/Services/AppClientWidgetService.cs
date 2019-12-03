@@ -10,16 +10,16 @@ namespace ApplicationCore.Services
 {
     public class AppClientWidgetService : IAppClientWidgetService
     {
-        private readonly IAsyncRepository<ClientWidjet> clientWidgetRepository;
+        private readonly IAsyncRepository<ApplicationUserWidgets> clientWidgetRepository;
 
         public AppClientWidgetService(
-            IAsyncRepository<ClientWidjet> clientWidgetRepository)
+            IAsyncRepository<ApplicationUserWidgets> clientWidgetRepository)
             
         {
             this.clientWidgetRepository = clientWidgetRepository ?? throw new ArgumentNullException(nameof(clientWidgetRepository));
         }
 
-        public async Task<ClientWidjet> GetAllAsync(string clientId)
+        public async Task<ApplicationUserWidgets> GetAllAsync(string clientId)
         {
             var specification = new ClientWidgetsWithWidgetsSpecification(clientId);
 

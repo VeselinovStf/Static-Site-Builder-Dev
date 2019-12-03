@@ -5,15 +5,15 @@ using System.Text;
 
 namespace ApplicationCore.Entities.WidjetsEntityAggregate
 {
-    public class WidgetClientWidget : BaseEntity
+    public class ClientWidgets 
     {
         public string WidgetId { get; set; }
 
-        public string ClientWidgetId { get; set; }
+        public string ApplicationUserWidgetsId { get; set; }
 
-        public Widjet Widget { get; set; }
+        public Widget Widget { get; set; }
 
-        public ClientWidjet ClientWidget { get; set; }
+        public ApplicationUserWidgets ApplicationUserWidgets { get; set; }
 
     }
 }

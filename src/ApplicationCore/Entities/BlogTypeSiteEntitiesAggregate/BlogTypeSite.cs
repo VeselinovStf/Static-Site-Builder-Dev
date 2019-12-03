@@ -37,7 +37,7 @@ namespace ApplicationCore.Entities.BlogSiteTypeEntities
         }
 
         //Build in widjets
-        public ICollection<Widjet> TemplateUsableWidjets { get; set; }
+        public ICollection<Widget> TemplateUsableWidjets { get; set; }
 
         public string ProjectId { get; set; }
 

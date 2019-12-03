@@ -31,9 +31,10 @@ namespace Infrastructure.Data
         public DbSet<BlogTypeSite> BlogTypeSites { get; set; }
         public DbSet<BlogPost> BlogPosts { get; set; }
         public DbSet<BlogPostFrontMatter> BlogPostFrontMatters { get; set; }
-        public DbSet<ClientWidjet> ClientWidjets { get; set; }
-       
-        public DbSet<Widjet> Widjets { get; set; }
+        public DbSet<ApplicationUserWidgets> ApplicationUserWidgets { get; set; }
+        public DbSet<ClientWidgets> ClientWidgets { get; set; }
+
+        public DbSet<Widget> Widjets { get; set; }
         public DbSet<LaunchConfig> LaunchConfigs { get; set; }
         public DbSet<SiteType> SiteTypes { get; set; }
         public DbSet<SiteTemplate> SiteTemplates { get; set; }

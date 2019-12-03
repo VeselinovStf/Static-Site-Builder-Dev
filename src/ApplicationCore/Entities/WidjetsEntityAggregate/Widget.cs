@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ApplicationCore.Entities.WidjetsEntityAggregate
 {
-    public class Widjet : DescriptiveEntity
+    public class Widget : DescriptiveEntity
     {
         public string Functionality { get; set; }
 
@@ -28,9 +28,9 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
 
         public SiteType.SiteType UsebleSiteType { get; set; }
 
-        public SiteWidjetEnum SystemName { get; set; }
-        public SiteWidjetEnum Dependency { get; set; }
+        public SiteWidgetEnum SystemName { get; set; }
+        public SiteWidgetEnum Dependency { get; set; }
 
-        public ICollection<WidgetClientWidget> WidgetClientWidget { get; set; }
+        public ICollection<ClientWidgets> WidgetClientWidget { get; set; }
     }
 }

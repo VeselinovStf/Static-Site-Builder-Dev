@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ApplicationCore.Entities.WidjetsEntityAggregate
 {
-    public enum SiteWidjetEnum
+    public enum SiteWidgetEnum
     {
         None = 0,
         MenuDisplay = 1,
