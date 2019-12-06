@@ -31,7 +31,7 @@ namespace Web.ModelFatories.SiteTypeModelFactory
                 Description = serviceCall.Description,
                 HostingServiceGate = serviceCall.HostingServiceGate,
                 Name = serviceCall.Name,
-
+                TemplateName = serviceCall.TemplateName,
                 Repository = serviceCall.Repository,
 
                 ClientId = serviceCall.ClientId,

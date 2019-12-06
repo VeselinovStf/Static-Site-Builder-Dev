@@ -57,7 +57,7 @@
                 </ul>
                 @if (Model.IsLaunched)
                 {
-                    <a asp-action="Site" asp-controller="Site" asp-route-clientId="@Model.ClientId" asp-route-siteTypeId="@Model.Id" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white" target="_blank">Use</a>
+                    <a asp-action="Site" asp-controller="Site" asp-route-clientId="@Model.ClientId" asp-route-siteTemplateName="@Model.TemplateName" asp-route-siteTypeId="@Model.Id" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white" target="_blank">Use</a>
                     <a asp-action="UnLaunch" asp-controller="LaunchSite" asp-route-clientId="@Model.ClientId" asp-route-siteTypeId="@Model.Id" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Un-Launch</a>
                 }
                 else

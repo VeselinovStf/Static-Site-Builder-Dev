@@ -26,11 +26,11 @@ namespace Web.Controllers
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<IActionResult> Site(string clientId, string siteTypeId)
+        public async Task<IActionResult> Site(string clientId,string siteTemplateName, string siteTypeId)
         {
             try
             {
-                var serviceModel = await this.siteRenderingService.RenderSiteAsync(clientId, siteTypeId);
+                var serviceModel = await this.siteRenderingService.RenderSiteAsync(clientId, siteTemplateName,siteTypeId);
 
                 this.logger.LogInformation($"{nameof(SiteController)} : {nameof(Site)} : Sucess - Getting Client Site");
           

@@ -6,6 +6,7 @@ namespace ApplicationCore.Interfaces
     public interface IAppSiteTemplatesService<T>
     {
         Task<T> GetTemplateWithElementsAsync(string templateName);
+        Task<T> GetTemplateAsync(string templateName);
 
         Task<IEnumerable<T>> GetAllTemplatesByTypeAsync(string buildInType);
 

@@ -1,6 +1,9 @@
 ﻿using ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate;
+using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ApplicationCore.Services
@@ -14,6 +17,20 @@ namespace ApplicationCore.Services
             )
         {
             this.storeTypeRepository = storeTypeRepository;
+        }
+
+        public async Task AddRangeOfWidgetsAsync(string id,IEnumerable<Widget> widgets)
+        {
+            var specification = new StoreTypeSiteWithWidgetsSpecification(id);
+
+            var store =  this.storeTypeRepository.GetSingleBySpec(specification);
+
+            foreach (var newWidget in widgets)
+            {
+                store.SiteUsedWidgets.Add(newWidget);
+            }
+
+            await this.storeTypeRepository.UpdateAsync(store);
         }
 
         public async Task DeleteClientStoreProjectAsync(string clientId)

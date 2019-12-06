@@ -13,6 +13,7 @@
 
         public string TemplateLocation { get; set; }
 
+        public string TemplateName { get; set; }
         public string CardApiKey { get; set; }
 
         public string CardServiceGate { get; set; }

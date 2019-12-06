@@ -31,6 +31,8 @@ namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
 
         public string ProjectId { get; set; }
 
+
+
         //Build in site type config
         public SiteTypesEnum SiteTypeSpecification
         {

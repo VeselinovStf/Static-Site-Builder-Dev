@@ -1,7 +1,9 @@
 ﻿using ApplicationCore.Entities.BlogSiteTypeEntities;
+using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApplicationCore.Services
@@ -16,6 +18,21 @@ namespace ApplicationCore.Services
             this.blogTypeRepository = blogTypeRepository ?? throw new ArgumentNullException(nameof(blogTypeRepository));
         }
 
+        public async Task AddRangeOfWidgetsAsync(string id, IEnumerable<Widget> widgets)
+        {
+            var specification = new BlogTypeSiteWithWidgetsSpecification(id);
+
+            var store = this.blogTypeRepository.GetSingleBySpec(specification);
+
+            foreach (var newWidget in widgets)
+            {
+                store.SiteUsedWidgets.Add(newWidget);
+            }
+
+            await this.blogTypeRepository.UpdateAsync(store);
+        }
+
+
         public async Task DeleteClientBlogProjectAsync(string clientId)
         {
             var specification = new ClientBlogTypeSiteWithLaunchingConfigSpecification(clientId);
@@ -26,6 +43,8 @@ namespace ApplicationCore.Services
 
             await this.blogTypeRepository.UpdateAsync(blog);
         }
+
+
 
         public async Task EditClientBlogProjectAsync(string clientId, string name, string description, string cardApiKey, string cardServiceGate, string hostingServiceGate, string repository)
         {

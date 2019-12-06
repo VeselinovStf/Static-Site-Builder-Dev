@@ -278,7 +278,7 @@ namespace Infrastructure.SiteTypes
                         resultModel.HostingServiceGate = clientStoreConfig.HostingServiceGate;
                         resultModel.Description = clientStoreSiteType.Description;
                         resultModel.Name = clientStoreSiteType.Name;
-
+                        resultModel.TemplateName = clientStoreSiteType.TemplateName;
                         resultModel.Repository = clientStoreConfig.RepositoryId;
                         resultModel.TemplateLocation = clientStoreSiteType.TemplateName;
                         resultModel.ClientId = clientStoreSiteType.ClientId;
@@ -297,7 +297,7 @@ namespace Infrastructure.SiteTypes
                     resultModel.HostingServiceGate = clientBlogConfig.HostingServiceGate;
                     resultModel.Description = clientBlogSiteType.Description;
                     resultModel.Name = clientBlogSiteType.Name;
-
+                    resultModel.TemplateName = clientStoreSiteType.TemplateName;
                     resultModel.Repository = clientBlogConfig.RepositoryId;
                     resultModel.TemplateLocation = clientBlogSiteType.TemplateName;
                     resultModel.ClientId = clientBlogSiteType.ClientId;
