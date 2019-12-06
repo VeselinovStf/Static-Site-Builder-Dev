@@ -32,5 +32,6 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
         public SiteWidgetEnum Dependency { get; set; }
 
         public ICollection<ClientWidgets> WidgetClientWidget { get; set; }
+       
     }
 }

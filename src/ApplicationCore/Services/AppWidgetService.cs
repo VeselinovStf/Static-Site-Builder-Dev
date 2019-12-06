@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,5 +21,7 @@ namespace ApplicationCore.Services
         {
             return await this.appWidgetRepository.ListAllAsync();
         }
+
+     
     }
 }

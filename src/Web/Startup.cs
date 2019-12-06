@@ -26,6 +26,8 @@ using Infrastructure.Services.FileTransferrer.DTOs;
 using Infrastructure.Services.HostingHubConnectorService;
 using Infrastructure.Services.HostingHubConnectorService.DTOs;
 using Infrastructure.Services.RepoHubConnectorService;
+using Infrastructure.Site;
+using Infrastructure.Site.DTOs;
 using Infrastructure.SiteTypes;
 using Infrastructure.SiteTypes.DTOs;
 using Infrastructure.Storage;
@@ -57,6 +59,8 @@ using Web.ModelFatories.MessagesModelFactory;
 using Web.ModelFatories.MessagesModelFactory.Abstraction;
 using Web.ModelFatories.ProjectsModelFactory;
 using Web.ModelFatories.ProjectsModelFactory.Abstraction;
+using Web.ModelFatories.SiteModelFactory;
+using Web.ModelFatories.SiteModelFactory.Abstraction;
 using Web.ModelFatories.SiteTypeModelFactory;
 using Web.ModelFatories.SiteTypeModelFactory.Abstraction;
 using Web.ModelFatories.TemplateModelFactory;
@@ -135,6 +139,11 @@ namespace Web
             //Templates
             services.AddScoped<ITemplateService<SiteTemplateDTO>, TemplateService>();
             services.AddScoped<ITemplateModelFactory, TemplateModelFactory>();
+
+            //Site
+            services.AddScoped<ISiteModelFactory, SiteModelFactory>();
+            services.AddScoped<ISiteService<SiteRenderingDTO>, SiteService>();
+
 
             //Client
             services.AddScoped<IClientModelFactory, ClientModelFactory>();

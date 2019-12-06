@@ -40,6 +40,8 @@ namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
             }
         }
 
+        public ICollection<Widget> SiteUsedWidgets { get ; set; }
+
         public void AddProduct(string projectId, string name, string description,
             bool hot, bool latestNewCollectionProduct, bool latestProduct,
             bool pickedForYou, decimal price, string size, bool state,

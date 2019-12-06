@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities.SiteProjectAggregate;
+using ApplicationCore.Entities.SitesTemplates;
 using ApplicationCore.Entities.SiteType;
 using ApplicationCore.Interfaces;
 using Infrastructure.Guard;
@@ -15,14 +16,18 @@ namespace Infrastructure.SiteTypes
     {
         private readonly IAppSiteTypesService<SiteType> appSiteTypeService;
         private readonly IAppProjectsService<Project> appProjectService;
+
         private readonly Dictionary<SiteTypesEnum, SiteTypesFactory> _factories;
 
         public SiteTypesService(
             IAppSiteTypesService<SiteType> appSiteTypeService,
-            IAppProjectsService<Project> appProjectService)
+            IAppProjectsService<Project> appProjectService
+
+            )
         {
             this.appSiteTypeService = appSiteTypeService ?? throw new System.ArgumentNullException(nameof(appSiteTypeService));
             this.appProjectService = appProjectService ?? throw new ArgumentNullException(nameof(appProjectService));
+           
             _factories = new Dictionary<SiteTypesEnum, SiteTypesFactory>
                         {
                             { SiteTypesEnum.BlogType, new BlogTypeSiteFactory(appProjectService) },
@@ -107,6 +112,7 @@ namespace Infrastructure.SiteTypes
                            buildInType, templateName,
                            cardApiKey, cardServiceGate, hostingServiceGate,
                            repository);
+         
             }
             catch (Exception ex)
             {

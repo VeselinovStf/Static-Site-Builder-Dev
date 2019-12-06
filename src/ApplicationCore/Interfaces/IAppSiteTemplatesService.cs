@@ -9,6 +9,8 @@ namespace ApplicationCore.Interfaces
 
         Task<IEnumerable<T>> GetAllTemplatesByTypeAsync(string buildInType);
 
-        Task AddVariablesAsync(string buildInSiteType, string templateName, string siteId, string accessToken);
+
+        
+        //Task AddVariablesAsync(string buildInSiteType, string templateName, string siteId, string accessToken);
     }
 }

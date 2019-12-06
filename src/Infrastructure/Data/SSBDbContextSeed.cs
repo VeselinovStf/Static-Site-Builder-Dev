@@ -122,7 +122,7 @@ namespace Infrastructure.Data
         private static async Task<SiteTemplate[]> DevelopmentAddPreBuildSiteTemplatesFromDirectory(
             IFileTransferrer<ConvertedFileElement> fileTransporter, SSBDbContext dbContext)
         {
-            var defaultStoreTypeSiteFileRead = await fileTransporter.FilesToList("D:\\STORE\\Static_Store_Builder-SSB-\\Dev_V03\\src\\Web\\BuildInTemplates\\StoreTemplates\\Default");
+            var defaultStoreTypeSiteFileRead = await fileTransporter.FilesToList(@"H:\HUB\Static_Store_Builder-SSB-\Dev_V03\src\Web\BuildInTemplates\StoreTemplates\Default");
 
             var storePreconfirmedWidjets =  dbContext.Widjets;
 

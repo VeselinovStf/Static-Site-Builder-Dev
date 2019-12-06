@@ -17,5 +17,6 @@ namespace ApplicationCore.Interfaces
 
         //Build in widjets
         ICollection<Widget> TemplateUsableWidjets { get; set; }
+        ICollection<Widget> SiteUsedWidgets { get; set; }
     }
 }

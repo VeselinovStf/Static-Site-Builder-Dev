@@ -60,7 +60,7 @@ namespace Infrastructure.LaunchSite
                             var clientTemplateName = clientStoreSiteType.TemplateName;
                             //var clientBuildInSiteType = clientStoreSiteType.SiteTypeSpecification.ToString();
 
-                            var siteStorageCreaton = await this.siteStorageCreator.StorageCreatorExecute(clientProjectName, clientTemplateName);
+                           // var siteStorageCreaton = await this.siteStorageCreator.StorageCreatorExecute(clientProjectName, clientTemplateName);
 
                             //Mark IsLanched
                             await this.appLaunchConfigService.LaunchSiteTypeLaunchConfigAsync(clientStoreSiteType.Id);

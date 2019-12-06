@@ -9,5 +9,7 @@ namespace ApplicationCore.Interfaces
     public interface IAppWidgetService
     {
         Task<IEnumerable<Widget>> GetAllWidgetsAsync();
+
+    
     }
 }

@@ -39,6 +39,9 @@ namespace ApplicationCore.Entities.BlogSiteTypeEntities
         //Build in widjets
         public ICollection<Widget> TemplateUsableWidjets { get; set; }
 
+        public ICollection<Widget> SiteUsedWidgets { get ; set; }
+
+
         public string ProjectId { get; set; }
 
         public void AddBlogPost(string name, string description,
