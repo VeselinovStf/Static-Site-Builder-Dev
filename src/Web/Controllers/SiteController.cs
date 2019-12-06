@@ -26,10 +26,29 @@ namespace Web.Controllers
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+        public async Task<IActionResult> Use(string clientId, string siteTemplateName, string siteTypeId, string returnUrl = "Site")
+        {
+            try
+            {
+                await this.siteRenderingService.UpdateSiteWidgetsAsync(clientId, siteTemplateName, siteTypeId);
+
+                this.logger.LogInformation($"{nameof(SiteController)} : {nameof(Use)} : Sucess - Updating Site Widgets");
+
+                return RedirectToAction(returnUrl, "Site", new { clientId = clientId, siteTemplateName = siteTemplateName, siteTypeId = siteTypeId });
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(SiteController)} : {nameof(Use)} : Exception - {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { message = "Can't display client site. Contact support" });
+            }
+        }
+
         public async Task<IActionResult> Site(string clientId,string siteTemplateName, string siteTypeId)
         {
             try
             {
+               
                 var serviceModel = await this.siteRenderingService.RenderSiteAsync(clientId, siteTemplateName,siteTypeId);
 
                 this.logger.LogInformation($"{nameof(SiteController)} : {nameof(Site)} : Sucess - Getting Client Site");

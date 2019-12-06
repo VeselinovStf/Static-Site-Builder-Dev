@@ -7,6 +7,7 @@ namespace ApplicationCore.Interfaces
 {
     public interface ISiteService<T>
     {
+        Task UpdateSiteWidgetsAsync(string clientId, string defaultStoreSiteTemplateName, string siteTypeId);
         Task<T> RenderSiteAsync(string clientId, string defaultStoreSiteTemplateName, string siteTypeId);
     }
 }

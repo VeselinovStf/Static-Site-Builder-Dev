@@ -1,7 +1,9 @@
-﻿namespace Web.ViewModels.Site
+﻿using System.Collections.Generic;
+
+namespace Web.ViewModels.Site
 {
     public class SiteRenderingViewModel
     {
-        public string ProjectId { get; set; }
+        public ICollection<MenuWidgetViewModel> Widgets { get; set; }
     }
 }

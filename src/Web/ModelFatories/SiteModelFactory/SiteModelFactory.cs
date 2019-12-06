@@ -12,7 +12,13 @@ namespace Web.ModelFatories.SiteModelFactory
     {
         public SiteRenderingViewModel Create(SiteRenderingDTO serviceModel)
         {
-            throw new NotImplementedException();
+            return new SiteRenderingViewModel()
+            {
+                Widgets = new List<MenuWidgetViewModel>(serviceModel.Widget.Select(w => new MenuWidgetViewModel()
+                {
+                    Name = w.Name
+                }))
+            };
         }
     }
 }

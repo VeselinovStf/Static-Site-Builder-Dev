@@ -5,7 +5,7 @@ namespace Web.Views.ViewComponents.AdminSiteNavigationViewComponents
 {
     public class AdminSideNavigationViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync(string id)
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             return View("AdminSideNavigation");
         }

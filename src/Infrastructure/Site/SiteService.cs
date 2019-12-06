@@ -2,6 +2,7 @@
 using ApplicationCore.Entities.SiteProjectAggregate;
 using ApplicationCore.Entities.SitesTemplates;
 using ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate;
+using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
 using Infrastructure.Guard;
 using Infrastructure.Site.DTOs;
@@ -50,13 +51,61 @@ namespace Infrastructure.Site
             {
                 var usebleWidgetsCall = await this.appSiteTemplateService.GetTemplateAsync(defaultStoreSiteTemplateName);
 
+                var clientProjectCall = await this.appProjectService.GetClientProject(clientId);
+
                 Validator.ObjectIsNull(
-                 usebleWidgetsCall, $"{nameof(SiteService)} : {nameof(RenderSiteAsync)} : {nameof(usebleWidgetsCall)} : {defaultStoreSiteTemplateName} -> FATAL : Can't find template useble widgets");
+                    clientProjectCall, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(clientProjectCall)} : {clientId} -> FATAL : Can't find project");
+
+                var clientBlogProjectWidgets = clientProjectCall.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId).SiteUsedWidgets;
+                var clientStoreProjectWidgets = clientProjectCall.StoreSiteTypes.FirstOrDefault(b => b.Id == siteTypeId).SiteUsedWidgets;
+
+                var siteWidgets = new List<Widget>();
+
+                siteWidgets.AddRange(usebleWidgetsCall.SiteType.UsebleWidjets.Except(clientStoreProjectWidgets));
+                siteWidgets.AddRange(usebleWidgetsCall.SiteType.UsebleWidjets.Except(clientBlogProjectWidgets));
+
+
+                var serviceModel = new SiteRenderingDTO()
+                {
+                    Widget = new List<WidgetsDTO>(siteWidgets.Select(s => new WidgetsDTO()
+                    {
+                        Name = s.Name
+                    })
+                )
+                };
+                
+
+                return serviceModel;
+            }
+            catch (Exception ex)
+            {
+
+                throw new SiteServiceRenderSiteException($"{nameof(SiteServiceRenderSiteException)} : Can't render user site! : {ex.Message}");
+            }
+        }
+
+        public async Task UpdateSiteWidgetsAsync(string clientId, string defaultStoreSiteTemplateName, string siteTypeId)
+        {
+            Validator.StringIsNullOrEmpty(
+               clientId, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(clientId)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+              defaultStoreSiteTemplateName, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(defaultStoreSiteTemplateName)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+                defaultStoreSiteTemplateName, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(defaultStoreSiteTemplateName)} : is null/empty");
+
+            try
+            {
+                var usebleWidgetsCall = await this.appSiteTemplateService.GetTemplateAsync(defaultStoreSiteTemplateName);
+
+                Validator.ObjectIsNull(
+                 usebleWidgetsCall, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(usebleWidgetsCall)} : {defaultStoreSiteTemplateName} -> FATAL : Can't find template useble widgets");
 
                 var clientWidgetsCall = await this.appClientWidgetService.GetAllAsync(clientId);
 
                 Validator.ObjectIsNull(
-                    clientWidgetsCall, $"{nameof(SiteService)} : {nameof(RenderSiteAsync)} : {nameof(clientWidgetsCall)} : {clientId} -> FATAL : Can't find client widgets");
+                    clientWidgetsCall, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(clientWidgetsCall)} : {clientId} -> FATAL : Can't find client widgets");
 
                 var usebleWidgets = usebleWidgetsCall.SiteType.UsebleWidjets;
                 var clientWidgets = clientWidgetsCall.ClientWidgets.Select(w => w.Widget).ToList();
@@ -65,16 +114,16 @@ namespace Infrastructure.Site
                 var widgetsCompareResult = usebleWidgets
                     .Except(clientWidgets
                     .Select(w => w)
-                    .Where(c => c.IsFree && !c.IsDeleted && c.IsOn))
+                    .Where(c => (c.IsFree) || (!c.IsDeleted && c.IsOn) ))
                     .ToList();
 
                 clientWidgets.AddRange(widgetsCompareResult);
-                
+
                 //add
                 var clientProjectCall = await this.appProjectService.GetClientProject(clientId);
 
                 Validator.ObjectIsNull(
-                    clientProjectCall, $"{nameof(SiteService)} : {nameof(RenderSiteAsync)} : {nameof(clientProjectCall)} : {clientId} -> FATAL : Can't find project");
+                    clientProjectCall, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(clientProjectCall)} : {clientId} -> FATAL : Can't find project");
 
                 //return
                 var clientBlogProject = clientProjectCall.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
@@ -90,7 +139,7 @@ namespace Infrastructure.Site
                     else
                     {
                         //throw
-                        throw new ArgumentException($"{nameof(SiteService)} : {nameof(RenderSiteAsync)} : NO SUCHE TEMPLATE :");
+                        throw new ArgumentException($"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : NO SUCHE TEMPLATE :");
                     }
                 }
                 else
@@ -99,14 +148,12 @@ namespace Infrastructure.Site
                     await this.appBlogTypeSiteService.AddRangeOfWidgetsAsync(siteTypeId, clientWidgets);
                 }
 
-                var serviceModel = new SiteRenderingDTO();
-
-                return serviceModel;
+                
             }
             catch (Exception ex)
             {
 
-                throw new SiteServiceRenderSiteException($"{nameof(SiteServiceRenderSiteException)} : Can't render user site! : {ex.Message}");
+                throw new SiteServiceUpdateSiteWidgetsAsyncException($"{nameof(SiteServiceUpdateSiteWidgetsAsyncException)} : Can't update site widgets! : {ex.Message}");
             }
         }
     }

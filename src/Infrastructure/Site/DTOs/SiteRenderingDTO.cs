@@ -6,5 +6,6 @@ namespace Infrastructure.Site.DTOs
 {
     public class SiteRenderingDTO
     {
+        public ICollection<WidgetsDTO> Widget { get; set; }
     }
 }
