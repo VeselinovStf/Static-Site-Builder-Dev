@@ -127,23 +127,35 @@ namespace Infrastructure.Data
             var storePreconfirmedWidjets =  dbContext.Widjets;
 
             var storeTypeId = Guid.NewGuid().ToString();
+            var storeWidgets = new List<Widget>(storePreconfirmedWidjets.Where(w => w.SiteTypeSpecification == SiteTypesEnum.StoreType));
             var storeType = new SiteType()
             {
                 Id = storeTypeId,
                 Name = "Multipurpose eCommerce Site",
                 Description = "Build you owne eCommersce site, sell one nich or many all depends on you. Use build in Widjets to customize and optimize your new application. Start earning in few hours.",
                 Type = SiteTypesEnum.StoreType,
-                UsebleWidjets = new List<Widget>(storePreconfirmedWidjets.Where(w => w.SiteTypeSpecification == SiteTypesEnum.StoreType))
+                UsebleWidjets = new List<SiteTypeWidget>(storeWidgets.Select(w => new SiteTypeWidget()
+                {
+                    SiteTypeId = storeTypeId,
+                    WidgetId = w.Id,
+                    Widget = w
+                }))
             };
 
             var blogTypeId = Guid.NewGuid().ToString();
+            var blogWidgets = new List<Widget>(storePreconfirmedWidjets.Where(w => w.SiteTypeSpecification == SiteTypesEnum.BlogType));
             var blogType = new SiteType()
             {
                 Id = blogTypeId,
                 Name = "Blog Site",
                 Description = "Build you owne blog site. Use build in Widjets to customize and optimize your new application. Create your first posts in minutes. Start posting now.",
                 Type = SiteTypesEnum.BlogType,
-                UsebleWidjets = new List<Widget>(storePreconfirmedWidjets.Where(w => w.SiteTypeSpecification == SiteTypesEnum.BlogType))
+                UsebleWidjets = new List<SiteTypeWidget>(blogWidgets.Select(w => new SiteTypeWidget()
+                {
+                    SiteTypeId = blogTypeId,
+                    WidgetId = w.Id,
+                    Widget = w
+                }))
             };
 
             await dbContext.SiteTypes.AddAsync(storeType);

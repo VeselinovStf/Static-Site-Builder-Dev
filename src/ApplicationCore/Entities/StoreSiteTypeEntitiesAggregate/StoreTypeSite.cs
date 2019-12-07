@@ -7,14 +7,9 @@ using System.Collections.Generic;
 
 namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
 {
-    public class StoreTypeSite : DescriptiveEntity, IBaseSiteProject, IAggregateRoot
+    public class StoreTypeSite : BaseWidget, IAggregateRoot
     {
-        public string TemplateName { get; set; }
-
-        public string ClientId { get; set; }
-
-        public string LaunchingConfigId { get; set; }
-        public LaunchConfig LaunchingConfig { get; set; }
+ 
 
         private readonly List<Product> _products = new List<Product>();
 
@@ -27,9 +22,9 @@ namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
         }
 
         //Build in widjets
-        public ICollection<Widget> TemplateUsableWidjets { get; set; }
+       
 
-        public string ProjectId { get; set; }
+        
 
 
 
@@ -42,7 +37,9 @@ namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
             }
         }
 
-        public ICollection<Widget> SiteUsedWidgets { get ; set; }
+       
+
+      
 
         public void AddProduct(string projectId, string name, string description,
             bool hot, bool latestNewCollectionProduct, bool latestProduct,

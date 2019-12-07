@@ -8,14 +8,9 @@ using System.Collections.Generic;
 
 namespace ApplicationCore.Entities.BlogSiteTypeEntities
 {
-    public class BlogTypeSite : DescriptiveEntity, IBaseSiteProject, IAggregateRoot
+    public class BlogTypeSite : BaseWidget,IAggregateRoot
     {
-        public string TemplateName { get; set; }
-
-        public string ClientId { get; set; }
-
-        public string LaunchingConfigId { get; set; }
-        public LaunchConfig LaunchingConfig { get; set; }
+       
 
         private readonly List<BlogPost> _blogPosts = new List<BlogPost>();
 
@@ -37,12 +32,9 @@ namespace ApplicationCore.Entities.BlogSiteTypeEntities
         }
 
         //Build in widjets
-        public ICollection<Widget> TemplateUsableWidjets { get; set; }
+       
 
-        public ICollection<Widget> SiteUsedWidgets { get ; set; }
-
-
-        public string ProjectId { get; set; }
+    
 
         public void AddBlogPost(string name, string description,
             string header, string image, string content,

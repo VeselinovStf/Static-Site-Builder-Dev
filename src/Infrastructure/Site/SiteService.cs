@@ -22,18 +22,21 @@ namespace Infrastructure.Site
         private readonly IAppProjectsService<Project> appProjectService;
         private readonly IAppBlogTypeSiteService<BlogTypeSite> appBlogTypeSiteService;
         private readonly IAppStoreTypeSiteService<StoreTypeSite> appStoreTypeSiteService;
+        private readonly IAppWidgetService appWidgetService;
 
         public SiteService(IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService,
             IAppClientWidgetService appClientWidgetService,
             IAppProjectsService<Project> appProjectService,
             IAppBlogTypeSiteService<BlogTypeSite> appBlogTypeSiteService,
-            IAppStoreTypeSiteService<StoreTypeSite> appStoreTypeSiteService)
+            IAppStoreTypeSiteService<StoreTypeSite> appStoreTypeSiteService,
+            IAppWidgetService appWidgetService)
         {
             this.appSiteTemplateService = appSiteTemplateService ?? throw new ArgumentNullException(nameof(appSiteTemplateService));
             this.appClientWidgetService = appClientWidgetService ?? throw new ArgumentNullException(nameof(appClientWidgetService));
             this.appProjectService = appProjectService ?? throw new ArgumentNullException(nameof(appProjectService));
             this.appBlogTypeSiteService = appBlogTypeSiteService ?? throw new ArgumentNullException(nameof(appBlogTypeSiteService));
             this.appStoreTypeSiteService = appStoreTypeSiteService ?? throw new ArgumentNullException(nameof(appStoreTypeSiteService));
+            this.appWidgetService = appWidgetService ?? throw new ArgumentNullException(nameof(appWidgetService));
         }
 
         public async Task<SiteRenderingDTO> RenderSiteAsync(string clientId, string defaultStoreSiteTemplateName, string siteTypeId)
@@ -56,13 +59,21 @@ namespace Infrastructure.Site
                 Validator.ObjectIsNull(
                     clientProjectCall, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(clientProjectCall)} : {clientId} -> FATAL : Can't find project");
 
-                var clientBlogProjectWidgets = clientProjectCall.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId).SiteUsedWidgets;
-                var clientStoreProjectWidgets = clientProjectCall.StoreSiteTypes.FirstOrDefault(b => b.Id == siteTypeId).SiteUsedWidgets;
+                var clientBlogProjectWidgetsId = clientProjectCall.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId).SiteUsedWidgets.Select(w => w.WidgetId).ToList();
+                var clientStoreProjectWidgetsId = clientProjectCall.StoreSiteTypes.FirstOrDefault(b => b.Id == siteTypeId).SiteUsedWidgets.Select(w => w.WidgetId).ToList();
+                var usebleWidgetsId = usebleWidgetsCall.SiteType.UsebleWidjets.Select(w => w.WidgetId).ToList();
+
+                var widgetsCompareResultCall = await this.appWidgetService.GetAllWidgetsAsync();
+
+                var clientBlogProjectWidgets = widgetsCompareResultCall.Where(x => clientBlogProjectWidgetsId.Contains(x.Id));
+                var clientStoreProjectWidgets = widgetsCompareResultCall.Where(x => clientStoreProjectWidgetsId.Contains(x.Id));
+                var usebleWidgets = widgetsCompareResultCall.Where(x => usebleWidgetsId.Contains(x.Id));
+
 
                 var siteWidgets = new List<Widget>();
-
-                siteWidgets.AddRange(usebleWidgetsCall.SiteType.UsebleWidjets.Except(clientStoreProjectWidgets));
-                siteWidgets.AddRange(usebleWidgetsCall.SiteType.UsebleWidjets.Except(clientBlogProjectWidgets));
+              
+                siteWidgets.AddRange(usebleWidgets.Except(clientBlogProjectWidgets));
+                siteWidgets.AddRange(usebleWidgets.Except(clientStoreProjectWidgets));
 
 
                 var serviceModel = new SiteRenderingDTO()
@@ -107,17 +118,20 @@ namespace Infrastructure.Site
                 Validator.ObjectIsNull(
                     clientWidgetsCall, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(clientWidgetsCall)} : {clientId} -> FATAL : Can't find client widgets");
 
-                var usebleWidgets = usebleWidgetsCall.SiteType.UsebleWidjets;
-                var clientWidgets = clientWidgetsCall.ClientWidgets.Select(w => w.Widget).ToList();
+                var usebleWidgetsId = usebleWidgetsCall.SiteType.UsebleWidjets.Select(w => w.WidgetId).ToList();
+                var clientWidgetsId = clientWidgetsCall.ClientWidgets.Select(w => w.WidgetId).ToList();
 
                 //compare for new free widgets
-                var widgetsCompareResult = usebleWidgets
-                    .Except(clientWidgets
-                    .Select(w => w)
-                    .Where(c => (c.IsFree) || (!c.IsDeleted && c.IsOn) ))
-                    .ToList();
+                var widgetsCompareResultIds = usebleWidgetsId
+                    .Except(clientWidgetsId) .ToList();
 
-                clientWidgets.AddRange(widgetsCompareResult);
+                var widgetsCompareResultCall = await this.appWidgetService.GetAllWidgetsAsync();
+
+                var widgetsCompareResultNewWidget = widgetsCompareResultCall.Where(w => widgetsCompareResultIds.Contains(w.Id));
+
+                var allNewWidgets = widgetsCompareResultCall.Where(w => clientWidgetsId.Contains(w.Id)).Where(w => usebleWidgetsId.Contains(w.Id));
+
+                allNewWidgets.ToList().AddRange(widgetsCompareResultNewWidget.ToList());
 
                 //add
                 var clientProjectCall = await this.appProjectService.GetClientProject(clientId);
@@ -129,12 +143,14 @@ namespace Infrastructure.Site
                 var clientBlogProject = clientProjectCall.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
                 var clientStoreProject = clientProjectCall.StoreSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
 
+               // var clientNewWidgets = clientWidgetsCall.ClientWidgets.Add(widgetsCompareResult.Select(w => new ClientWidgets() {  }));
+
                 if (clientBlogProject == null)
                 {
                     if (clientStoreProject != null)
                     {
                         //storeProject add
-                        await this.appStoreTypeSiteService.AddRangeOfWidgetsAsync(siteTypeId, clientWidgets);
+                        await this.appStoreTypeSiteService.AddRangeOfWidgetsAsync(siteTypeId, allNewWidgets);
                     }
                     else
                     {
@@ -145,7 +161,7 @@ namespace Infrastructure.Site
                 else
                 {
                     //add to blogType by id
-                    await this.appBlogTypeSiteService.AddRangeOfWidgetsAsync(siteTypeId, clientWidgets);
+                    await this.appBlogTypeSiteService.AddRangeOfWidgetsAsync(siteTypeId, allNewWidgets);
                 }
 
                 

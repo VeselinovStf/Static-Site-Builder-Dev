@@ -16,7 +16,8 @@ namespace ApplicationCore.Interfaces
         string ProjectId { get; set; }
 
         //Build in widjets
-        ICollection<Widget> TemplateUsableWidjets { get; set; }
-        ICollection<Widget> SiteUsedWidgets { get; set; }
+      
+
+         ICollection<SiteWidget> SiteUsedWidgets { get; set; }
     }
 }

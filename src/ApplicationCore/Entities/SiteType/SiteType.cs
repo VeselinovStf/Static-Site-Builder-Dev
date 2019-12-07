@@ -11,6 +11,6 @@ namespace ApplicationCore.Entities.SiteType
 
         public ICollection<SiteTemplate> SiteTemplates { get; set; }
 
-        public ICollection<Widget> UsebleWidjets { get; set; }
+        public ICollection<SiteTypeWidget> UsebleWidjets { get; set; }
     }
 }
