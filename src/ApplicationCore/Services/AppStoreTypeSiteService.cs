@@ -27,7 +27,7 @@ namespace ApplicationCore.Services
 
             foreach (var newWidget in widgets)
             {
-                store.SiteUsedWidgets.Add(new SiteWidget() { WidgetId = newWidget.Id, SiteId = store.Id });
+                store.SiteUsedWidgets.Add(new SiteWidget() { WidgetId = newWidget.Id, SiteId = store.Id, Widget = newWidget });
             }
 
             await this.storeTypeRepository.UpdateAsync(store);

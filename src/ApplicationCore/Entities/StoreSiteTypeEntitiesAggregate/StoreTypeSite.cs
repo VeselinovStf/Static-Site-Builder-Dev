@@ -7,9 +7,14 @@ using System.Collections.Generic;
 
 namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
 {
-    public class StoreTypeSite : BaseWidget, IAggregateRoot
+    public class StoreTypeSite : DescriptiveEntity, IAggregateRoot
     {
- 
+        public string TemplateName { get; set; }
+        public string ClientId { get; set; }
+        public string LaunchingConfigId { get; set; }
+        public LaunchConfig LaunchingConfig { get; set; }
+        public string ProjectId { get; set; }
+        public ICollection<SiteWidget> SiteUsedWidgets { get; set; }
 
         private readonly List<Product> _products = new List<Product>();
 
@@ -48,7 +53,7 @@ namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
             string collection, string color, bool dealOfTheDayProduct,
             string details, string detailsLink, decimal discountProcent,
             DateTime discountTimer, bool productOfTheDay,
-            double rating, string image)
+            double rating, string image, IEnumerable<Widget> widgets)
         {
             this._products.Add(
                 new Product()

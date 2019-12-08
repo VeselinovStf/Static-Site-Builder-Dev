@@ -17,9 +17,7 @@ namespace Infrastructure.Data.Config
                 .WithMany(p => p.BuildInSiteTypeWidjets)
                 .HasForeignKey(pt => pt.WidgetId);
 
-            builder.HasOne(pt => pt.SiteType)
-                .WithMany(t => t.UsebleWidjets)
-                .HasForeignKey(pt => pt.SiteTypeId);
+          
         }
     }
 }

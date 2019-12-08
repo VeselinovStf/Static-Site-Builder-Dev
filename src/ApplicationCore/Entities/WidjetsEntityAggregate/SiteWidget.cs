@@ -15,6 +15,6 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
 
         public string SiteId { get; set; }
 
-        public BaseWidget SiteProgect { get; set; }
+        
     }
 }

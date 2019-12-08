@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using ApplicationCore.Entities.WidjetsEntityAggregate;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ApplicationCore.Interfaces
 {
@@ -9,11 +11,11 @@ namespace ApplicationCore.Interfaces
         Task AddStoreTypeSite(string clientProjectId, string name, string description, string clientId,
             string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
-            string repository);
+            string repository, IEnumerable<Widget> widgets);
 
         Task AddBlogTypeSite(string clientProjectId, string name, string description, string clientId,
             string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
-            string repository);
+            string repository, IEnumerable<Widget> widgets);
     }
 }

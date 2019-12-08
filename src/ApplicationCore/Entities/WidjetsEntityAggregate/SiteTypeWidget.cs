@@ -13,6 +13,6 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
 
         public string SiteTypeId { get; set; }
 
-        public SiteType.SiteType SiteType { get; set; }
+       
     }
 }

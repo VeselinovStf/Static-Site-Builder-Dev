@@ -1,7 +1,9 @@
 ﻿using ApplicationCore.Entities.SiteProjectAggregate;
+using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApplicationCore.Services
@@ -26,7 +28,7 @@ namespace ApplicationCore.Services
         public async Task AddStoreTypeSite(string clientProjectId, string name, string description, string clientId,
             string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
-            string repository)
+            string repository, IEnumerable<Widget> widgets)
         {
             var specification = new ClientProjectWithStoreTypeSitesSpecification(clientId);
 
@@ -35,7 +37,7 @@ namespace ApplicationCore.Services
             projectStores.AddStoreTypeSite(clientProjectId, name, description, clientId,
              buildInType, templateName,
              cardApiKey, cardServiceGate, hostingServiceGate,
-             repository);
+             repository,widgets);
 
             await this.projectRepository.UpdateAsync(projectStores);
         }
@@ -43,7 +45,7 @@ namespace ApplicationCore.Services
         public async Task AddBlogTypeSite(string clientProjectId, string name, string description, string clientId,
             string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
-            string repository)
+            string repository, IEnumerable<Widget> widgets)
         {
             var specification = new ClientProjectWithBlogTypeSitesSpecification(clientId);
 
@@ -52,7 +54,7 @@ namespace ApplicationCore.Services
             projectStores.AddBlogTypeSite(clientProjectId, name, description, clientId,
              buildInType, templateName,
              cardApiKey, cardServiceGate, hostingServiceGate,
-             repository);
+             repository,widgets);
 
             await this.projectRepository.UpdateAsync(projectStores);
         }

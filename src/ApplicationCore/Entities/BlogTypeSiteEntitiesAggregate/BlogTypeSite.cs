@@ -8,9 +8,15 @@ using System.Collections.Generic;
 
 namespace ApplicationCore.Entities.BlogSiteTypeEntities
 {
-    public class BlogTypeSite : BaseWidget,IAggregateRoot
+    public class BlogTypeSite : DescriptiveEntity, IAggregateRoot
     {
-       
+
+        public string TemplateName { get; set; }
+        public string ClientId { get; set; }
+        public string LaunchingConfigId { get; set; }
+        public LaunchConfig LaunchingConfig { get; set; }
+        public string ProjectId { get; set; }
+        public ICollection<SiteWidget> SiteUsedWidgets { get; set; }
 
         private readonly List<BlogPost> _blogPosts = new List<BlogPost>();
 

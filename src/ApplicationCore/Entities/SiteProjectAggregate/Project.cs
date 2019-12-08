@@ -37,7 +37,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
         public void AddStoreTypeSite(string clientProjectId, string name, string description, string clientId,
             string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
-            string repository)
+            string repository, IEnumerable<Widget> widgets)
         {
             var newStoreId = Guid.NewGuid().ToString();
             _storeSiteTypes.Add(new StoreTypeSite()
@@ -59,14 +59,21 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
                     IsDeleted = false,
                     CreatedOn = DateTime.Now,
                     ModifiedOn = DateTime.Now,
-                }
+                },
+                 SiteUsedWidgets = new List<SiteWidget>(widgets.Select(w => new SiteWidget()
+                 {
+                      Widget = w,
+                      WidgetId = w.Id,
+                      SiteId = newStoreId,
+                 }))
+                 
             });
         }
 
         public void AddBlogTypeSite(string clientProjectId, string name, string description, string clientId,
             string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
-            string repository)
+            string repository, IEnumerable<Widget> widgets)
         {
             var newBlogId = Guid.NewGuid().ToString();
             _blogSiteTypes.Add(new BlogTypeSite()
@@ -88,7 +95,13 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
                     IsDeleted = false,
                     CreatedOn = DateTime.Now,
                     ModifiedOn = DateTime.Now,
-                }
+                },
+                SiteUsedWidgets = new List<SiteWidget>(widgets.Select(w => new SiteWidget()
+                {
+                    Widget = w,
+                    WidgetId = w.Id,
+                    SiteId = newBlogId,
+                }))
             });
         }
     }

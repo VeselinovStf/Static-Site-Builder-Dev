@@ -59,22 +59,49 @@ namespace Infrastructure.Site
                 Validator.ObjectIsNull(
                     clientProjectCall, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(clientProjectCall)} : {clientId} -> FATAL : Can't find project");
 
-                var clientBlogProjectWidgetsId = clientProjectCall.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId).SiteUsedWidgets.Select(w => w.WidgetId).ToList();
-                var clientStoreProjectWidgetsId = clientProjectCall.StoreSiteTypes.FirstOrDefault(b => b.Id == siteTypeId).SiteUsedWidgets.Select(w => w.WidgetId).ToList();
+                var clientBlogProjectWidgetsId = clientProjectCall.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
+                var clientStoreProjectWidgetsId = clientProjectCall.StoreSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
+
                 var usebleWidgetsId = usebleWidgetsCall.SiteType.UsebleWidjets.Select(w => w.WidgetId).ToList();
 
                 var widgetsCompareResultCall = await this.appWidgetService.GetAllWidgetsAsync();
 
-                var clientBlogProjectWidgets = widgetsCompareResultCall.Where(x => clientBlogProjectWidgetsId.Contains(x.Id));
-                var clientStoreProjectWidgets = widgetsCompareResultCall.Where(x => clientStoreProjectWidgetsId.Contains(x.Id));
-                var usebleWidgets = widgetsCompareResultCall.Where(x => usebleWidgetsId.Contains(x.Id));
+                var usebleTemplateWidgets = widgetsCompareResultCall.Where(w => usebleWidgetsId.Contains(w.Id));
 
+                var clientBlogProjectWidgets = usebleTemplateWidgets.Where(x => clientBlogProjectWidgetsId.Id != x.Id);
+                var clientStoreProjectWidgets = usebleTemplateWidgets.Where(x => clientStoreProjectWidgetsId.Id != x.Id);
+
+              
 
                 var siteWidgets = new List<Widget>();
-              
-                siteWidgets.AddRange(usebleWidgets.Except(clientBlogProjectWidgets));
-                siteWidgets.AddRange(usebleWidgets.Except(clientStoreProjectWidgets));
 
+              
+                //return
+                var clientBlogProject = clientProjectCall.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
+                var clientStoreProject = clientProjectCall.StoreSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
+
+                // var clientNewWidgets = clientWidgetsCall.ClientWidgets.Add(widgetsCompareResult.Select(w => new ClientWidgets() {  }));
+
+                if (clientBlogProject == null)
+                {
+                    if (clientStoreProject != null)
+                    {
+
+                        //storeProject add
+                        siteWidgets.AddRange(clientStoreProjectWidgets);
+                    }
+                    else
+                    {
+                        //throw
+                        throw new ArgumentException($"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : NO SUCHE TEMPLATE :");
+                    }
+                }
+                else
+                {
+                    //add to blogType by id
+                    siteWidgets.AddRange(clientBlogProjectWidgets);
+                }
+             
 
                 var serviceModel = new SiteRenderingDTO()
                 {
@@ -84,7 +111,7 @@ namespace Infrastructure.Site
                     })
                 )
                 };
-                
+
 
                 return serviceModel;
             }
@@ -108,30 +135,38 @@ namespace Infrastructure.Site
 
             try
             {
-                var usebleWidgetsCall = await this.appSiteTemplateService.GetTemplateAsync(defaultStoreSiteTemplateName);
+                //Get useble widgets for current template
+                var templateUsableWidgets = await this.appSiteTemplateService.GetTemplateAsync(defaultStoreSiteTemplateName);
 
                 Validator.ObjectIsNull(
-                 usebleWidgetsCall, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(usebleWidgetsCall)} : {defaultStoreSiteTemplateName} -> FATAL : Can't find template useble widgets");
+                 templateUsableWidgets, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(templateUsableWidgets)} : {defaultStoreSiteTemplateName} -> FATAL : Can't find template useble widgets");
 
-                var clientWidgetsCall = await this.appClientWidgetService.GetAllAsync(clientId);
+                //Get client availible Widgets
+                var clientAvailibleWidgetsCall = await this.appClientWidgetService.GetAllAsync(clientId);
 
                 Validator.ObjectIsNull(
-                    clientWidgetsCall, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(clientWidgetsCall)} : {clientId} -> FATAL : Can't find client widgets");
+                    clientAvailibleWidgetsCall, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(clientAvailibleWidgetsCall)} : {clientId} -> FATAL : Can't find client widgets");
 
-                var usebleWidgetsId = usebleWidgetsCall.SiteType.UsebleWidjets.Select(w => w.WidgetId).ToList();
-                var clientWidgetsId = clientWidgetsCall.ClientWidgets.Select(w => w.WidgetId).ToList();
+                //Useble id's'
+                var usebleWidgetsId = templateUsableWidgets.SiteType.UsebleWidjets.Select(w => w.WidgetId).ToList();
+                //Client id's
+                var clientWidgetsId = clientAvailibleWidgetsCall.ClientWidgets.Select(w => w.WidgetId).ToList();
 
                 //compare for new free widgets
-                var widgetsCompareResultIds = usebleWidgetsId
-                    .Except(clientWidgetsId) .ToList();
+                var widgetsNewCompareResultIds = usebleWidgetsId
+                    .Except(clientWidgetsId).ToList();
 
-                var widgetsCompareResultCall = await this.appWidgetService.GetAllWidgetsAsync();
 
-                var widgetsCompareResultNewWidget = widgetsCompareResultCall.Where(w => widgetsCompareResultIds.Contains(w.Id));
+                //All system widgets
+                var systemWidgetsCall = await this.appWidgetService.GetAllWidgetsAsync();
 
-                var allNewWidgets = widgetsCompareResultCall.Where(w => clientWidgetsId.Contains(w.Id)).Where(w => usebleWidgetsId.Contains(w.Id));
+                //Get new widget
+                var newWidgets = systemWidgetsCall.Where(w => widgetsNewCompareResultIds.Contains(w.Id));
 
-                allNewWidgets.ToList().AddRange(widgetsCompareResultNewWidget.ToList());
+                var allNewWidgetsResult = new List<Widget>();
+
+
+                allNewWidgetsResult.ToList().AddRange(newWidgets.ToList());
 
                 //add
                 var clientProjectCall = await this.appProjectService.GetClientProject(clientId);
@@ -143,14 +178,15 @@ namespace Infrastructure.Site
                 var clientBlogProject = clientProjectCall.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
                 var clientStoreProject = clientProjectCall.StoreSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
 
-               // var clientNewWidgets = clientWidgetsCall.ClientWidgets.Add(widgetsCompareResult.Select(w => new ClientWidgets() {  }));
+                // var clientNewWidgets = clientWidgetsCall.ClientWidgets.Add(widgetsCompareResult.Select(w => new ClientWidgets() {  }));
 
                 if (clientBlogProject == null)
                 {
                     if (clientStoreProject != null)
                     {
+
                         //storeProject add
-                        await this.appStoreTypeSiteService.AddRangeOfWidgetsAsync(siteTypeId, allNewWidgets);
+                        await this.appStoreTypeSiteService.AddRangeOfWidgetsAsync(siteTypeId, allNewWidgetsResult);
                     }
                     else
                     {
@@ -161,10 +197,10 @@ namespace Infrastructure.Site
                 else
                 {
                     //add to blogType by id
-                    await this.appBlogTypeSiteService.AddRangeOfWidgetsAsync(siteTypeId, allNewWidgets);
+                    await this.appBlogTypeSiteService.AddRangeOfWidgetsAsync(siteTypeId, allNewWidgetsResult);
                 }
 
-                
+
             }
             catch (Exception ex)
             {

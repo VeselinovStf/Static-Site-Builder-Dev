@@ -16,18 +16,25 @@ namespace Infrastructure.SiteTypes
     {
         private readonly IAppSiteTypesService<SiteType> appSiteTypeService;
         private readonly IAppProjectsService<Project> appProjectService;
-
+        private readonly IAppClientWidgetService appClientWidgetService;
+        private readonly IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService;
+        private readonly IAppWidgetService appWidgetService;
         private readonly Dictionary<SiteTypesEnum, SiteTypesFactory> _factories;
 
         public SiteTypesService(
             IAppSiteTypesService<SiteType> appSiteTypeService,
-            IAppProjectsService<Project> appProjectService
+            IAppProjectsService<Project> appProjectService,
+            IAppClientWidgetService appClientWidgetService,
+            IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService,
+            IAppWidgetService appWidgetService
 
             )
         {
             this.appSiteTypeService = appSiteTypeService ?? throw new System.ArgumentNullException(nameof(appSiteTypeService));
             this.appProjectService = appProjectService ?? throw new ArgumentNullException(nameof(appProjectService));
-           
+            this.appClientWidgetService = appClientWidgetService ?? throw new ArgumentNullException(nameof(appClientWidgetService));
+            this.appSiteTemplateService = appSiteTemplateService ?? throw new ArgumentNullException(nameof(appSiteTemplateService));
+            this.appWidgetService = appWidgetService ?? throw new ArgumentNullException(nameof(appWidgetService));
             _factories = new Dictionary<SiteTypesEnum, SiteTypesFactory>
                         {
                             { SiteTypesEnum.BlogType, new BlogTypeSiteFactory(appProjectService) },
@@ -39,11 +46,29 @@ namespace Infrastructure.SiteTypes
             string name, string description, string clientId,
             string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
-            string repository) => await _factories[action].Create(clientProjectId,
-             name, description, clientId,
-             buildInType, templateName,
-             cardApiKey, cardServiceGate, hostingServiceGate,
-             repository);
+            string repository)
+        {
+            //Get useble widgets for current template
+            var templateUsableWidgets = await this.appSiteTemplateService.GetTemplateAsync(templateName);
+
+            Validator.ObjectIsNull(
+                templateUsableWidgets, $"{nameof(SiteTypesService)} : {nameof(ExecuteCreation)} : {nameof(templateUsableWidgets)} : {templateName} -> FATAL : Can't find template useble widgets");
+
+            //Useble id's'
+            var usebleWidgetsId = templateUsableWidgets.SiteType.UsebleWidjets.Select(w => w.WidgetId).ToList();
+
+            //All system widgets
+            var systemWidgetsCall = await this.appWidgetService.GetAllWidgetsAsync();
+
+            //Get new widget
+            var newWidgets = systemWidgetsCall.Where(w => usebleWidgetsId.Contains(w.Id));
+
+            await _factories[action].Create(clientProjectId,
+                  name, description, clientId,
+                  buildInType, templateName,
+                  cardApiKey, cardServiceGate, hostingServiceGate,
+                  repository, newWidgets);
+        }
 
         public async Task<bool> ConfirmTypeAsync(string buildInType)
         {
