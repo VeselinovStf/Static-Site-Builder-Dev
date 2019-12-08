@@ -162,6 +162,7 @@ namespace Infrastructure.Site
 
                 //Get new widget
                 var newWidgets = systemWidgetsCall.Where(w => widgetsNewCompareResultIds.Contains(w.Id));
+              
 
                 var allNewWidgetsResult = new List<Widget>();
 
