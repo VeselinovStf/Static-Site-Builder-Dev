@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Infrastructure.Widgets.DTOs;
 using Web.ModelFatories.WidgetsModelFactory.Abstraction;
+using Web.ViewModels.Site;
 using Web.ViewModels.Widget;
 
 namespace Web.ModelFatories.WidgetsModelFactory
@@ -45,6 +46,19 @@ namespace Web.ModelFatories.WidgetsModelFactory
 
                     Version = w.Version,
                     Votes = w.Votes
+                }))
+            };
+        }
+
+        public SiteViewModel Create(ClientSiteWidgetsDTO serviceCall)
+        {
+            return new SiteViewModel()
+            {
+                Widgets = new List<SiteWidgetViewModel>(serviceCall.Widgets.Select(w => new SiteWidgetViewModel()
+                {
+                    DisplayName = w.DisplayName,
+                    IsOn = w.IsOn,
+                    WidgetId = w.WidgetId
                 }))
             };
         }

@@ -14,10 +14,9 @@ namespace Web.ModelFatories.SiteModelFactory
         {
             return new SiteRenderingViewModel()
             {
-                Widgets = new List<MenuWidgetViewModel>(serviceModel.Widget.Select(w => new MenuWidgetViewModel()
-                {
-                    Name = w.Name
-                }))
+                ClientId = serviceModel.ClientId,
+                PresentationLink = serviceModel.PresentationLink,
+                TemplateName = serviceModel.TemplateName
             };
         }
     }

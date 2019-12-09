@@ -17,6 +17,8 @@ namespace Infrastructure.Site
 {
     public class SiteService : ISiteService<SiteRenderingDTO>
     {
+        private const string SITE_RENDERING_DOMAIN = ".netlify.com";
+
         private readonly IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService;
         private readonly IAppClientWidgetService appClientWidgetService;
         private readonly IAppProjectsService<Project> appProjectService;
@@ -82,6 +84,7 @@ namespace Infrastructure.Site
 
                 // var clientNewWidgets = clientWidgetsCall.ClientWidgets.Add(widgetsCompareResult.Select(w => new ClientWidgets() {  }));
 
+                var siteAddress = string.Empty;
                 if (clientBlogProject == null)
                 {
                     if (clientStoreProject != null)
@@ -89,6 +92,7 @@ namespace Infrastructure.Site
 
                         //storeProject add
                         siteWidgets.AddRange(clientStoreProjectWidgets);
+                        siteAddress = clientStoreProjectWidgetsId.Name;
                     }
                     else
                     {
@@ -100,17 +104,18 @@ namespace Infrastructure.Site
                 {
                     //add to blogType by id
                     siteWidgets.AddRange(clientBlogProjectWidgets);
-                }
-             
+                    siteAddress = clientBlogProjectWidgetsId.Name;
 
+                }
+
+                //Add widgets -> usable
                 var serviceModel = new SiteRenderingDTO()
                 {
-                    Widget = new List<WidgetsDTO>(siteWidgets.Select(s => new WidgetsDTO()
-                    {
-                        Name = s.Name
-                    })
-                )
+                    ClientId = clientId,
+                    PresentationLink = "https://" + siteAddress + SITE_RENDERING_DOMAIN,
+                    TemplateName = defaultStoreSiteTemplateName
                 };
+                
 
 
                 return serviceModel;

@@ -132,6 +132,7 @@ namespace Web
             services.AddScoped<IAppWidgetService, AppWidgetService>();
             services.AddScoped<IWidgetService<ClientWidgetListDTO>, WidgetService>();
             services.AddScoped<IWidgetModelFactory, WidgetModelFactory>();
+            services.AddScoped<IManageWidgetService<ClientSiteWidgetsDTO>, ManageWidgetsService>();
 
             //LaunchSite
             services.AddScoped<ILaunchSiteService, LaunchSiteService>();

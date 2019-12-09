@@ -6,6 +6,9 @@ namespace Infrastructure.Site.DTOs
 {
     public class SiteRenderingDTO
     {
-        public ICollection<WidgetsDTO> Widget { get; set; }
+        public string PresentationLink { get; set; }
+        public string ClientId { get; set; }
+
+        public string TemplateName { get; set; }
     }
 }

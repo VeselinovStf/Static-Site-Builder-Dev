@@ -4,6 +4,9 @@ namespace Web.ViewModels.Site
 {
     public class SiteRenderingViewModel
     {
-        public ICollection<MenuWidgetViewModel> Widgets { get; set; }
+        public string ClientId { get; set; }
+        public string PresentationLink { get; set; }
+
+        public string TemplateName { get; set; }
     }
 }

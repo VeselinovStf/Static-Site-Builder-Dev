@@ -2,13 +2,10 @@
 @{
 
     Layout = "~/Views/Shared/_SiteAdminLayout.cshtml";
-    //ViewData["ProjectId"] = Model.ProjectId;
+    ViewData["ClientId"] = Model.ClientId;
+    ViewData["TemplateName"] = Model.TemplateName;
 }
-@foreach (var item in Model.Widgets)
-{
-    <hr />
-    <h1>@item.Name</h1>
-}
+
 <div class="embed-responsive embed-responsive-16by9">
-    <iframe class="embed-responsive-item" @*src="@Model.PresentationLink" *@ allowfullscreen></iframe>
+    <iframe class="embed-responsive-item" src="@Model.PresentationLink"  allowfullscreen></iframe>
 </div>

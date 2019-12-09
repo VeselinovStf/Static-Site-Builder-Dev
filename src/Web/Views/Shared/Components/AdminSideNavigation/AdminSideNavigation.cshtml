@@ -1,4 +1,4 @@
-﻿@*@model SSB.Web.ViewModels.Site.SiteViewModel*@
+﻿@model SiteViewModel
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -16,6 +16,22 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
+                @foreach (var widget in Model.Widgets)
+                {
+                    if (widget.IsOn)
+                    {
+                         
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-copy"></i>
+                                <p>
+                                    @widget.DisplayName                                                                   
+                                </p>
+                            </a>
+                          
+                        </li>
+                    }
+                }
                 @*@if (Model.SiteStructure.IsOn)
                     {
                         <li class="nav-header">TEMPLATE</li>
@@ -36,16 +52,16 @@
                                     @if (element.IsOne)
                                     {
                                         <li class="nav-item">
-                                            @await Component.InvokeAsync("SideNavStructureModal", new { model = element, projectId = Model.ProjectId, elementName = element.Name })
+                                            @await Component.InvokeAsync("SideNavStructureModal", new { model = element, projectId = Model.ClientId, elementName = element.Name })
                                         </li>
                                     }
 
                                 }
                             </ul>
                         </li>
-                    }
+                    }*@
 
-                    @if (Model.IsMenuWidjetOn)
+                    @*@if (Model.IsMenuWidjetOn)
                     {
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
@@ -58,7 +74,7 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
 
-                                    <a asp-controller="LeftMenu" asp-action="Index" asp-route-id="@Model.ProjectId" class="nav-link">
+                                    <a asp-controller="LeftMenu" asp-action="Index" asp-route-id="@Model.ClientId" class="nav-link">
                                         <i class="nav-icon fas fa-circle"></i>
                                         <p>
                                             Left Menu
@@ -66,7 +82,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-controller="CenterMenu" asp-action="Index" asp-route-id="@Model.ProjectId" class="nav-link">
+                                    <a asp-controller="CenterMenu" asp-action="Index" asp-route-id="@Model.ClientId" class="nav-link">
                                         <i class="nav-icon fas fa-circle"></i>
                                         <p>
                                             Center Menu
@@ -75,8 +91,8 @@
                                 </li>
                             </ul>
                         </li>
-                    }
-                    @if (Model.IsProductWidjetOn)
+                    }*@
+                    @*@if (Model.IsProductWidjetOn)
                     {
                         <li class="nav-header">PRODUCTS</li>
                         <li class="nav-item has-treeview">
@@ -89,22 +105,22 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a asp-controller="Products" asp-action="Index" asp-route-projectId="@Model.ProjectId" class="nav-link">
+                                    <a asp-controller="Products" asp-action="Index" asp-route-projectId="@Model.ClientId" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Manage</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-controller="Products" asp-action="AddProduct" asp-route-projectId="@Model.ProjectId" class="nav-link">
+                                    <a asp-controller="Products" asp-action="AddProduct" asp-route-projectId="@Model.ClientId" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Add</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                    }
+                    }*@
 
-                    @if (Model.TopProducts.IsOn)
+                    @*@if (Model.TopProducts.IsOn)
                     {
                         <li class="nav-item">
                             <a href="#" class="nav-link">
@@ -118,11 +134,11 @@
                                 @foreach (var element in Model.TopProducts.Elements)
                                 {
                                     <li class="nav-item">
-                                        @await Component.InvokeAsync("TopProducts", new { model = element, projectId = Model.ProjectId })
+                                        @await Component.InvokeAsync("TopProducts", new { model = element, projectId = Model.ClientId })
                                     </li>
                                 }
                             </ul>
-                        </li>
+                        </li>*@
                     }
 
                     @*<li class="nav-header">FUTURES</li>
@@ -156,7 +172,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a asp-controller="MenuSettings" asp-action="General" asp-route-id="@Model.ProjectId" class="nav-link">
+                                    <a asp-controller="MenuSettings" asp-action="General" asp-route-id="@Model.ClientId" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>General</p>
                                     </a>

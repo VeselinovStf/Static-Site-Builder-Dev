@@ -4,7 +4,7 @@
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
         <!-- /#sidebar-wrapper -->
-        @await Component.InvokeAsync("AdminSideNavigation")
+        @await Component.InvokeAsync("AdminSideNavigation", new { clientId = ViewData["ClientId"], templateName = ViewData["TemplateName"]})
         <!-- Page Content -->
         <!--Slidebar buttons-->
 
