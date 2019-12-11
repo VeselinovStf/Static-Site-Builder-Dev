@@ -9,16 +9,24 @@ namespace ApplicationCore.Services
     public class AppSiteTypesService : IAppSiteTypesService<SiteType>
     {
         private readonly IAsyncRepository<SiteType> siteTypeRepository;
+        
 
         public AppSiteTypesService(
             IAsyncRepository<SiteType> siteTypeRepository)
+           
         {
             this.siteTypeRepository = siteTypeRepository ?? throw new ArgumentNullException(nameof(siteTypeRepository));
+            
         }
 
         public async Task<IEnumerable<SiteType>> GetAllAsync()
         {
             return await this.siteTypeRepository.ListAllAsync();
+        }
+
+        public  IList<SiteTypesEnum> GetSiteTypes()
+        {
+            return new List<SiteTypesEnum>() { SiteTypesEnum.BlogType, SiteTypesEnum.StoreType };
         }
     }
 }

@@ -49,6 +49,8 @@ using Web.ModelFatories.AccountManageModelFactory;
 using Web.ModelFatories.AccountManageModelFactory.Abstraction;
 using Web.ModelFatories.AdminModelFactory;
 using Web.ModelFatories.AdminModelFactory.Abstraction;
+using Web.ModelFatories.AdminSiteTypesModelFactory;
+using Web.ModelFatories.AdminSiteTypesModelFactory.Abstraction;
 using Web.ModelFatories.BlogModelFactory;
 using Web.ModelFatories.BlogModelFactory.Abstraction;
 using Web.ModelFatories.ClientModelFactory;
@@ -154,6 +156,10 @@ namespace Web
 
             services.AddScoped<IAppMailBoxService, AppMailBoxService>();
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
+
+            //Admin Site Types
+            services.AddScoped<IAdminSiteTypesModelFactory, AdminSiteTypesModelFactory>();
+
 
             //Infrastructure Services
             services.AddScoped<IEmailSender, EmailSender>();

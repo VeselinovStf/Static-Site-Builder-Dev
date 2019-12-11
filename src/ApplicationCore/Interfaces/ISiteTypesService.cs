@@ -26,5 +26,7 @@ namespace ApplicationCore.Interfaces
             string buildInType, string templateLocation,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
             string repository);
+
+        IList<string> GetBuildInSiteTypes();
     }
 }

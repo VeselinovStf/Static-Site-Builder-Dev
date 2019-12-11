@@ -9,5 +9,7 @@ namespace Web.ModelFatories.SiteTypeModelFactory.Abstraction
         ClientSiteTypesViewModel Create(IEnumerable<SiteTypeDTO> serviceCall, string clientId);
 
         SiteTypeEditViewModel Create(SiteTypeEditorDTO serviceCall);
+
+       
     }
 }

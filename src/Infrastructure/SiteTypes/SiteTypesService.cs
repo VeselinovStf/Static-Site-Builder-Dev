@@ -168,5 +168,25 @@ namespace Infrastructure.SiteTypes
                 throw new SiteTypesServiceGetAllTypesException($"{nameof(SiteTypesServiceGetAllTypesException)} : Can't get build in types! : {ex.Message}");
             }
         }
+
+        public  IList<string> GetBuildInSiteTypes()
+        {
+            try
+            {
+                var buildInSiteTypes =  this.appSiteTypeService.GetSiteTypes();
+
+                Validator.ObjectIsNull(
+                    buildInSiteTypes, $"{nameof(SiteTypesService)} : {nameof(GetBuildInSiteTypes)} : {nameof(buildInSiteTypes)} : Can't get build in site types!");
+
+                return new List<string>(buildInSiteTypes.Select(t => t.ToString()));
+                
+            }
+            catch (Exception ex)
+            {
+
+                throw new SiteTypesServiceGetBuildInSiteTypesException($"{nameof(SiteTypesServiceGetBuildInSiteTypesException)} : Can't get build in types! : {ex.Message}");
+
+            }
+        }
     }
 }
