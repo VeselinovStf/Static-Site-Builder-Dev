@@ -6,10 +6,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Web.ModelFatories.TemplateModelFactory.Abstraction;
+using Web.ViewModels.Template;
 
 namespace Web.Controllers
-{
-    [Authorize]
+{   
     public class TemplateController : Controller
     {
         private readonly ITemplateService<SiteTemplateDTO> templateService;
@@ -26,6 +26,7 @@ namespace Web.Controllers
             this.logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
         }
 
+        [Authorize(Roles = "Client")]
         [HttpGet]
         public async Task<IActionResult> SelectTemplate(string buildInType, string clientId)
         {
@@ -49,5 +50,7 @@ namespace Web.Controllers
 
             //Call db to get all availible build in template
         }
+
+       
     }
 }
