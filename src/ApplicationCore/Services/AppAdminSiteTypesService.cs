@@ -20,6 +20,7 @@ namespace ApplicationCore.Services
         {
             var createdEntity = await this.siteTypeRepository.AddAsync(new SiteType()
             {
+                
                 Name = name,
                 Description = description,
                 Type = type

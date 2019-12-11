@@ -83,11 +83,11 @@ namespace Web.Controllers
         {
             try
             {
-                await this.siteTypeService.AddSiteTypeAsync(model.Name, model.Description, model.SiteType);
+                var resultModel = await this.siteTypeService.AddSiteTypeAsync(model.Name, model.Description, model.SiteType);
 
                 this.logger.LogInformation($"{nameof(AdminSiteTypesController)} : {nameof(CreateSiteType)} : Creating administrated site type done.");
 
-                return RedirectToAction("SiteTypes", "AdminSiteTypes");
+                return RedirectToAction("SiteTypes", "Type", new { siteTypeId = resultModel.Id });
             }
             catch (Exception ex)
             {
@@ -99,7 +99,11 @@ namespace Web.Controllers
           
         }
 
-
+        [HttpGet]
+        public async Task<IActionResult> Type(string siteTypeId)
+        {
+            return View();
+        }
         //CreateTemplate
 
     }

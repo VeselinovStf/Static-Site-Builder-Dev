@@ -19,6 +19,7 @@ namespace Web.ModelFatories.AdminSiteTypesModelFactory
                 
                 SiteTypes = new List<AdminSiteTypeViewModel>(serviceCall.Select(t => new AdminSiteTypeViewModel()
                 {
+                    Id = t.Id,
                     Name = t.Name,
                     Description = t.Description,
                     BuildInName = t.BuildInName
