@@ -6,6 +6,8 @@ using ApplicationCore.Entities.SiteType;
 using ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
+using Infrastructure.AdminSiteTypes;
+using Infrastructure.AdminSiteTypes.DTOs;
 using Infrastructure.Blog;
 using Infrastructure.Blog.DTOs;
 using Infrastructure.ClientProjects;
@@ -158,7 +160,9 @@ namespace Web
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
 
             //Admin Site Types
+            services.AddScoped<IAdminSiteTypeService<AdminSiteTypeDTO>, AdminSiteTypeService>();
             services.AddScoped<IAdminSiteTypesModelFactory, AdminSiteTypesModelFactory>();
+            services.AddScoped<IAppAdminSiteTypesService<SiteType>, AppAdminSiteTypesService>();
 
 
             //Infrastructure Services

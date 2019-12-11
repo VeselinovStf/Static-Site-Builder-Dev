@@ -7,7 +7,7 @@ namespace Web.ViewModels.AdminSiteType
 {
     public class AdminClientSiteTypesViewModel
     {
-        public string ClientId { get; set; }
+        
 
         public IEnumerable<AdminSiteTypeViewModel> SiteTypes { get; set; }
     }

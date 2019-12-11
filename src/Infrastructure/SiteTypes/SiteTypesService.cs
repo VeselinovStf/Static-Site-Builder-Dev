@@ -70,7 +70,7 @@ namespace Infrastructure.SiteTypes
                   repository, newWidgets);
         }
 
-        public async Task<bool> ConfirmTypeAsync(string buildInType)
+        public async Task<IEnumerable<SiteTypeDTO>> GetAllTypesAsync()
         {
             try
             {
@@ -78,6 +78,32 @@ namespace Infrastructure.SiteTypes
 
                 Validator.ObjectIsNull(
                  siteTypes, $"{nameof(SiteTypesService)} : {nameof(GetAllTypesAsync)} : {nameof(siteTypes)} : Can't find build in site types!");
+
+                var serviceModel = new List<SiteTypeDTO>(siteTypes.Select(t => new SiteTypeDTO()
+                {
+                    
+                    Name = t.Name,
+                    Description = t.Description,
+                    BuildInName = t.Type.ToString()
+                }));
+
+                return serviceModel;
+            }
+            catch (Exception ex)
+            {
+                throw new SiteTypesServiceGetAllTypesException($"{nameof(SiteTypesServiceGetAllTypesException)} : Can't get build in types! : {ex.Message}");
+            }
+        }
+
+
+        public async Task<bool> ConfirmTypeAsync(string buildInType)
+        {
+            try
+            {
+                var siteTypes = await this.appSiteTypeService.GetAllAsync();
+
+                Validator.ObjectIsNull(
+                 siteTypes, $"{nameof(SiteTypesService)} : {nameof(ConfirmTypeAsync)} : {nameof(siteTypes)} : Can't find build in site types!");
 
                 if (siteTypes.Any(t => t.Type.ToString() == buildInType))
                 {
@@ -145,48 +171,6 @@ namespace Infrastructure.SiteTypes
             }
         }
 
-        public async Task<IEnumerable<SiteTypeDTO>> GetAllTypesAsync()
-        {
-            try
-            {
-                var siteTypes = await this.appSiteTypeService.GetAllAsync();
-
-                Validator.ObjectIsNull(
-                 siteTypes, $"{nameof(SiteTypesService)} : {nameof(GetAllTypesAsync)} : {nameof(siteTypes)} : Can't find build in site types!");
-
-                var serviceModel = new List<SiteTypeDTO>(siteTypes.Select(t => new SiteTypeDTO()
-                {
-                    Name = t.Name,
-                    Description = t.Description,
-                    BuildInName = t.Type.ToString()
-                }));
-
-                return serviceModel;
-            }
-            catch (Exception ex)
-            {
-                throw new SiteTypesServiceGetAllTypesException($"{nameof(SiteTypesServiceGetAllTypesException)} : Can't get build in types! : {ex.Message}");
-            }
-        }
-
-        public  IList<string> GetBuildInSiteTypes()
-        {
-            try
-            {
-                var buildInSiteTypes =  this.appSiteTypeService.GetSiteTypes();
-
-                Validator.ObjectIsNull(
-                    buildInSiteTypes, $"{nameof(SiteTypesService)} : {nameof(GetBuildInSiteTypes)} : {nameof(buildInSiteTypes)} : Can't get build in site types!");
-
-                return new List<string>(buildInSiteTypes.Select(t => t.ToString()));
-                
-            }
-            catch (Exception ex)
-            {
-
-                throw new SiteTypesServiceGetBuildInSiteTypesException($"{nameof(SiteTypesServiceGetBuildInSiteTypesException)} : Can't get build in types! : {ex.Message}");
-
-            }
-        }
+    
     }
 }

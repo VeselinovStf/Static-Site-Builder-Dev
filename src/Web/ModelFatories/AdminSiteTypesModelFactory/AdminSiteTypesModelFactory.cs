@@ -1,4 +1,5 @@
-﻿using Infrastructure.SiteTypes.DTOs;
+﻿using Infrastructure.AdminSiteTypes.DTOs;
+using Infrastructure.SiteTypes.DTOs;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,11 @@ namespace Web.ModelFatories.AdminSiteTypesModelFactory
 {
     public class AdminSiteTypesModelFactory : IAdminSiteTypesModelFactory
     {
-        public AdminClientSiteTypesViewModel Create(IEnumerable<SiteTypeDTO> serviceCall, string clientId)
+        public AdminClientSiteTypesViewModel Create(IEnumerable<AdminSiteTypeDTO> serviceCall)
         {
             return new AdminClientSiteTypesViewModel()
             {
-                ClientId = clientId,
+                
                 SiteTypes = new List<AdminSiteTypeViewModel>(serviceCall.Select(t => new AdminSiteTypeViewModel()
                 {
                     Name = t.Name,

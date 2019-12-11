@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Interfaces;
+using Infrastructure.AdminSiteTypes.DTOs;
 using Infrastructure.SiteTypes.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,12 +16,12 @@ namespace Web.Controllers
     [Authorize(Roles = "Administrator")]
     public class AdminSiteTypesController : Controller
     {
-        private readonly ISiteTypesService<SiteTypeDTO> siteTypeService;
+        private readonly IAdminSiteTypeService<AdminSiteTypeDTO> siteTypeService;
         private readonly IAdminSiteTypesModelFactory modelFactory;
         private readonly IAppLogger<AdminController> logger;
 
         public AdminSiteTypesController(
-            ISiteTypesService<SiteTypeDTO> siteTypeService,
+            IAdminSiteTypeService<AdminSiteTypeDTO> siteTypeService,
             IAdminSiteTypesModelFactory modelFactory,
             IAppLogger<AdminController> logger)
         {
@@ -30,7 +31,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SiteTypes(string clientId)
+        public async Task<IActionResult> SiteTypes()
         {
             //TODO: do i nead id
             try
@@ -39,7 +40,7 @@ namespace Web.Controllers
 
                 this.logger.LogInformation($"{nameof(AdminSiteTypesController)} : {nameof(SiteTypes)} : Geting administrated site type templates done.");
 
-                var model = this.modelFactory.Create(serviceCall, clientId);
+                var model = this.modelFactory.Create(serviceCall);
 
                 return View(model);
             }
@@ -51,10 +52,7 @@ namespace Web.Controllers
             }
         }
 
-        //Display site type
-        //Create siteType
-        //CreateTemplate
-        [Authorize(Roles = "Administrator")]
+      
         [HttpGet]
         public IActionResult CreateSiteType()
         {
@@ -78,12 +76,31 @@ namespace Web.Controllers
 
         }
 
-        [Authorize(Roles = "Administrator")]
+       
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateSiteType([Bind("Name", "Description", "SiteType")]CreateSiteTypeTemplateViewModel model)
         {
+            try
+            {
+                await this.siteTypeService.AddSiteTypeAsync(model.Name, model.Description, model.SiteType);
 
-            return View();
+                this.logger.LogInformation($"{nameof(AdminSiteTypesController)} : {nameof(CreateSiteType)} : Creating administrated site type done.");
+
+                return RedirectToAction("SiteTypes", "AdminSiteTypes");
+            }
+            catch (Exception ex)
+            {
+
+                this.logger.LogWarning($"{nameof(AdminSiteTypesController)} : {nameof(CreateSiteType)} : Exception - {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { message = "Can't Create site types. Contact support" });
+            }
+          
         }
+
+
+        //CreateTemplate
+
     }
 }
