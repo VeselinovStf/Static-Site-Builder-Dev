@@ -1,0 +1,24 @@
+{
+    "widgetType" : "simple_Elements",
+    "placement" : "top",
+    "name": "language-change",
+    "display": true,    
+    "elements": 
+    [
+        {
+            "name" : "English (ENG)"
+          
+        },
+        {
+            "name" : "Russian (Ru)"
+        },
+        {
+            "name" : "French (FR)"
+        },
+        {
+            "name" : "Spanish (Es)"
+        }
+    ],
+    "dependancy" : null
+        
+}

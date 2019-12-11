@@ -1,0 +1,13 @@
+{
+    "widgetType" : "dependent",
+    "placement" : "site",
+    "name": "deals-of-the-day-new-collection",
+    "display": true,   
+    "dependancy" : 
+    [
+       "products",
+       "product-banner"
+    ],
+    "dependant": true     
+
+}

@@ -1,0 +1,69 @@
+{% assign widget = site.data.widgets.top-header.top-header %}
+{% if widget.dependant %}
+    {% assign widgetDependency = widget.dependancy %}
+{% endif %}
+
+<!-- Add Widget dependencies -->
+{% assign propsTitle =  site.data.widgets.props-title.props-title %}
+{% assign propsPages =  site.data.widgets.props-pages.props-pages %}
+{% assign languageChange =  site.data.widgets.language-change.language-change %}
+{% assign currencyChange =  site.data.widgets.currency-change.currency-change %}
+<!-- Check if widget is displayed-->
+{% if widget.display %}
+<!--TOP HEADER-->
+<div id="top-header">
+    <div class="container">
+        {% if widgetDependency  %}
+        {% for dependancy in widgetDependency %}
+        {% if dependancy contains "props-title"  %}
+        {% if  propsTitle.display %}
+        <div class="pull-left">
+            <span>{{ propsTitle.element }}</span>
+        </div>
+        {% endif %}
+        {% endif %}
+        <div class="pull-right">
+            <ul class="header-top-links">
+                {% if dependancy contains "props-pages"  %}
+                {% if propsPages.display %}
+                {% for element in propsPages.elements %}
+                <li><a href="{{ element.link }}">{{ element.name }}</a></li>
+                {% endfor %}
+                {% endif %}
+                {% endif %}
+                {% if dependancy contains "language-change"  %}
+                {% if  languageChange.display %}
+                <div class="pull-left">
+                    <li class="dropdown default-dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">ENG <i
+                                class="fa fa-caret-down"></i></a>
+                        <ul class="custom-menu">
+                            {% for element in languageChange.elements %}
+                            <li><a href="#">{{element.name}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </div>
+                {% endif %}
+                {% endif %}
+                {% if dependancy contains "currency-change"  %}
+                {% if  currencyChange.display %}
+                <li class="dropdown default-dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">USD <i
+                            class="fa fa-caret-down"></i></a>
+                    <ul class="custom-menu">
+                        {% for element in currencyChange.elements %}
+                        <li><a href="#">{{element.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}
+                {% endif %}
+            </ul>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+<!-- /top Header -->
+{% endif %}

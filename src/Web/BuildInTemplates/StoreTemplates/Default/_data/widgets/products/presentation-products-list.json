@@ -1,0 +1,17 @@
+{
+    "widgetType" : "dependent",
+    "placement" : "site",
+    "name": "presentation-products-list",
+    "display": true,   
+    "dependancy" : 
+    [
+       "deals-of-the-day-new-collection",
+       "deals-of-the-day-product",
+       "latest-products",
+       "latest-products-new-collection",
+       "hot-deal",
+       "picked-for-you"
+    ],
+    "dependant": true     
+
+}

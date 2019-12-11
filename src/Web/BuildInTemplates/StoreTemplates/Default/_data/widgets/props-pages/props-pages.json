@@ -1,0 +1,22 @@
+{
+    "widgetType" : "simple_Elements_Link",
+    "placement" : "top",
+    "name": "currency-change",
+    "display": true,
+    "elements" : 
+        [
+            {
+                "name" : "STORE_NAME",
+                "linkTo" : "/home1"
+            },
+            {
+                "name" : "NEWSLATTER_PAGE",
+                "linkTo" : "/home2"
+            },
+            {
+                "name" : "FAQ_PAGE",
+                "linkTo" : "/home3"
+            }
+        ],
+    "dependancy" : null    
+}

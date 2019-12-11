@@ -1,0 +1,43 @@
+{% assign widget = site.data.widgets.products.presentation-products-list %}
+<!---
+1.st -> get all build in dependancy for current widget
+2.nd -> get client used widget
+3.th -> get client used widdget dependency
+4-th -> widget dependency == 3th
+
+---
+<!-- Check if widget is displayed-->
+{% if widget.display %}
+{% if widget.dependant %}
+    {% assign widgetDependency = widget.dependancy %}
+
+<!--Dependency widgets-->
+{% assign dealsOfTheDayNewCollection =  site.data.widgets.products.deals-of-the-day-new-collection %}
+{% assign dealsOfTheDayProduct =  site.data.widgets.products.deals-of-the-day-product %}
+{% assign latestProductsNewCollection =  site.data.widgets.products.latest-products-new-collection %}
+{% assign latestProducts =  site.data.widgets.products.latest-products %}
+{% assign latestProducts =  site.data.widgets.products.hot-deal %}
+{% assign pickedForYou =  site.data.widgets.products.picked-for-you %}
+
+<!-- Start Widget dependency-->
+{% if widgetDependency %}
+
+    {% for dependancy in widgetDependency %}
+    <!-- Start For each dependency -->
+        {% if dependancy contains "deals-of-the-day-new-collection"  %}
+            {% if dealsOfTheDayNewCollection.display %}           
+                <!--ACTIONS-->
+                {% include  widgets/_building-blogs/_product-display/deals-of-the-day-new-collection.html  %}
+            {% endif %}
+        {% endif %}
+    <!-- End For each dependency -->
+    {% endfor %}
+{% endif %}
+<!-- End Widget dependency-->
+
+
+
+{% endif %}
+{% endif %}
+
+<!-- Add Widget dependencies -->

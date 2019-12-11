@@ -1,0 +1,32 @@
+{
+	"usedWidgets": [
+	{
+		"owner": "header",
+		"name":"top-header",
+		"template" : "defaultStoreTemplate",
+		"sysName": "/_data/widgets/top-header/top-header.json",
+		"location" : "/widgets/_site-structure/_main-blocks/_header/top-header.html",
+		"userAddOnWidgets" :  [
+			"language-change", 
+        	"currency-change", 
+        	"props-pages", 
+        	"props-title"
+		 ]
+	},
+	{
+		"owner": "site",
+		"name":"presentation-products-list",
+		"template" : "defaultStoreTemplate",
+		"sysName": "/_data/widgets/products/presentation-products-list.json",
+		"location" : "/widgets/_building-blogs/_product-display/presentation-products-list.html",
+		"userAddOnWidgets" :  [
+			"deals-of-the-day-new-collection",
+			"deals-of-the-day-product",
+			"latest-products",
+			"latest-products-new-collection",
+			"hot-deal",
+			"picked-for-you"
+		 ]
+	}
+	]
+}

@@ -1,0 +1,19 @@
+{
+	"availibleWidgets":[
+	{
+		"owner": "header",
+		"name":"top-header",
+		"template" : "defaultStoreTemplate",
+		"sysName": "/_data/widgets/top-header/top-header.json",
+		"location" : "/widgets/_site-structure/_main-blocks/_header/top-header.html"
+	},
+	{
+		"owner": "site",
+		"name":"presentation-products-list",
+		"template" : "defaultStoreTemplate",
+		"sysName": "/_data/widgets/products/presentation-products-list.json",
+		"location" : "/widgets/_building-blogs/_product-display/presentation-products-list.html"
+	}
+	
+]
+}

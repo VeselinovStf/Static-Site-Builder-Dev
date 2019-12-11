@@ -1,0 +1,16 @@
+{
+    "widgetType" : "strong_product_banner",
+    "placement" : "site",
+    "name": "product-banner",
+    "display": true,
+    "elements": {
+        "title" : "Deals Of The Day",
+        "link" : "/home",
+        "image" : "/assets/img/banner14.jpg",
+        "description" : "New Collection"
+    }
+    ,
+    "dependancy" : null    
+}
+
+   

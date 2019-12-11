@@ -1,0 +1,9 @@
+{
+    "widgetType" : "simple",
+    "placement" : "top",
+    "name": "top-header-name",
+    "display": true,
+    "multy" : false,
+    "element": "Owsome site name",
+    "dependancy" : null    
+}

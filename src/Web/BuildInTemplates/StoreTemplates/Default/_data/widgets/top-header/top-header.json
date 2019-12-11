@@ -1,0 +1,15 @@
+{
+    "widgetType" : "dependent",
+    "placement" : "top",
+    "name": "top-header",
+    "display": true,   
+    "dependancy" : 
+    [
+        "language-change", 
+        "currency-change", 
+        "props-pages", 
+        "props-title"
+    ],
+    "dependant": true     
+
+}

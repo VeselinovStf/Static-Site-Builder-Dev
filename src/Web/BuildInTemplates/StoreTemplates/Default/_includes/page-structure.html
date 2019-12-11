@@ -1,30 +1,17 @@
+{% assign includeOwnerParameter = include.param %}
+{% assign includeSubOwnerParameter = include.param2 %}
+{% assign elementId = include.elementId %}
 
-{% for config in site.data.site-front %}
+{% for widgetElement in site.data.appUsedWidgetsConfig.usedWidgets %}
     
-    {% if config.name == include.param %}
-        {% if config.display %}
-
-          {% for page-element in config.page-structure %}
-
-            {% if include.param2 %}
-                {% if page-element.name == include.param2 %}
-                  {% if page-element.display == true %}
-                    {% include {{ page-element.element }} %}
-                  {% endif %}
-                {% endif %}
-            {% else %}
-
-                {% if include.productId %}
-                  {% include {{ page-element.element }} productId=include.productId %}
-                {% else %}
-                  {% include {{ page-element.element }} %}
-                {% endif %}
-
-            {% endif %}
-
-          {% endfor %}
-
+    {% if widgetElement.owner ==  includeOwnerParameter%}
+    {% if widgetElement.name ==  includeSubOwnerParameter%}
+        {% if elementId %}
+            {% include  {{ widgetElement.location }} elementId = elementId %}
+        {% else %}
+            {% include {{ widgetElement.location }}  %}
         {% endif %}
     {% endif %}
-
+    {% endif %}
+    
 {% endfor %}

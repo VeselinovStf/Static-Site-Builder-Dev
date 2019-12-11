@@ -1,0 +1,17 @@
+{
+    "widgetType" : "simple_Elements",
+    "placement" : "top",
+    "name": "currency-change",
+    "display": true,
+    "elements": [
+        {
+            "name" : "USD ($)"
+        },
+        {
+            "name" : "EUR (€)"
+        }
+    ],
+    "dependancy" : null    
+}
+
+   
