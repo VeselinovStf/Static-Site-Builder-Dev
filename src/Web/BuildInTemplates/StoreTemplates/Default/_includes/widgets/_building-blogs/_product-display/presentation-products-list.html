@@ -1,4 +1,10 @@
-{% assign widget = site.data.widgets.products.presentation-products-list %}
+<!-- 1-st check if current widget is used ( is in used widgets json )-->
+{% assign usedWidget = site.data.widgets.appUsedWidgetsConfig.usedWidgets %}
+{% for addedWidget in usedWidget %}
+    {% if addedWidget.name contains  "presentation-products-list" %}
+
+       
+        {% assign widget = site.data.widgets.products.presentation-products-list %}
 <!---
 1.st -> get all build in dependancy for current widget
 2.nd -> get client used widget
@@ -11,6 +17,13 @@
 {% if widget.dependant %}
     {% assign widgetDependency = widget.dependancy %}
 
+ <!-- 2-nd if widget is used - check for dependency-->
+        {% for addedWidgetDependency in addedWidget.userAddOnWidgets %}
+
+            {% if addedWidgetDependency contains "addedWidgetDependency" %}
+                {% assign dealsOfTheDayNewCollection =  site.data.widgets.products.deals-of-the-day-new-collection %}
+            {% endif %}
+         {% endfor %}
 <!--Dependency widgets-->
 {% assign dealsOfTheDayNewCollection =  site.data.widgets.products.deals-of-the-day-new-collection %}
 {% assign dealsOfTheDayProduct =  site.data.widgets.products.deals-of-the-day-product %}
@@ -23,21 +36,21 @@
 {% if widgetDependency %}
 
     {% for dependancy in widgetDependency %}
-    <!-- Start For each dependency -->
+<!-- Start For each dependency -->
         {% if dependancy contains "deals-of-the-day-new-collection"  %}
-            {% if dealsOfTheDayNewCollection.display %}           
-                <!--ACTIONS-->
+            {% if dealsOfTheDayNewCollection.display %}
+<!--ACTIONS-->
                 {% include  widgets/_building-blogs/_product-display/deals-of-the-day-new-collection.html  %}
             {% endif %}
         {% endif %}
-    <!-- End For each dependency -->
+<!-- End For each dependency -->
     {% endfor %}
 {% endif %}
 <!-- End Widget dependency-->
-
-
-
 {% endif %}
 {% endif %}
 
 <!-- Add Widget dependencies -->
+    {% endif %}
+{% endfor %}
+
