@@ -20,7 +20,7 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
 
         public bool IsFree { get; set; }
 
-        
+        public string Implementation { get; set; }
 
         public SiteTypesEnum SiteTypeSpecification { get; set; }
 

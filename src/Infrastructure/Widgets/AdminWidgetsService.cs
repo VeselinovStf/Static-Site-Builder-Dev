@@ -45,37 +45,37 @@ namespace Infrastructure.Widgets
             if (!adminRoles.Contains("Administrator"))
             {
                 throw new WidgetServiceGetAllAdminException($"{nameof(WidgetServiceGetAllAdminException)} : Exception : ATTENTION USER WITH ID {clientId} IS NOT ADMIN");
-            }
-
-            var adminWidgets = await this.appClientWidgetService.GetAllAsync(clientId);
+            }         
 
             var availibleSystemWidgets = await this.appWidgetService.GetAllWidgetsAsync();
 
             Validator.ObjectIsNull(
-               adminWidgets, $"{nameof(ClientWidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : Can't find any admin widgets with this id.");
+               availibleSystemWidgets, $"{nameof(ClientWidgetService)} : {nameof(GetAllAsync)} : {nameof(availibleSystemWidgets)} : Can't find any admin widgets with this id.");
 
             var resultModel = new AdminClientWidgetListDTO()
             {
                 ClientId = clientId,
-                ClientWidgets = new List<WidgetDTO>(adminWidgets.ClientWidgets.Select(w => new WidgetDTO()
+                ClientWidgets = new List<WidgetDTO>(availibleSystemWidgets.Select(w => new WidgetDTO()
                 {
-                    Id = w.Widget.Id,
-                    Name = w.Widget.Name,
-                    Description = w.Widget.Description,
-                    Dependency = w.Widget.Dependency.ToString(),
-                    Functionality = w.Widget.Functionality,
-                    IsFree = w.Widget.IsFree,
-                    IsOn = w.Widget.IsOn,
-                    Price = w.Widget.Price,
-                    SiteTypeSpecification = w.Widget.SiteTypeSpecification.ToString(),
-
-                    Version = w.Widget.Version,
-                    Votes = w.Widget.Votes
+                    Id = w.Id,
+                    Name = w.Name,
+                    Description = w.Description,
+                    Dependency = w.Dependency.ToString(),
+                    Functionality = w.Functionality,
+                    IsFree = w.IsFree,
+                    IsOn = w.IsOn,
+                    Price = w.Price,
+                    SiteTypeSpecification = w.SiteTypeSpecification.ToString(),
+                    Implementation = w.Implementation,
+                    Version = w.Version,
+                    Votes = w.Votes
                 })),
                
             };
 
             return resultModel;
         }
+
+    
     }
 }

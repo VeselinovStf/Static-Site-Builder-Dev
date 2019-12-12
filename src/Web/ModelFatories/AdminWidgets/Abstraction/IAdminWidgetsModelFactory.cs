@@ -10,5 +10,7 @@ namespace Web.ModelFatories.AdminWidgets.Abstraction
     public interface IAdminWidgetsModelFactory
     {
         AdminWidgetsListViewModel Create(AdminClientWidgetListDTO serviceCall);
+
+        CreateWidgetViewModel Create(IList<string> buildInSiteTypeWidgets, IList<string> buildInSiteTypes);
     }
 }

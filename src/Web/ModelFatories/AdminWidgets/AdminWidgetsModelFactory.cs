@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Widgets.DTOs;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +27,28 @@ namespace Web.ModelFatories.AdminWidgets
                     IsOn = w.IsOn,
                     Price = w.Price,
                     SiteTypeSpecification = w.SiteTypeSpecification.ToString(),
-
+                    Implementation = w.Implementation,
                     Version = w.Version,
                     Votes = w.Votes
                 }))
                
+            };
+        }
+
+        public CreateWidgetViewModel Create(IList<string> buildInSiteTypeWidgets, IList<string> buildInSiteTypes)
+        {
+            return new CreateWidgetViewModel()
+            {
+                SiteTypes = new List<SelectListItem>(buildInSiteTypes.Select(s => new SelectListItem()
+                {
+                    Text = s,
+                    Value = s
+                })),
+                UsebleWidgetTypes = new List<SelectListItem>(buildInSiteTypeWidgets.Select(w => new SelectListItem()
+                {
+                    Text = w,
+                    Value = w
+                }))
             };
         }
     }

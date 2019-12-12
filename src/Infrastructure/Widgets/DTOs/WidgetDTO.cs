@@ -7,6 +7,7 @@
         public string Description { get; set; }
         public string Functionality { get; set; }
 
+        public string Implementation { get; set; }
         public decimal Price { get; set; }
 
         public int Version { get; set; }

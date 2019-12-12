@@ -85,22 +85,26 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateSiteType([Bind("Name", "Description", "SiteType")]CreateSiteTypeTemplateViewModel model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var resultModel = await this.siteTypeService.AddSiteTypeAsync(model.Name, model.Description, model.SiteType);
+                try
+                {
+                    var resultModel = await this.siteTypeService.AddSiteTypeAsync(model.Name, model.Description, model.SiteType);
 
-                this.logger.LogInformation($"{nameof(AdminSiteTypesController)} : {nameof(CreateSiteType)} : Creating administrated site type done.");
+                    this.logger.LogInformation($"{nameof(AdminSiteTypesController)} : {nameof(CreateSiteType)} : Creating administrated site type done.");
 
-                return RedirectToAction("SiteTypes", "Type", new { siteTypeId = resultModel.Id });
+                    return RedirectToAction("SiteTypes", "Type", new { siteTypeId = resultModel.Id });
+                }
+                catch (Exception ex)
+                {
+
+                    this.logger.LogWarning($"{nameof(AdminSiteTypesController)} : {nameof(CreateSiteType)} : Exception - {ex.Message}");
+
+                    return RedirectToAction("Error", "Home", new { message = "Can't Create site types. Contact support" });
+                }
             }
-            catch (Exception ex)
-            {
 
-                this.logger.LogWarning($"{nameof(AdminSiteTypesController)} : {nameof(CreateSiteType)} : Exception - {ex.Message}");
-
-                return RedirectToAction("Error", "Home", new { message = "Can't Create site types. Contact support" });
-            }
-          
+            return View();
         }
 
         [HttpGet]

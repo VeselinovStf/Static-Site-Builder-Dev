@@ -1,0 +1,86 @@
+﻿@model CreateWidgetViewModel
+
+
+<section class="ftco-section services-section bg-light ">
+    <section class="ftco-section ftco-counter img" id="section-counter">
+        <div class="container">
+            <div class="row justify-content-center mb-1">
+                <div class="col-md-6 text-center heading-section heading-section-white ftco-animate">
+                    <h1>Create Widget</h1>
+                </div>
+            </div>
+            <div class="col-md-6 offset-3 fadeInUp  ">
+                <form method="post" class="container-fluid services">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label asp-for="Name"><i class="zmdi zmdi-email"></i></label>
+                        <input asp-for="Name" type="text" name="Name" placeholder="Site Name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description"><i class="zmdi zmdi-email"></i></label>
+                        <input asp-for="Description" type="text" name="description" placeholder="Site Description" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Functionality"><i class="zmdi zmdi-email"></i></label>
+                        <input asp-for="Functionality" type="text" name="functionality" placeholder="Functionality" />
+                        <span asp-validation-for="Functionality" class="text-danger"></span>
+                    </div>
+                     <div class="form-group">
+                        <label asp-for="Implementation"><i class="zmdi zmdi-email"></i></label>
+                        <textarea class="form-control" asp-for="Implementation"  name="implementation" placeholder="Implementation" rows="10"></textarea>
+                        <span asp-validation-for="Implementation" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Price"><i class="zmdi zmdi-email"></i></label>
+                        <input asp-for="Price" type="number" name="description" placeholder="Price" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Version"><i class="zmdi zmdi-email"></i></label>
+                        <input asp-for="Version" type="text" name="description" placeholder="Version" />
+                        <span asp-validation-for="Version" class="text-danger"></span>
+                    </div>
+                 
+
+                 
+                    <div class="custom-control custom-checkbox">
+                        <input asp-for="IsOn" type="checkbox" class="custom-control-input" id="customCheck2">
+                        <label class="custom-control-label" for="isFree">Turn on widget</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input asp-for="IsFree" type="checkbox" class="custom-control-input" id="customCheck2">
+                        <label class="custom-control-label" for="isFree">Free for all widget</label>
+                    </div>
+                      <div class="form-group">
+                        <label for="siteType"><i class="zmdi zmdi-email"></i></label>
+
+                        <select class="custom-select" asp-for="SiteType" asp-items="Model.SiteTypes">
+                            <option selected>Select build in site type</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="usebleSiteType"><i class="zmdi zmdi-email"></i></label>
+
+                        <select class="custom-select" asp-for="UsebleWidgetType" asp-items="Model.UsebleWidgetTypes">
+                            <option selected>Select build in widget type</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group form-button text-center">
+                        <input type="submit" class="form-submit" value="Create" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</section>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

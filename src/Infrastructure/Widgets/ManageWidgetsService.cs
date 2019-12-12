@@ -1,4 +1,6 @@
 ﻿using ApplicationCore.Entities.SitesTemplates;
+using ApplicationCore.Entities.SiteType;
+using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
 using Infrastructure.Guard;
 using Infrastructure.Widgets.DTOs;
@@ -15,13 +17,49 @@ namespace Infrastructure.Widgets
     {
         private readonly IAppClientWidgetService appClientWidgetService;
         private readonly IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService;
+        private readonly IAppWidgetService appWidgetService;
 
         public ManageWidgetsService(
             IAppClientWidgetService appClientWidgetService,
-            IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService)
+            IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService,
+            IAppWidgetService appWidgetService)
         {
             this.appClientWidgetService = appClientWidgetService ?? throw new ArgumentNullException(nameof(appClientWidgetService));
             this.appSiteTemplateService = appSiteTemplateService ?? throw new ArgumentNullException(nameof(appSiteTemplateService));
+            this.appWidgetService = appWidgetService ?? throw new ArgumentNullException(nameof(appWidgetService));
+        }
+
+        public async Task CreateWidgetAsync(
+            string name, string description, string functionality, string implementation, 
+            decimal price, int version, bool isOn, bool isFree, string widgetType,
+            string usebleWidgetType, string dependency)
+        {
+            Validator.StringIsNullOrEmpty(
+               name, $"{nameof(ManageWidgetsService)} : {nameof(CreateWidgetAsync)} : {nameof(name)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+              description, $"{nameof(ManageWidgetsService)} : {nameof(CreateWidgetAsync)} : {nameof(description)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+              functionality, $"{nameof(ManageWidgetsService)} : {nameof(CreateWidgetAsync)} : {nameof(functionality)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+              implementation, $"{nameof(ManageWidgetsService)} : {nameof(CreateWidgetAsync)} : {nameof(implementation)} : is null/empty");
+
+            try
+            {
+                var widgetTypeEnum = (SiteWidgetEnum)Enum.Parse(typeof(SiteWidgetEnum), usebleWidgetType);
+                var type = (SiteTypesEnum)Enum.Parse(typeof(SiteTypesEnum), widgetType);
+
+                await this.appWidgetService.CreateWidgetAsync( name,  description,  functionality,  implementation,
+             price,  version,  isOn,  isFree,  widgetType, widgetTypeEnum,  dependency,
+             type);
+            }
+            catch (Exception ex)
+            {
+                throw new ManageWidgetsServiceCreateWidgetException($"{nameof(ManageWidgetsServiceCreateWidgetException)} : Exception : Can't create client widgets : {ex.Message}");
+
+            }
         }
 
         public async Task<ClientSiteWidgetsDTO> GetAllAsync(string clientId, string templateName)
@@ -77,6 +115,28 @@ namespace Infrastructure.Widgets
                 throw new ManageWidgetsServiceGetAllAsyncException($"{nameof(ManageWidgetsServiceGetAllAsyncException)} : Exception : Can't get client widgets : {ex.Message}");
 
             }
+        }
+
+        public IList<string> GetBuildInWidgetTypes()
+        {
+
+            try
+            {
+                var buildInWidgetTypes = this.appWidgetService.GetBuildInWidgetTypes();
+
+                Validator.ObjectIsNull(
+                    buildInWidgetTypes, $"{nameof(AdminWidgetsService)} : {nameof(GetBuildInWidgetTypes)} : {nameof(buildInWidgetTypes)} : Can't get build in widget types!");
+
+                return new List<string>(buildInWidgetTypes.Select(t => t.ToString()));
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new WidgetServiceGetBuildInWidgetTypesException($"{nameof(WidgetServiceGetBuildInWidgetTypesException)} : Can't get build in widget types! : {ex.Message}");
+
+            }
+
         }
     }
 }

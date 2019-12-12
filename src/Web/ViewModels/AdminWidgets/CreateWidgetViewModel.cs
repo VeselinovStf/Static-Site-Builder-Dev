@@ -1,6 +1,12 @@
-﻿namespace Web.ViewModels.AdminWidgets
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Web.ViewModels.AdminWidgets
 {
-    public class AdminWidgetViewModel
+    public class CreateWidgetViewModel
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -18,9 +24,14 @@
 
         public bool IsFree { get; set; }
 
-        public string SiteTypeSpecification { get; set; }
+        public string SiteType { get; set; }
 
-        public string UsebleSiteType { get; set; }
+        public IList<SelectListItem> SiteTypes { get; set; }
+
+
+        public string UsebleWidgetType { get; set; }
+
+        public IList<SelectListItem> UsebleWidgetTypes { get; set; }
 
         public string Dependency { get; set; }
     }
