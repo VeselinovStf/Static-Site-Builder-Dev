@@ -8,6 +8,6 @@ namespace ApplicationCore.Interfaces
     public interface IWidgetService<T>
     {
         Task<T> GetAllAsync(string clientId);
-        Task<T> GetAllAdminAsync(string clientId);
+        
     }
 }

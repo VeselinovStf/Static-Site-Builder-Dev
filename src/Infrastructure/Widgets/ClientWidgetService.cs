@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Widgets
 {
-   public class WidgetService : IWidgetService<ClientWidgetListDTO>
+   public class ClientWidgetService : IWidgetService<ClientWidgetListDTO>
     {
         private readonly IAppClientWidgetService appClientWidgetService;
         private readonly IAppWidgetService appWidgetService;
         private readonly IAccountService<ApplicationUser> accountService;
 
-        public WidgetService(
+        public ClientWidgetService(
             IAppClientWidgetService appClientWidgetService,
             IAppWidgetService appWidgetService,
             IAccountService<ApplicationUser> accountService)
@@ -27,92 +27,29 @@ namespace Infrastructure.Widgets
             this.accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
         }
 
-        public async Task<ClientWidgetListDTO> GetAllAdminAsync(string clientId)
-        {
-            Validator.StringIsNullOrEmpty(
-                  clientId, $"{nameof(WidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : is null/empty");
-
-            var user = await this.accountService.FindByIdAsync(clientId);
-
-            Validator.ObjectIsNull(
-               user, $"{nameof(WidgetService)} : {nameof(GetAllAsync)} : {nameof(user)} : Can't find user with this id.");
-
-            var adminRoles = await this.accountService.GetRolesAsync(user);
-
-            Validator.ObjectIsNull(
-               adminRoles, $"{nameof(WidgetService)} : {nameof(GetAllAsync)} : {nameof(adminRoles)} : Can't find admin roles");
-
-            if (!adminRoles.Contains("Administrator"))
-            {
-                throw new WidgetServiceGetAllAdminException($"{nameof(WidgetServiceGetAllAdminException)} : Exception : ATTENTION USER WITH ID {clientId} IS NOT ADMIN");
-            }
-           
-            var adminWidgets = await this.appClientWidgetService.GetAllAsync(clientId);
-
-            var availibleSystemWidgets = await this.appWidgetService.GetAllWidgetsAsync();
-
-            Validator.ObjectIsNull(
-               adminWidgets, $"{nameof(WidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : Can't find any admin widgets with this id.");
-
-            var resultModel = new ClientWidgetListDTO()
-            {
-                ClientId = clientId,
-                ClientWidgets = new List<WidgetDTO>(adminWidgets.ClientWidgets.Select(w => new WidgetDTO()
-                {
-                    Id = w.Widget.Id,
-                    Name = w.Widget.Name,
-                    Description = w.Widget.Description,
-                    Dependency = w.Widget.Dependency.ToString(),
-                    Functionality = w.Widget.Functionality,
-                    IsFree = w.Widget.IsFree,
-                    IsOn = w.Widget.IsOn,
-                    Price = w.Widget.Price,
-                    SiteTypeSpecification = w.Widget.SiteTypeSpecification.ToString(),
-
-                    Version = w.Widget.Version,
-                    Votes = w.Widget.Votes
-                })),
-                AvailibleWidgets = availibleSystemWidgets.Count() < 1 ? new List<WidgetDTO>() : new List<WidgetDTO>(availibleSystemWidgets.Select(w => new WidgetDTO()
-                {
-                    Id = w.Id,
-                    Name = w.Name,
-                    Description = w.Description,
-                    Dependency = w.Dependency.ToString(),
-                    Functionality = w.Functionality,
-                    IsFree = w.IsFree,
-                    IsOn = w.IsOn,
-                    Price = w.Price,
-                    SiteTypeSpecification = w.SiteTypeSpecification.ToString(),
-
-                    Version = w.Version,
-                    Votes = w.Votes
-                }))
-            };
-
-            return resultModel;
-        }
+       
 
         public async Task<ClientWidgetListDTO> GetAllAsync(string clientId)
         {
             try
             {
                 Validator.StringIsNullOrEmpty(
-                  clientId, $"{nameof(WidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : is null/empty");
+                  clientId, $"{nameof(ClientWidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : is null/empty");
 
                 var widgetsCall = await this.appWidgetService.GetAllWidgetsAsync();
 
                 Validator.ObjectIsNull(
-                    widgetsCall, $"{nameof(WidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : Can't find any widgets.");
+                    widgetsCall, $"{nameof(ClientWidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : Can't find any widgets.");
 
                 var clientWidgets = await this.appClientWidgetService.GetAllAsync(clientId);
 
                 Validator.ObjectIsNull(
-                   clientWidgets, $"{nameof(WidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : Can't find any client widgets with this id.");
+                   clientWidgets, $"{nameof(ClientWidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : Can't find any client widgets with this id.");
 
                 var availibleWidgets = widgetsCall.Except(clientWidgets.ClientWidgets.Select(w => w.Widget));
 
                 Validator.ObjectIsNull(
-                  availibleWidgets, $"{nameof(WidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : Can't find any availible widgets for this user.");
+                  availibleWidgets, $"{nameof(ClientWidgetService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : Can't find any availible widgets for this user.");
 
                 var resultModel = new ClientWidgetListDTO()
                 {

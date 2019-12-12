@@ -1,0 +1,23 @@
+﻿@model IEnumerable<AdminWidgetViewModel>
+
+<div class="col-lg-12 py-5">
+    <div class="row">
+        @foreach (var widget in Model)
+        {
+        <div class="col-md-6 ftco-animate fadeInUp ftco-animated">
+             <a href="#" data-toggle="modal" data-target="#@widget.Name">
+                <div class="media block-6 services border text-center">
+                    <div class="icon d-flex align-items-center justify-content-center">
+                        <span class="flaticon-cloud-computing"></span>
+                    </div>
+                    <div class="mt-3 media-body media-body-2">
+                        <h3 class="heading">@widget.Name</h3>
+                        <p>@widget.Description</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+         <partial name="_WidgetOrderDetailsPartial.cshtml" model="widget" />
+        }
+    </div>
+</div>

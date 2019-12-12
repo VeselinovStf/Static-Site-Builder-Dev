@@ -50,27 +50,6 @@ namespace Web.Controllers
             
         }
 
-        [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> AdminWidgets(string clientId)
-        {
-            try
-            {
-                var serviceCall = await this.widgetService.GetAllAdminAsync(clientId);
-
-                this.logger.LogInformation($"{nameof(WidgetController)} : {nameof(AdminWidgets)} : Sucess - Getting Admin Widgets");
-
-                var model = this.modelFactory.Create(serviceCall);
-
-                return View(model);
-            }
-            catch (Exception ex)
-            {
-                this.logger.LogWarning($"{nameof(WidgetController)} : {nameof(AdminWidgets)} : Exception - {ex.Message}");
-
-                return RedirectToAction("Error", "Home", new { message = "Can't display Admin Widgets. Contact support" });
-            }
-
-
-        }
+    
     }
 }

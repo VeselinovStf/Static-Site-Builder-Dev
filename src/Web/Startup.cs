@@ -55,6 +55,8 @@ using Web.ModelFatories.AdminModelFactory;
 using Web.ModelFatories.AdminModelFactory.Abstraction;
 using Web.ModelFatories.AdminSiteTypesModelFactory;
 using Web.ModelFatories.AdminSiteTypesModelFactory.Abstraction;
+using Web.ModelFatories.AdminWidgets;
+using Web.ModelFatories.AdminWidgets.Abstraction;
 using Web.ModelFatories.BlogModelFactory;
 using Web.ModelFatories.BlogModelFactory.Abstraction;
 using Web.ModelFatories.ClientModelFactory;
@@ -136,7 +138,7 @@ namespace Web
             //Widgets
             services.AddScoped<IAppClientWidgetService, AppClientWidgetService>();
             services.AddScoped<IAppWidgetService, AppWidgetService>();
-            services.AddScoped<IWidgetService<ClientWidgetListDTO>, WidgetService>();
+            services.AddScoped<IWidgetService<ClientWidgetListDTO>, ClientWidgetService>();
             services.AddScoped<IWidgetModelFactory, WidgetModelFactory>();
             services.AddScoped<IManageWidgetService<ClientSiteWidgetsDTO>, ManageWidgetsService>();
 
@@ -170,6 +172,9 @@ namespace Web
             services.AddScoped<IAdminSiteTypeUsebleWidgetsService<AdminSiteTypeUsebleWidgetsDTO>, AdminSiteTypeUsebleWidgetsService>();
             services.AddScoped<IAppAdminSiteTypesUsebleWidgetsService<SiteType>, AppAdminSiteTypesUsebleWidgetsService>();
 
+            //Admin Widgets
+            services.AddScoped<IWidgetService<AdminClientWidgetListDTO>, AdminWidgetsService>();
+            services.AddScoped<IAdminWidgetsModelFactory, AdminWidgetsModelFactory>();
 
 
             //Infrastructure Services
