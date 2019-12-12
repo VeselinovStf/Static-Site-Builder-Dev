@@ -12,11 +12,9 @@
         <li class="nav-item d-none d-sm-inline-block">
             <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="ManageUsers">Users</a>
         </li>
+      
         <li class="nav-item d-none d-sm-inline-block">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-route-clientId="@Model.ClientId" asp-action="Index">Projects</a>
-        </li>
-        <li class="nav-item d-none d-sm-inline-block">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Widget" asp-action="AdminWidgets" asp-route-clientId="@Model.ClientId">Sonic Widjets</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Widget" asp-action="AdminWidgets" asp-route-clientId="@Model.ClientId">Widjets</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a class="nav-link text-dark" asp-area="" asp-controller="Widjet" asp-action="AdminWidjets" asp-route-clientId="@Model.ClientId">Site Trade</a>
@@ -28,7 +26,7 @@
             <a class="nav-link text-dark" href="#" onclick="window.open('@Url.Content("~/Messages/Index?clientId=" + Model.ClientId)',target = '_blank', width='500px', height='800px');">Messages</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Settings">Global Settings</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Settings">Settings</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">LogOut</a>

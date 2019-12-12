@@ -1,4 +1,5 @@
 ﻿using Infrastructure.AdminSiteTypes.DTOs;
+using Infrastructure.AdminSiteTypeUsebleWidgets.DTOs;
 using Infrastructure.SiteTypes.DTOs;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace Web.ModelFatories.AdminSiteTypesModelFactory.Abstraction
         AdminClientSiteTypesViewModel Create(IEnumerable<AdminSiteTypeDTO> serviceCall);
 
         CreateSiteTypeTemplateViewModel Create(IList<string> buildInSiteTypes);
+        AdminSiteTypeUsebleWidgetsViewModel Create(AdminSiteTypeUsebleWidgetsDTO buildInSiteTypes);
 
     }
 }

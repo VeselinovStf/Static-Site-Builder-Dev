@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Interfaces;
 using Infrastructure.AdminSiteTypes.DTOs;
+using Infrastructure.AdminSiteTypeUsebleWidgets.DTOs;
 using Infrastructure.SiteTypes.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,15 +18,18 @@ namespace Web.Controllers
     public class AdminSiteTypesController : Controller
     {
         private readonly IAdminSiteTypeService<AdminSiteTypeDTO> siteTypeService;
+        private readonly IAdminSiteTypeUsebleWidgetsService<AdminSiteTypeUsebleWidgetsDTO> siteTypeUsebleWidgetsService;
         private readonly IAdminSiteTypesModelFactory modelFactory;
         private readonly IAppLogger<AdminController> logger;
 
         public AdminSiteTypesController(
             IAdminSiteTypeService<AdminSiteTypeDTO> siteTypeService,
+            IAdminSiteTypeUsebleWidgetsService<AdminSiteTypeUsebleWidgetsDTO> siteTypeUsebleWidgetsService,
             IAdminSiteTypesModelFactory modelFactory,
             IAppLogger<AdminController> logger)
         {
             this.siteTypeService = siteTypeService ?? throw new ArgumentNullException(nameof(siteTypeService));
+            this.siteTypeUsebleWidgetsService = siteTypeUsebleWidgetsService ?? throw new ArgumentNullException(nameof(siteTypeUsebleWidgetsService));
             this.modelFactory = modelFactory ?? throw new ArgumentNullException(nameof(modelFactory));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -102,7 +106,27 @@ namespace Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Type(string siteTypeId)
         {
-            return View();
+            //display single site type
+            //options for add widgets from created widgets
+            try
+            {
+                var serviceCall = await this.siteTypeUsebleWidgetsService.GetSiteTypeAsync(siteTypeId);
+
+
+                this.logger.LogInformation($"{nameof(AdminSiteTypesController)} : {nameof(Type)} : Geting administrated site type done.");
+
+                var model = this.modelFactory.Create(serviceCall);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+
+                this.logger.LogWarning($"{nameof(AdminSiteTypesController)} : {nameof(Type)} : Exception - {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { message = "Can't Get site types. Contact support" });
+            }
+                      
         }
         //CreateTemplate
 

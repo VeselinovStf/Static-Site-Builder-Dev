@@ -1,4 +1,5 @@
 ﻿using Infrastructure.AdminSiteTypes.DTOs;
+using Infrastructure.AdminSiteTypeUsebleWidgets.DTOs;
 using Infrastructure.SiteTypes.DTOs;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -35,6 +36,29 @@ namespace Web.ModelFatories.AdminSiteTypesModelFactory
                 {
                     Value = b,
                     Text = b
+                }))
+            };
+        }
+
+        public AdminSiteTypeUsebleWidgetsViewModel Create(AdminSiteTypeUsebleWidgetsDTO serviceModel)
+        {
+            return new AdminSiteTypeUsebleWidgetsViewModel()
+            {
+                Id = serviceModel.Id,
+                Description = serviceModel.Description,
+                Name = serviceModel.Name,
+                UsebleWidgets = new List<UsebleWidgetViewModel>(serviceModel.UsebleWidgets.Select(w => new UsebleWidgetViewModel()
+                {
+                    Description = w.Description,
+                    Functionality = w.Functionality,
+                    Name = w.Name,
+                    Id = w.Id
+                })),
+                SiteTemplates = new List<AdminSiteTemplateViewModel>(serviceModel.SiteTemplates.Select(t => new AdminSiteTemplateViewModel()
+                {
+                    Name = t.Name,
+                    Description = t.Description,
+                    Id = t.Id
                 }))
             };
         }

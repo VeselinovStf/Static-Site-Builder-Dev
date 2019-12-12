@@ -8,6 +8,8 @@ using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
 using Infrastructure.AdminSiteTypes;
 using Infrastructure.AdminSiteTypes.DTOs;
+using Infrastructure.AdminSiteTypeUsebleWidgets;
+using Infrastructure.AdminSiteTypeUsebleWidgets.DTOs;
 using Infrastructure.Blog;
 using Infrastructure.Blog.DTOs;
 using Infrastructure.ClientProjects;
@@ -163,6 +165,11 @@ namespace Web
             services.AddScoped<IAdminSiteTypeService<AdminSiteTypeDTO>, AdminSiteTypeService>();
             services.AddScoped<IAdminSiteTypesModelFactory, AdminSiteTypesModelFactory>();
             services.AddScoped<IAppAdminSiteTypesService<SiteType>, AppAdminSiteTypesService>();
+
+            //Admin Site Type Useble widgets
+            services.AddScoped<IAdminSiteTypeUsebleWidgetsService<AdminSiteTypeUsebleWidgetsDTO>, AdminSiteTypeUsebleWidgetsService>();
+            services.AddScoped<IAppAdminSiteTypesUsebleWidgetsService<SiteType>, AppAdminSiteTypesUsebleWidgetsService>();
+
 
 
             //Infrastructure Services
