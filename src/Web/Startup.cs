@@ -10,6 +10,8 @@ using Infrastructure.AdminSiteTypes;
 using Infrastructure.AdminSiteTypes.DTOs;
 using Infrastructure.AdminSiteTypeUsebleWidgets;
 using Infrastructure.AdminSiteTypeUsebleWidgets.DTOs;
+using Infrastructure.AdminSiteTypeWidgets;
+using Infrastructure.AdminSiteTypeWidgets.DTOs;
 using Infrastructure.Blog;
 using Infrastructure.Blog.DTOs;
 using Infrastructure.ClientProjects;
@@ -55,6 +57,8 @@ using Web.ModelFatories.AdminModelFactory;
 using Web.ModelFatories.AdminModelFactory.Abstraction;
 using Web.ModelFatories.AdminSiteTypesModelFactory;
 using Web.ModelFatories.AdminSiteTypesModelFactory.Abstraction;
+using Web.ModelFatories.AdminSiteTypeWidgetModelFactory;
+using Web.ModelFatories.AdminSiteTypeWidgetModelFactory.Abstraction;
 using Web.ModelFatories.AdminWidgets;
 using Web.ModelFatories.AdminWidgets.Abstraction;
 using Web.ModelFatories.BlogModelFactory;
@@ -171,6 +175,10 @@ namespace Web
             //Admin Site Type Useble widgets
             services.AddScoped<IAdminSiteTypeUsebleWidgetsService<AdminSiteTypeUsebleWidgetsDTO>, AdminSiteTypeUsebleWidgetsService>();
             services.AddScoped<IAppAdminSiteTypesUsebleWidgetsService<SiteType>, AppAdminSiteTypesUsebleWidgetsService>();
+            services.AddScoped<IAdminSiteTypeWidgetModelFactory, AdminSiteTypeWidgetModelFactory>();
+            services.AddScoped<IAdminSiteTypeUsebleWidgetsService<UsebleSiteTypeWidgetListDTO>, AdminSiteTypeWidgetsService>();
+
+            
 
             //Admin Widgets
             services.AddScoped<IWidgetService<AdminClientWidgetListDTO>, AdminWidgetsService>();

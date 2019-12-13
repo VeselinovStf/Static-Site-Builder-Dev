@@ -1,0 +1,217 @@
+﻿@model CreateUsebleWidgetViewModel
+<style>
+    /* Styling Checkbox Starts */
+    .checkbox-label {
+        display: block;
+        position: relative;
+        margin: auto;
+        cursor: pointer;
+        font-size: 22px;
+        line-height: 24px;
+        height: 24px;
+        width: 24px;
+        clear: both;
+    }
+
+        .checkbox-label input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .checkbox-label .checkbox-custom {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            height: 24px;
+            width: 24px;
+            background-color: transparent;
+            border-radius: 5px;
+            transition: all 0.3s ease-out;
+            -webkit-transition: all 0.3s ease-out;
+            -moz-transition: all 0.3s ease-out;
+            -ms-transition: all 0.3s ease-out;
+            -o-transition: all 0.3s ease-out;
+            border: 2px solid #FFFFFF;
+        }
+
+
+        .checkbox-label input:checked ~ .checkbox-custom {
+            background-color: #FFFFFF;
+            border-radius: 5px;
+            -webkit-transform: rotate(0deg) scale(1);
+            -ms-transform: rotate(0deg) scale(1);
+            transform: rotate(0deg) scale(1);
+            opacity: 1;
+            border: 2px solid #FFFFFF;
+        }
+
+
+        .checkbox-label .checkbox-custom::after {
+            position: absolute;
+            content: "";
+            left: 12px;
+            top: 12px;
+            height: 0px;
+            width: 0px;
+            border-radius: 5px;
+            border: solid #009BFF;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(0deg) scale(0);
+            -ms-transform: rotate(0deg) scale(0);
+            transform: rotate(0deg) scale(0);
+            opacity: 1;
+            transition: all 0.3s ease-out;
+            -webkit-transition: all 0.3s ease-out;
+            -moz-transition: all 0.3s ease-out;
+            -ms-transition: all 0.3s ease-out;
+            -o-transition: all 0.3s ease-out;
+        }
+
+
+        .checkbox-label input:checked ~ .checkbox-custom::after {
+            -webkit-transform: rotate(45deg) scale(1);
+            -ms-transform: rotate(45deg) scale(1);
+            transform: rotate(45deg) scale(1);
+            opacity: 1;
+            left: 8px;
+            top: 3px;
+            width: 6px;
+            height: 12px;
+            border: solid #009BFF;
+            border-width: 0 2px 2px 0;
+            background-color: transparent;
+            border-radius: 0;
+        }
+
+
+
+        /* For Ripple Effect */
+        .checkbox-label .checkbox-custom::before {
+            position: absolute;
+            content: "";
+            left: 10px;
+            top: 10px;
+            width: 0px;
+            height: 0px;
+            border-radius: 5px;
+            border: 2px solid #FFFFFF;
+            -webkit-transform: scale(0);
+            -ms-transform: scale(0);
+            transform: scale(0);
+        }
+
+        .checkbox-label input:checked ~ .checkbox-custom::before {
+            left: -3px;
+            top: -3px;
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            -webkit-transform: scale(3);
+            -ms-transform: scale(3);
+            transform: scale(3);
+            opacity: 0;
+            z-index: 999;
+            transition: all 0.3s ease-out;
+            -webkit-transition: all 0.3s ease-out;
+            -moz-transition: all 0.3s ease-out;
+            -ms-transition: all 0.3s ease-out;
+            -o-transition: all 0.3s ease-out;
+        }
+</style>
+<section class="ftco-section services-section bg-light">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-12 py-1">
+                <div class="row">
+                    <div class="col-lg-12 py-1">
+
+
+                        <div class="col-md-12 ftco-animate">
+
+                            <div class="media block-6 services border text-center">
+                                <div class="icon d-flex align-items-center justify-content-center">
+                                    <span class="flaticon-cloud-computing"></span>
+                                </div>
+                                <div class="mt-3 media-body media-body-2">
+                                    <h3 class="heading">Add Useble Widgets</h3>
+                                    <p>@Model.SiteTypeName</p>
+                                    <input type="hidden" asp-for="@Model.SiteTypeId" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-12 py-1">
+                <div class="row">
+                    <div class="col-lg-12 py-1">
+
+                        <h2 class="mb-4 text-center">Useble Widgets</h2>
+
+                    </div>
+                      <form method="post" style="display:   inherit;">
+                    <div class="row">
+                      
+                            @foreach (var widget in Model.UsebleWidgets)
+                            {
+                                <input type="hidden" asp-for="@widget.WidgetId" />
+                                <div class="col-md-3 ftco-animate">
+
+                                    <div class="media block-3 services border text-center">
+                                        <div class="icon d-flex align-items-center justify-content-center">
+                                            <span class="flaticon-cloud-computing"></span>
+                                        </div>
+                                        <div class="mt-3 media-body media-body-2">
+                                            <h3 class="heading">@widget.Name Widget</h3>
+                                            <p>Functionality : @widget.Functionality</p>
+                                            <p>IsFree : @widget.IsFree</p>
+                                            <p>IsOn : @widget.IsOn</p>
+                                            <textarea rows="3"> @widget.Implementation</textarea>
+                                            <p>Price : @widget.Price</p>
+                                            <p>Version : @widget.Version</p>
+                                            <br />
+                                         
+                                                   <div class="custom-control custom-checkbox">
+                                                <label class="checkbox-label">
+                                                    <input type="checkbox" asp-for="@widget.IsAdded">
+                                                    <span class="checkbox-custom rectangular"></span>
+                                                </label>
+                                                <div class="input-title">Add This Widget</div>
+                                            </div>
+                                  
+                                         
+                                          
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+
+
+
+                            }
+                         
+                      
+                    </div>
+                          <div class="row text-center">
+                            <input type="submit" class="form-submit" value="Create" />
+                        </div>
+                            
+  </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
