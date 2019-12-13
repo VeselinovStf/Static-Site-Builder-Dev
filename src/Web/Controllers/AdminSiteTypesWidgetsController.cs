@@ -48,19 +48,21 @@ namespace Web.Controllers
 			}
         }
 
-		//[HttpPost]
-		//[ValidateAntiForgeryToken]
-		//public async Task<IActionResult> AddUsebleWidget([Bind("SiteTypeId")]CreateUsebleWidgetViewModel model)
-		//{
-		//	try
-		//	{
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> AddUsebleWidget([Bind("SiteTypeId", "UsebleWidgets")]CreateUsebleWidgetViewModel model)
+		{
+			try
+			{
 
-		//	}
-		//	catch (Exception ex)
-		//	{
+				return View();
+			}
+			catch (Exception ex)
+			{
 
-		//		throw;
-		//	}
-		//}
+				throw;
+			}
+
+		}
 	}
 }
