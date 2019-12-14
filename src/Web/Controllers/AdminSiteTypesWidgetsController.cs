@@ -52,17 +52,28 @@ namespace Web.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> AddUsebleWidget([Bind("SiteTypeId", "UsebleWidgets")]CreateUsebleWidgetViewModel model)
 		{
-			try
+			if (ModelState.IsValid)
 			{
+				try
+				{
+					 model.UsebleWidgets.ForEach(async a => 
+						await this.adminSiteTypeUsebleWidgetsService.AddUsebleWidgets(model.SiteTypeId, a.WidgetId)
+						);
 
-				return View();
+					this.logger.LogInformation($"{nameof(AdminSiteTypesWidgetsController)} : {nameof(AddUsebleWidget)} : Adding administrated site type template useble widgets done.");
+
+					return RedirectToAction("Type", "AdminSiteTypes", new { siteTypeId = model.SiteTypeId });
+
+				}
+				catch (Exception ex)
+				{
+					this.logger.LogWarning($"{nameof(AdminSiteTypesWidgetsController)} : {nameof(AddUsebleWidget)} : Can't add administrated site type template useble widgets : {ex.Message}");
+
+					return RedirectToAction("Error", "Home", new { message = "Can't add administrated site type template useble widgets.Contact support!" });
+				}
 			}
-			catch (Exception ex)
-			{
 
-				throw;
-			}
-
+			return View(model.SiteTypeId);
 		}
 	}
 }

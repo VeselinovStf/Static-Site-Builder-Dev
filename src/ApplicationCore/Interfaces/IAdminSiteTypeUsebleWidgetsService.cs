@@ -8,5 +8,6 @@ namespace ApplicationCore.Interfaces
     public interface IAdminSiteTypeUsebleWidgetsService<T>
     {
         Task<T> GetSiteTypeAsync(string siteTypeId);
+        Task AddUsebleWidgets(string siteTypeId, string widgetId);
     }
 }

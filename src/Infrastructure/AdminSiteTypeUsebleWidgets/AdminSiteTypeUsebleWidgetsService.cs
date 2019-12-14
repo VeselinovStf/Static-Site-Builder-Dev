@@ -24,6 +24,26 @@ namespace Infrastructure.AdminSiteTypeUsebleWidgets
             this.appWidgetService = appWidgetService ?? throw new ArgumentNullException(nameof(appWidgetService));
         }
 
+        public async Task AddUsebleWidgets(string siteTypeId, string widgetId)
+        {
+            Validator.StringIsNullOrEmpty(
+               siteTypeId, $"{nameof(AdminSiteTypeUsebleWidgetsService)} : {nameof(AddUsebleWidgets)} : {nameof(siteTypeId)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+               widgetId, $"{nameof(AdminSiteTypeUsebleWidgetsService)} : {nameof(AddUsebleWidgets)} : {nameof(widgetId)} : is null/empty");
+
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new AdminSiteTypeUsebleWidgetsServiceAddUsebleWidgetsException($"{nameof(AdminSiteTypeUsebleWidgetsServiceAddUsebleWidgetsException)} : Can't add widget! : {ex.Message}");
+
+            }
+        }
+
         public async Task<AdminSiteTypeUsebleWidgetsDTO> GetSiteTypeAsync(string siteTypeId)
         {
             Validator.StringIsNullOrEmpty(
