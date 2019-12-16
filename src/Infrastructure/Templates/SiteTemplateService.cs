@@ -14,7 +14,10 @@ namespace Infrastructure.Templates
 
         public async Task AddUsebleWidgets(string siteTypeId, string templateName)
         {
-            throw new NotImplementedException();
+           //call api and get elements
+           //convert if is neaded
+           //add them to Db
+
         }
     }
 }
