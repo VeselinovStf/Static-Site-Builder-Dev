@@ -179,7 +179,8 @@ namespace Web
             services.AddScoped<IAdminSiteTypeUsebleWidgetsService<UsebleSiteTypeWidgetListDTO>, AdminSiteTypeWidgetsService>();
             services.AddScoped<IAdminSiteTypeWidgetService, AdminSiteTypeWidgetService>();
 
-            
+            //Admin Site Template 
+            services.AddScoped<ISiteTemplateService, SiteTemplateService>();
 
             //Admin Widgets
             services.AddScoped<IWidgetService<AdminClientWidgetListDTO>, AdminWidgetsService>();
@@ -201,7 +202,7 @@ namespace Web
                 new List<string> { ".img", ".jpg", ".png", ".otf", ".eot", ".ttf", ".woff", ".woff2" }
                 ));
 
-            services.AddScoped<IAPIRepoClientService<GitLabHubClient>, GitLabAPIClientService>();
+            services.AddScoped<IAPIRepoClientService<RepoPullTemplateDTO>, GitLabAPIClientService>();
             services.AddScoped<IRepoUserKey, GitLabAPIClientService>();
             services.AddScoped<IAPIHostClientService<NetlifyHubClient>, NetlifyApiClientService>();
             services.AddScoped<IHostDeployToken<DeployKeyDTO>, NetlifyApiClientService>();

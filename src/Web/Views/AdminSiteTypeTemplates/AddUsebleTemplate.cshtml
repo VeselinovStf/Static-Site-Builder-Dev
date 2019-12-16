@@ -1,0 +1,35 @@
+﻿@model AdminCreateSiteTypeTemplateViewModel
+
+<section class="ftco-section services-section bg-light ">
+    <section class="ftco-section ftco-counter img" id="section-counter">
+        <div class="container">
+            <div class="row justify-content-center mb-1">
+                <div class="col-md-6 text-center heading-section heading-section-white ftco-animate">
+                    <h1>Create Site Type Template</h1>
+                </div>
+            </div>
+            <div class="col-md-6 offset-3 fadeInUp  ">
+                <form method="post" class="container-fluid services">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="@Model.SiteTypeId" />
+                    
+                    <div class="form-group">
+                        <label asp-for="TemplateName"><i class="zmdi zmdi-email"></i></label>
+                        <input asp-for="TemplateName" type="text" name="Name" placeholder="Template Name" />
+                        <span asp-validation-for="TemplateName" class="text-danger"></span>
+                    </div>                 
+                    <div class="form-group form-button text-center">
+                        <input type="submit" class="form-submit" value="Create" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</section>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

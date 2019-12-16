@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Services.APIClientService.DTOs;
 using Infrastructure.Services.APIClientService.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,6 +35,26 @@ namespace Infrastructure.Services.APIClientService.Clients
                 var resultIdModel = GetCreatedResponse<HubProjectDTO>(responseBody);
 
                 return resultIdModel.id;
+            }
+
+            throw new GitHubClientPostCreateException($"{nameof(GitHubClientPostCreateException)} : Can't create post to repo hub : {response.StatusCode}");
+        }
+
+        public async Task<RepoPullTemplateDTO> PullFromHubAsync(string hubId, string repositoryName, string accesTokken)
+        {
+           
+
+            var response = await this.Client.GetAsync($"projects?access_tok");
+
+            response.EnsureSuccessStatusCode();
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                var resultModel = new RepoPullTemplateDTO();
+
+                return resultModel;
             }
 
             throw new GitHubClientPostCreateException($"{nameof(GitHubClientPostCreateException)} : Can't create post to repo hub : {response.StatusCode}");
