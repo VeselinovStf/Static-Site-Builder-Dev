@@ -84,7 +84,8 @@ namespace Infrastructure.SiteTypes
                     
                     Name = t.Name,
                     Description = t.Description,
-                    BuildInName = t.Type.ToString()
+                    BuildInName = t.Type.ToString(),
+                    Price = t.Price
                 }));
 
                 return serviceModel;

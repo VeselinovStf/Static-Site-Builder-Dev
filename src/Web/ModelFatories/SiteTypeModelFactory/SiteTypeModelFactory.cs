@@ -17,7 +17,8 @@ namespace Web.ModelFatories.SiteTypeModelFactory
                 {
                     Name = t.Name,
                     Description = t.Description,
-                    BuildInName = t.BuildInName
+                    BuildInName = t.BuildInName,
+                     Price = t.Price
                 }))
             };
         }
