@@ -11,38 +11,25 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.AdminSiteTypeUsebleWidgets
 {
-    public class AdminSiteTypeUsebleWidgetsService : IAdminSiteTypeUsebleWidgetsService<AdminSiteTypeUsebleWidgetsDTO>
+    public class AdminSiteTypeUsebleWidgetsService : 
+        IAdminSiteTypeUsebleWidgetsService<AdminSiteTypeUsebleWidgetsDTO>
+        
     {
         private readonly IAppAdminSiteTypesUsebleWidgetsService<SiteType> appAdminSiteTypeUsebleWidgets;
+        private readonly IAppSiteTypesService<SiteType> appSiteTypeService;
         private readonly IAppWidgetService appWidgetService;
 
         public AdminSiteTypeUsebleWidgetsService(
             IAppAdminSiteTypesUsebleWidgetsService<SiteType> appAdminSiteTypeUsebleWidgets,
+            IAppSiteTypesService<SiteType> appSiteTypeService,
             IAppWidgetService appWidgetService)
         {
             this.appAdminSiteTypeUsebleWidgets = appAdminSiteTypeUsebleWidgets ?? throw new ArgumentNullException(nameof(appAdminSiteTypeUsebleWidgets));
+            this.appSiteTypeService = appSiteTypeService ?? throw new ArgumentNullException(nameof(appSiteTypeService));
             this.appWidgetService = appWidgetService ?? throw new ArgumentNullException(nameof(appWidgetService));
         }
 
-        public async Task AddUsebleWidgets(string siteTypeId, string widgetId)
-        {
-            Validator.StringIsNullOrEmpty(
-               siteTypeId, $"{nameof(AdminSiteTypeUsebleWidgetsService)} : {nameof(AddUsebleWidgets)} : {nameof(siteTypeId)} : is null/empty");
-
-            Validator.StringIsNullOrEmpty(
-               widgetId, $"{nameof(AdminSiteTypeUsebleWidgetsService)} : {nameof(AddUsebleWidgets)} : {nameof(widgetId)} : is null/empty");
-
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-
-                throw new AdminSiteTypeUsebleWidgetsServiceAddUsebleWidgetsException($"{nameof(AdminSiteTypeUsebleWidgetsServiceAddUsebleWidgetsException)} : Can't add widget! : {ex.Message}");
-
-            }
-        }
+       
 
         public async Task<AdminSiteTypeUsebleWidgetsDTO> GetSiteTypeAsync(string siteTypeId)
         {

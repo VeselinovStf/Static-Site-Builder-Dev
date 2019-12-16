@@ -15,5 +15,6 @@ namespace ApplicationCore.Interfaces
         Task CreateWidgetAsync(string name, string description, string functionality, string implementation,
             decimal price, int version, bool isOn, bool isFree, string widgetType, SiteWidgetEnum usebleWidgetType, string dependency,
             SiteTypesEnum siteType);
+        Task<Widget> GetWidgetAsync(string widgetId);
     }
 }

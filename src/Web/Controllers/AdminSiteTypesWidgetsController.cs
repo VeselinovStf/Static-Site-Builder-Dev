@@ -15,15 +15,18 @@ namespace Web.Controllers
     public class AdminSiteTypesWidgetsController : Controller
     {
 		private readonly IAdminSiteTypeUsebleWidgetsService<UsebleSiteTypeWidgetListDTO> adminSiteTypeUsebleWidgetsService;
+		private readonly IAdminSiteTypeWidgetService adminSiteTypeWidgetService;
 		private readonly IAdminSiteTypeWidgetModelFactory modelFactory;
 		private readonly IAppLogger<AdminSiteTypesWidgetsController> logger;
 
 		public AdminSiteTypesWidgetsController(
 			IAdminSiteTypeUsebleWidgetsService<UsebleSiteTypeWidgetListDTO> adminSiteTypeUsebleWidgetsService,
+			IAdminSiteTypeWidgetService adminSiteTypeWidgetService,
 			IAdminSiteTypeWidgetModelFactory modelFactory,
 			IAppLogger<AdminSiteTypesWidgetsController> logger)
 		{
 			this.adminSiteTypeUsebleWidgetsService = adminSiteTypeUsebleWidgetsService ?? throw new ArgumentNullException(nameof(adminSiteTypeUsebleWidgetsService));
+			this.adminSiteTypeWidgetService = adminSiteTypeWidgetService ?? throw new ArgumentNullException(nameof(adminSiteTypeWidgetService));
 			this.modelFactory = modelFactory ?? throw new ArgumentNullException(nameof(modelFactory));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
@@ -56,9 +59,11 @@ namespace Web.Controllers
 			{
 				try
 				{
-					 model.UsebleWidgets.ForEach(async a => 
-						await this.adminSiteTypeUsebleWidgetsService.AddUsebleWidgets(model.SiteTypeId, a.WidgetId)
-						);
+					//TODO: Admin fix - strange idea for getting things done
+					model.WidgetId = model.UsebleWidgets.First().WidgetId;
+
+					await this.adminSiteTypeWidgetService.AddUsebleWidgets(model.SiteTypeId, model.WidgetId);
+						
 
 					this.logger.LogInformation($"{nameof(AdminSiteTypesWidgetsController)} : {nameof(AddUsebleWidget)} : Adding administrated site type template useble widgets done.");
 

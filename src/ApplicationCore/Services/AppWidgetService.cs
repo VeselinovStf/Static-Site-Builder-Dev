@@ -61,6 +61,9 @@ namespace ApplicationCore.Services
             };
         }
 
-
+        public async Task<Widget> GetWidgetAsync(string widgetId)
+        {
+            return await this.appWidgetRepository.GetByIdAsync(widgetId);
+        }
     }
 }

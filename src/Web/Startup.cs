@@ -177,6 +177,7 @@ namespace Web
             services.AddScoped<IAppAdminSiteTypesUsebleWidgetsService<SiteType>, AppAdminSiteTypesUsebleWidgetsService>();
             services.AddScoped<IAdminSiteTypeWidgetModelFactory, AdminSiteTypeWidgetModelFactory>();
             services.AddScoped<IAdminSiteTypeUsebleWidgetsService<UsebleSiteTypeWidgetListDTO>, AdminSiteTypeWidgetsService>();
+            services.AddScoped<IAdminSiteTypeWidgetService, AdminSiteTypeWidgetService>();
 
             
 

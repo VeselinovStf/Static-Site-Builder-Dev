@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities.SiteType;
+using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,26 @@ namespace ApplicationCore.Services
             
         }
 
-       
+        public async Task AddWidgetAsync(string siteTypeId, string widgetId)
+        {
+            var siteType = await this.siteTypeRepository.GetByIdAsync(siteTypeId);
+
+            siteType.UsebleWidjets.Add(new SiteTypeWidget()
+            {
+                WidgetId = widgetId
+            });
+
+            await this.siteTypeRepository.UpdateAsync(siteType);
+        }
 
         public async Task<IEnumerable<SiteType>> GetAllAsync()
         {
             return await this.siteTypeRepository.ListAllAsync();
         }
 
-       
+        public async Task<SiteType> GetSiteTypeAsync(string siteTypeId)
+        {
+            return await this.siteTypeRepository.GetByIdAsync(siteTypeId);
+        }
     }
 }

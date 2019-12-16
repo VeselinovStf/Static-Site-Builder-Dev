@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Interfaces
 {
-    public interface IAdminSiteTypeUsebleWidgetsService<T>
+    public interface IAdminSiteTypeWidgetService
     {
-        Task<T> GetSiteTypeAsync(string siteTypeId);
-       
+        Task AddUsebleWidgets(string siteTypeId, string widgetId);
     }
 }

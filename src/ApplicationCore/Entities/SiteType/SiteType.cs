@@ -7,6 +7,11 @@ namespace ApplicationCore.Entities.SiteType
 {
     public class SiteType : DescriptiveEntity
     {
+        public SiteType()
+        {
+            this.SiteTemplates = new HashSet<SiteTemplate>();
+            this.UsebleWidjets = new HashSet<SiteTypeWidget>();
+        }
         public SiteTypesEnum Type { get; set; }
 
         public ICollection<SiteTemplate> SiteTemplates { get; set; }

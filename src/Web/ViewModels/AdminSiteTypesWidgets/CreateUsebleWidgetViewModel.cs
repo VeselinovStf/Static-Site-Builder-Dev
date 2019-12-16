@@ -12,5 +12,7 @@ namespace Web.ViewModels.AdminSiteTypesWidgets
         public string SiteTypeName { get; set; }
 
         public List<AddUsebleWidgetViewModel> UsebleWidgets { get; set; }
+
+        public string WidgetId { get; set; }
     }
 }
