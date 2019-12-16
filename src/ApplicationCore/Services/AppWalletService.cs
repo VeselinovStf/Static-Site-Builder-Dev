@@ -22,7 +22,7 @@ namespace ApplicationCore.Services
         {
             var wallet = await this.walletRepository.GetByIdAsync(walledId);
 
-            //wallet.AvailibleCredit += 1;
+            wallet.AvailibleCredit += 1;
 
             await this.walletRepository.UpdateAsync(wallet);
         }

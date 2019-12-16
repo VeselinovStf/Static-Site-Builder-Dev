@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ApplicationCore.Entities.SitesTemplates
 {
-    public class SiteTemplate : DescriptiveEntity, IAggregateRoot
+    public class SiteTemplate : DescriptiveEntity, IAggregateRoot, ISelingEntity
     {
         private List<SiteTemplateElement> _siteTemplateElements = new List<SiteTemplateElement>();
 
@@ -17,6 +17,27 @@ namespace ApplicationCore.Entities.SitesTemplates
         }
 
         public string SiteTypeId { get; set; }
+
+        public bool IsFree { get; set; }
+
+        public decimal Price
+        {
+            get
+            {
+                if (this.IsFree)
+                {
+                    return 0m;
+                }
+                else
+                {
+                    return this.Price;
+                }
+            }
+            set
+            {
+                this.Price = value;
+            }
+        }
 
         public SiteType.SiteType SiteType { get; set; }
 

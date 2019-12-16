@@ -7,12 +7,33 @@ using System.Collections.Generic;
 
 namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
 {
-    public class StoreTypeSite : DescriptiveEntity, IAggregateRoot
+    public class StoreTypeSite : DescriptiveEntity, IAggregateRoot, ISelingEntity
     {
         public string TemplateName { get; set; }
         public string ClientId { get; set; }
         public string LaunchingConfigId { get; set; }
         public LaunchConfig LaunchingConfig { get; set; }
+
+        public bool IsFree { get; set; }
+
+        public decimal Price
+        {
+            get
+            {
+                if (this.IsFree)
+                {
+                    return 0m;
+                }
+                else
+                {
+                    return this.Price;
+                }
+            }
+            set
+            {
+                this.Price = value;
+            }
+        }
         public string ProjectId { get; set; }
         public ICollection<SiteWidget> SiteUsedWidgets { get; set; }
 

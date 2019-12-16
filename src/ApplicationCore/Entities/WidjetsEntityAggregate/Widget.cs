@@ -1,10 +1,11 @@
 ﻿using ApplicationCore.Entities.BaseEntities;
 using ApplicationCore.Entities.SiteType;
+using ApplicationCore.Interfaces;
 using System.Collections.Generic;
 
 namespace ApplicationCore.Entities.WidjetsEntityAggregate
 {
-    public class Widget : DescriptiveEntity
+    public class Widget : DescriptiveEntity, ISelingEntity
     {
         public string Functionality { get; set; }
 

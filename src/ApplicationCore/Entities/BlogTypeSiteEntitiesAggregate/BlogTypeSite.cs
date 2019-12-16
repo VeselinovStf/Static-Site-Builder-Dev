@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace ApplicationCore.Entities.BlogSiteTypeEntities
 {
-    public class BlogTypeSite : DescriptiveEntity, IAggregateRoot
+    public class BlogTypeSite : DescriptiveEntity, IAggregateRoot, ISelingEntity
     {
 
         public string TemplateName { get; set; }
@@ -16,6 +16,28 @@ namespace ApplicationCore.Entities.BlogSiteTypeEntities
         public string LaunchingConfigId { get; set; }
         public LaunchConfig LaunchingConfig { get; set; }
         public string ProjectId { get; set; }
+
+        public bool IsFree { get; set; }
+
+        public decimal Price
+        {
+            get
+            {
+                if (this.IsFree)
+                {
+                    return 0m;
+                }
+                else
+                {
+                    return this.Price;
+                }
+            }
+            set
+            {
+                this.Price = value;
+            }
+        }
+
         public ICollection<SiteWidget> SiteUsedWidgets { get; set; }
 
         private readonly List<BlogPost> _blogPosts = new List<BlogPost>();
@@ -38,9 +60,9 @@ namespace ApplicationCore.Entities.BlogSiteTypeEntities
         }
 
         //Build in widjets
-       
 
-    
+
+
 
         public void AddBlogPost(string name, string description,
             string header, string image, string content,
