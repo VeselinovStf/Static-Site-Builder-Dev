@@ -22,7 +22,7 @@
       </div>
       <div class="modal-footer">
           <div class="justify-content-center">
-               <button type="button" class="btn btn-info d-block  btn-outline-dark" data-dismiss="modal">Add This Widget!Comming Soon..</button>
+               <a asp-controller="Widget" asp-action="AddWidget" asp-route-widgetId="@Model.Id" asp-route-clientId="@Model.ClientId" type="button" class="btn btn-info d-block  btn-outline-dark" data-dismiss="modal">Buy Now</a>
           </div>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>

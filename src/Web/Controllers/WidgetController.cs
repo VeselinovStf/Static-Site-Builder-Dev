@@ -50,6 +50,27 @@ namespace Web.Controllers
             
         }
 
-    
+        [Authorize(Roles = "Client")]
+        public async Task<IActionResult> AddWidget(string widgetId, string clientId)
+        {
+            try
+            {
+                await this.widgetService.AddWidget(widgetId, clientId);
+
+                this.logger.LogInformation($"{nameof(WidgetController)} : {nameof(AddWidget)} : Sucess - Adding Client Widgets");              
+
+                return RedirectToAction("WidgetController", "ManageClientWidgets", new { clientId = clientId });
+
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(WidgetController)} : {nameof(AddWidget)} : Exception - {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { message = "Can't add Client Widgets. Contact support" });
+            }
+
+
+        }
+
     }
 }
