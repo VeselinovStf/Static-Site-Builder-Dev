@@ -11,5 +11,6 @@ namespace Infrastructure.Wallet.DTOs
         public string WalledId { get; set; }
 
         public decimal AwailibleTokens { get; set; }
+        public decimal AwailibleDiamonds { get; set; }
     }
 }

@@ -10,5 +10,6 @@ namespace ApplicationCore.Interfaces
         Task<T> GetWalletBuyClientIdAsync(string clientId);
         Task<T> GetWalletAsync(string clientWalletId);
         Task AddTokenAsync(string walledId);
+        Task AddDiamandAsync(string walledId);
     }
 }

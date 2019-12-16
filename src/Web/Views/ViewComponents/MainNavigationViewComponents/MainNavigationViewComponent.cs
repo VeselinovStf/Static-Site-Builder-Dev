@@ -54,6 +54,7 @@ namespace Web.Views.ViewComponents.MainNavigationViewComponents
 
                         clientViewModel.WalletAvailibleTokens = wallet.AwailibleTokens;
                         clientViewModel.WalledId = wallet.WalledId;
+                        clientViewModel.WalletAwailibleDiamonds = wallet.AwailibleDiamonds;
 
                         return View("ClientMenu", clientViewModel);
                     }

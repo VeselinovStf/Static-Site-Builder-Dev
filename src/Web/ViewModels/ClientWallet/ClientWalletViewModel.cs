@@ -11,6 +11,10 @@ namespace Web.ViewModels.ClientWallet
 
         public string WalletId { get; set; }
 
+        public bool IsTokenOrDiamond { get; set; }
+
+
+
 
     }
 }

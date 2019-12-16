@@ -16,6 +16,8 @@ namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
 
         public bool IsFree { get; set; }
 
+        private decimal UnitPrice { get; set; }
+
         public decimal Price
         {
             get
@@ -26,12 +28,12 @@ namespace ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate
                 }
                 else
                 {
-                    return this.Price;
+                    return this.UnitPrice;
                 }
             }
             set
             {
-                this.Price = value;
+                this.UnitPrice = value;
             }
         }
         public string ProjectId { get; set; }

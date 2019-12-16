@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Wallet
 {
-    public class WalletService : IWalletService<WalletDTO>, ITokenService
+    public class WalletService : IWalletService<WalletDTO>, ITokenService, IDiamondService
     {
         private readonly IAppWalletService<ApplicationCore.Entities.Wallet.Wallet> appWalletService;
 
@@ -17,6 +17,32 @@ namespace Infrastructure.Wallet
             IAppWalletService<ApplicationCore.Entities.Wallet.Wallet> appWalletService)
         {
             this.appWalletService = appWalletService ?? throw new ArgumentNullException(nameof(appWalletService));
+        }
+
+        public async Task AddDiamond(string walletId)
+        {
+           
+                Validator.StringIsNullOrEmpty(
+                    walletId, $"{nameof(WalletService)} : {nameof(AddDiamond)} : {nameof(walletId)} : is null/empty");
+
+                try
+                {
+
+
+                    var walletCall = await this.appWalletService.GetWalletAsync(walletId);
+
+                    Validator.ObjectIsNull(
+                        walletCall, $"{nameof(WalletService)} : {nameof(AddToken)} : {nameof(walletCall)} : Can't find client wallet with this id");
+
+                    //TODO: WALLET - REAL LIFE GET FROM CLIENT CARD $ And bye tokens
+                    await this.appWalletService.AddDiamandAsync(walletId);
+
+                }
+                catch (Exception ex)
+                {
+                    throw new WalletServiceAddDiamondAsyncException($"{nameof(WalletServiceAddDiamondAsyncException)} : Exception : Can't add diamond to client walled : {ex.Message}");
+                }
+            
         }
 
         public async Task AddToken(string walledId)
@@ -41,6 +67,11 @@ namespace Infrastructure.Wallet
             {
                 throw new WalletServiceAddTokenAsyncException($"{nameof(WalletServiceAddTokenAsyncException)} : Exception : Can't add token to client walled : {ex.Message}");
             }
+        }
+
+        public Task ExchangeToken(string walletId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<WalletDTO> GetWalletAsync(string clientWalletId)
@@ -89,7 +120,8 @@ namespace Infrastructure.Wallet
                 {
                      ClientId = clientId,
                      WalledId = walletCall.Id,
-                      AwailibleTokens = walletCall.AvailibleCredit
+                      AwailibleTokens = walletCall.AvailibleCredit,
+                      AwailibleDiamonds = walletCall.AvailibleDiamons
                 };
 
                 return returnModel;

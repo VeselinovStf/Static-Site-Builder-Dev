@@ -18,6 +18,15 @@ namespace ApplicationCore.Services
             this.walletRepository = walletRepository ?? throw new ArgumentNullException(nameof(walletRepository));
         }
 
+        public async Task AddDiamandAsync(string walledId)
+        {
+            var wallet = await this.walletRepository.GetByIdAsync(walledId);
+
+            wallet.AvailibleDiamons += 1;
+
+            await this.walletRepository.UpdateAsync(wallet);
+        }
+
         public async Task AddTokenAsync(string walledId)
         {
             var wallet = await this.walletRepository.GetByIdAsync(walledId);

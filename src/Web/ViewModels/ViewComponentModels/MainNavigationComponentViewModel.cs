@@ -6,5 +6,7 @@
 
         public string WalledId { get; set; }
         public decimal WalletAvailibleTokens { get; set; }
+
+        public decimal WalletAwailibleDiamonds { get; set; }
     }
 }

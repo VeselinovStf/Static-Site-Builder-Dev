@@ -14,17 +14,20 @@ namespace Web.Controllers
     {
         private readonly IWalletService<WalletDTO> walletService;
         private readonly ITokenService tokenService;
+        private readonly IDiamondService diamondService;
         private readonly IClientWalletModelFactory modelFactory;
         private readonly IAppLogger<ClientWalletController> logger;
 
         public ClientWalletController(
             IWalletService<WalletDTO> walletService,
             ITokenService tokenService,
+            IDiamondService diamondService,
             IClientWalletModelFactory modelFactory,
             IAppLogger<ClientWalletController> logger)
         {
             this.walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
             this.tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
+            this.diamondService = diamondService ?? throw new ArgumentNullException(nameof(diamondService));
             this.modelFactory = modelFactory ?? throw new ArgumentNullException(nameof(modelFactory));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -40,7 +43,7 @@ namespace Web.Controllers
 
 
                 var model = this.modelFactory.Create(serviceCall);
-
+                model.IsTokenOrDiamond = false;
                 return View(model);
             }
             catch (Exception ex)
@@ -52,30 +55,86 @@ namespace Web.Controllers
             }           
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Wallet([Bind("WalletId")]ClientWalletViewModel model)
+        [HttpGet]
+        
+        public async Task<IActionResult> AddToken(string walletId)
         {
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    await this.tokenService.AddToken(model.WalletId);
 
-                    this.logger.LogInformation($"{nameof(ClientWalletController)} : {nameof(Wallet)} : Success in adding token to user wallet");
+                await this.tokenService.AddToken(walletId);
 
-                    return RedirectToAction("Wallet", "ClientWallet", new { clientWalletId = model.WalletId });
-                }
-                catch (Exception ex)
-                {
+                this.logger.LogInformation($"{nameof(ClientWalletController)} : {nameof(AddToken)} : Success in adding token to user wallet");             
 
-                    this.logger.LogWarning($"{nameof(ClientWalletController)} : {nameof(Wallet)} : Exception - {ex.Message}");
+                return RedirectToAction("Wallet", "ClientWallet", new { clientWalletId = walletId });
 
-                    return RedirectToAction("Error", "Home", new { message = "Can't add tokens to Wallet. Contact support" });
-                }
+
+            }
+            catch (Exception ex)
+            {
+
+                this.logger.LogWarning($"{nameof(ClientWalletController)} : {nameof(Wallet)} : Exception - {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { message = "Can't add tokens to Wallet. Contact support" });
             }
 
-            return View(model);
         }
+
+        [HttpGet]
+        
+        public async Task<IActionResult> AddDiamond(string walletId)
+        {
+
+            try
+            {
+
+
+           
+                await this.diamondService.AddDiamond(walletId);
+
+                this.logger.LogInformation($"{nameof(ClientWalletController)} : {nameof(AddDiamond)} : Success in adding diamond to user wallet");
+
+
+                return RedirectToAction("Wallet", "ClientWallet", new { clientWalletId = walletId });
+
+
+            }
+            catch (Exception ex)
+            {
+
+                this.logger.LogWarning($"{nameof(ClientWalletController)} : {nameof(AddDiamond)} : Exception - {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { message = "Can't add tokens to Wallet. Contact support" });
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ExchangeToken(string walletId)
+        {
+
+            try
+            {
+                //await this.diamondService.ExchangeToken(walletId);
+
+                //this.logger.LogInformation($"{nameof(ClientWalletController)} : {nameof(ExchangeToken)} : Success in adding diamond to user wallet");
+
+
+                //return RedirectToAction("Wallet", "ClientWallet", new { clientWalletId = walletId });
+                return RedirectToAction("Error", "Home", new { message = "Sorry byt this Function is under construction. We are working on in, don't warry!" });
+
+            }
+            catch (Exception ex)
+            {
+
+                this.logger.LogWarning($"{nameof(ClientWalletController)} : {nameof(ExchangeToken)} : Exception - {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { message = "Can't add tokens to Wallet. Contact support" });
+            }
+
+        }
+
     }
 }

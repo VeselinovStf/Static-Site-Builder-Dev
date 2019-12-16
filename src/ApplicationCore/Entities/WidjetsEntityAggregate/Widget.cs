@@ -9,7 +9,25 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
     {
         public string Functionality { get; set; }
 
-        public decimal Price { get; set; }
+        private decimal UnitPrice { get; set; }
+        public decimal Price
+        {
+            get
+            {
+                if (this.IsFree)
+                {
+                    return 0m;
+                }
+                else
+                {
+                    return this.UnitPrice;
+                }
+            }
+            set
+            {
+                this.UnitPrice = value;
+            }
+        }
 
         public int Version { get; set; }
 

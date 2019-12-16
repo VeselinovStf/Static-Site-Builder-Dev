@@ -314,7 +314,12 @@ namespace Infrastructure.Identity
                     {
                         WidgetId = a.Id,
                     }))
+                },
+                Wallet = new ApplicationCore.Entities.Wallet.Wallet()
+                {
+                     AvailibleDiamons = 15
                 }
+                
             };
 
             var result = await this.userManager.CreateAsync(newUser, password);

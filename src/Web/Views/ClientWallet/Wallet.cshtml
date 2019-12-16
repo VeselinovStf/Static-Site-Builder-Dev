@@ -6,7 +6,7 @@
             <div class="row justify-content-center mb-1">
                 <div class="col-md-5 text-center heading-section heading-section-white ftco-animate">
                     <h1>Wallet</h1>
-                     <p>SST$ : @Model.AvailibleTokens</p>
+                    <p>SST$ : @Model.AvailibleTokens</p>
                 </div>
             </div>
         </div>
@@ -14,13 +14,12 @@
     <div class="container py-5">
         <div class="row">
             <div class="col-lg-12 ">
-               
 
 
-                    <div class="col-md-12 ftco-animate fadeInUp ftco-animated">
-                        <form method="post">                           
-                            <input type="hidden" asp-for="@Model.WalletId" />
-                             <div class="media block-5 services border text-center">
+
+                <div class="col-md-12 ftco-animate fadeInUp ftco-animated">
+                   <a asp-action="AddToken" asp-controller="ClientWallet" asp-route-walletId="@Model.WalletId">
+                        <div class="media block-5 services border text-center">
                             <div class="icon d-flex align-items-center justify-content-center">
                                 <span class="flaticon-cloud"></span>
                             </div>
@@ -28,18 +27,53 @@
                                 <h3 class="heading">Add SST$ TOKEN</h3>
 
                             </div>
-                                 <div class="center-block display-flex-center">
-                                <button type="submit"  class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Add</button>
-                            </div>
+                         
                         </div>
-                            
-                        </form>
-                       
 
-                    </div>
+                    </a>
+
+
+                </div>
+
+                <div class="col-md-12 ftco-animate fadeInUp ftco-animated">
+                    <a asp-action="AddDiamond" asp-controller="ClientWallet" asp-route-walletId="@Model.WalletId">
+                        
+                        <div class="media block-5 services border text-center">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <span class="flaticon-cloud"></span>
+                            </div>
+                            <div class="mt-3 media-body media-body-2">
+                                <h3 class="heading">Add Diamonds^</h3>
+
+                            </div>
+                           
+                        </div>
+
+                    </a>
+
+
                 </div>
             </div>
+            <div class="col-md-12 ftco-animate fadeInUp ftco-animated">
+
+                <a asp-action="ExchangeToken" asp-controller="ClientWallet" asp-route-widgetId="@Model.WalletId">
+                    <div class="media block-5 services border text-center">
+                        <div class="icon d-flex align-items-center justify-content-center">
+                            <span class="flaticon-cloud"></span>
+                        </div>
+                        <div class="mt-3 media-body media-body-2">
+                            <h3 class="heading">EXCHANGE $ for ^</h3>
+
+
+                        </div>
+                    </div>
+                </a>
+
+
+            </div>
         </div>
-    
-    
+    </div>
+
+
+
 </section>

@@ -10,5 +10,7 @@ namespace ApplicationCore.Entities.Wallet
         public string ClientId { get; set; }
 
         public decimal AvailibleCredit { get; set; }
+
+        public decimal AvailibleDiamons { get; set; }
     }
 }
