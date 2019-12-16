@@ -199,6 +199,7 @@ namespace Web
             //Tokens
             services.AddScoped<ITokenService, WalletService>();
             services.AddScoped<IDiamondService, WalletService>();
+            services.AddScoped<IAppProjectCalculatorService, AppProjectCalculatorService>();
 
 
             //Infrastructure Services

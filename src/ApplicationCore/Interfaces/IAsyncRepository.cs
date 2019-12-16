@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities.BaseEntities;
+using ApplicationCore.Entities.SiteType;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -21,5 +22,6 @@ namespace ApplicationCore.Interfaces
         Task DeleteAsync(T entity);
 
         Task<int> CountAsync(ISpecification<T> spec);
+        
     }
 }

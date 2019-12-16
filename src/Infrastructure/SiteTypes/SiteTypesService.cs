@@ -18,6 +18,7 @@ namespace Infrastructure.SiteTypes
         private readonly IAppProjectsService<Project> appProjectService;
         private readonly IAppClientWidgetService appClientWidgetService;
         private readonly IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService;
+        private readonly IAppProjectCalculatorService appProjectCalculator;
         private readonly IAppWidgetService appWidgetService;
         private readonly Dictionary<SiteTypesEnum, SiteTypesFactory> _factories;
 
@@ -26,6 +27,7 @@ namespace Infrastructure.SiteTypes
             IAppProjectsService<Project> appProjectService,
             IAppClientWidgetService appClientWidgetService,
             IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService,
+            IAppProjectCalculatorService appProjectCalculator,
             IAppWidgetService appWidgetService
 
             )
@@ -34,6 +36,7 @@ namespace Infrastructure.SiteTypes
             this.appProjectService = appProjectService ?? throw new ArgumentNullException(nameof(appProjectService));
             this.appClientWidgetService = appClientWidgetService ?? throw new ArgumentNullException(nameof(appClientWidgetService));
             this.appSiteTemplateService = appSiteTemplateService ?? throw new ArgumentNullException(nameof(appSiteTemplateService));
+            this.appProjectCalculator = appProjectCalculator ?? throw new ArgumentNullException(nameof(appProjectCalculator));
             this.appWidgetService = appWidgetService ?? throw new ArgumentNullException(nameof(appWidgetService));
             _factories = new Dictionary<SiteTypesEnum, SiteTypesFactory>
                         {
@@ -61,13 +64,25 @@ namespace Infrastructure.SiteTypes
             var systemWidgetsCall = await this.appWidgetService.GetAllWidgetsAsync();
 
             //Get new widget
-            var newWidgets = systemWidgetsCall.Where(w => usebleWidgetsId.Contains(w.Id));
+            var newWidgets = systemWidgetsCall.Where(w => usebleWidgetsId.Contains(w.Id));     
 
-            await _factories[action].Create(clientProjectId,
-                  name, description, clientId,
-                  buildInType, templateName,
-                  cardApiKey, cardServiceGate, hostingServiceGate,
-                  repository, newWidgets);
+            bool CanBuy = await this.appProjectCalculator.TakeDiamondsAsync(clientId, buildInType, templateName);
+
+            if (CanBuy)
+            {
+           
+                await _factories[action].Create(clientProjectId,
+                 name, description, clientId,
+                 buildInType, templateName,
+                 cardApiKey, cardServiceGate, hostingServiceGate,
+                 repository, newWidgets);
+            }
+            else
+            {
+                throw new NotEnoughtDiamondsSiteTypeServiceException_Note("Incofitiant Diamonds");
+            }
+           
+            
         }
 
         public async Task<IEnumerable<SiteTypeDTO>> GetAllTypesAsync()
