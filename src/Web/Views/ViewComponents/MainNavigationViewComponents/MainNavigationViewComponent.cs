@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Interfaces;
 using Infrastructure.Identity;
+using Infrastructure.Wallet.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,15 +15,18 @@ namespace Web.Views.ViewComponents.MainNavigationViewComponents
     {
         private readonly IHttpContextAccessor httpContext;
         private readonly IAccountService<ApplicationUser> accountService;
+        private readonly IWalletService<WalletDTO> walletService;
         private readonly IAppLogger<MainNavigationViewComponent> logger;
 
         public MainNavigationViewComponent(
             IHttpContextAccessor httpContext,
             IAccountService<ApplicationUser> accountService,
+            IWalletService<WalletDTO> walletService,
             IAppLogger<MainNavigationViewComponent> logger)
         {
             this.httpContext = httpContext ?? throw new ArgumentNullException(nameof(httpContext));
             this.accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
+            this.walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -39,11 +43,18 @@ namespace Web.Views.ViewComponents.MainNavigationViewComponents
 
                     var clientViewModel = new MainNavigationComponentViewModel()
                     {
-                        ClientId = client.Id
+                        ClientId = client.Id,
+                        
                     };
 
                     if (role.Contains("Client"))
                     {
+
+                        var wallet = await this.walletService.GetWalletByClientIdAsync(client.Id);
+
+                        clientViewModel.WalletAvailibleTokens = wallet.AwailibleTokens;
+                        clientViewModel.WalledId = wallet.WalledId;
+
                         return View("ClientMenu", clientViewModel);
                     }
                     else

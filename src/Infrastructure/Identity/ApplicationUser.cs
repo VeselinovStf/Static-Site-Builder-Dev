@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Entities.MessageAggregate;
 using ApplicationCore.Entities.PostAggregate;
 using ApplicationCore.Entities.SiteProjectAggregate;
+using ApplicationCore.Entities.Wallet;
 using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -32,5 +33,7 @@ namespace Infrastructure.Identity
 
         public string ClientWidjetId { get; set; }
         public ApplicationUserWidgets ClientWidjets { get; set; }
+
+        public ApplicationCore.Entities.Wallet.Wallet Wallet { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using ApplicationCore.Entities.SiteProjectAggregate;
 using ApplicationCore.Entities.SitesTemplates;
 using ApplicationCore.Entities.SiteType;
 using ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate;
+using ApplicationCore.Entities.Wallet;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
 using Infrastructure.AdminSiteTypes;
@@ -39,6 +40,8 @@ using Infrastructure.SiteTypes.DTOs;
 using Infrastructure.Storage;
 using Infrastructure.Templates;
 using Infrastructure.Templates.DTOs;
+using Infrastructure.Wallet;
+using Infrastructure.Wallet.DTOs;
 using Infrastructure.Widgets;
 using Infrastructure.Widgets.DTOs;
 using Microsoft.AspNetCore.Builder;
@@ -67,6 +70,8 @@ using Web.ModelFatories.ClientModelFactory;
 using Web.ModelFatories.ClientModelFactory.Abstraction;
 using Web.ModelFatories.ClientSettingsModelFactory;
 using Web.ModelFatories.ClientSettingsModelFactory.Abstraction;
+using Web.ModelFatories.ClientWalletModelFactory;
+using Web.ModelFatories.ClientWalletModelFactory.Abstraction;
 using Web.ModelFatories.MessagesModelFactory;
 using Web.ModelFatories.MessagesModelFactory.Abstraction;
 using Web.ModelFatories.ProjectsModelFactory;
@@ -185,6 +190,14 @@ namespace Web
             //Admin Widgets
             services.AddScoped<IWidgetService<AdminClientWidgetListDTO>, AdminWidgetsService>();
             services.AddScoped<IAdminWidgetsModelFactory, AdminWidgetsModelFactory>();
+
+            //Wallet
+            services.AddScoped<IAppWalletService<Wallet>, AppWalletService>();
+            services.AddScoped<IWalletService<WalletDTO>, WalletService>();
+            services.AddScoped<IClientWalletModelFactory, ClientWalletModelFactory>();
+
+            //Tokens
+            services.AddScoped<ITokenService, WalletService>();
 
 
             //Infrastructure Services

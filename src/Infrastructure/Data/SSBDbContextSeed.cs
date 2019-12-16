@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Entities.SiteProjectAggregate;
 using ApplicationCore.Entities.SitesTemplates;
 using ApplicationCore.Entities.SiteType;
+using ApplicationCore.Entities.Wallet;
 using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
 using Infrastructure.Identity;
@@ -311,6 +312,11 @@ namespace Infrastructure.Data
                         
                     }))
 
+                },
+                Wallet = new ApplicationCore.Entities.Wallet.Wallet()
+                {
+                     ClientId = clientId,
+                     AvailibleCredit = 5.0m,                     
                 }
             };
 
