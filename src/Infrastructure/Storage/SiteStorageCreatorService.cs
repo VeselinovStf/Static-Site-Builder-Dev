@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Entities.SitesTemplates;
 using ApplicationCore.Interfaces;
+using Infrastructure.BuildInOptions;
 using Infrastructure.Guard;
 using Infrastructure.Services.APIClientService.DTOs;
 using Infrastructure.Services.HostingHubConnectorService;
@@ -16,7 +17,9 @@ namespace Infrastructure.Storage
     {
         public AuthHostingConnectorOptions HostingOptions { get; }
         public AuthRepoHubConnectorOptions RepoOptions { get; }
+        public TemplatesRepoOptions TemplatesRepoOptions { get; }
 
+        private readonly IOptions<TemplatesRepoOptions> templateRepoOptions;
         private readonly IHubKeyMaker<HostingCreatePrepDTO> hostingHubDeployKeyMaker;
         private readonly IRepoHubConnector<RepoPullTemplateDTO> repoHubConnector;
         private readonly IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService;
@@ -26,6 +29,7 @@ namespace Infrastructure.Storage
         public SiteStorageCreatorService(
             IOptions<AuthHostingConnectorOptions> hostingOptions,
             IOptions<AuthRepoHubConnectorOptions> repoOptions,
+            IOptions<TemplatesRepoOptions> templateRepoOptions,
             IHubKeyMaker<HostingCreatePrepDTO> hostingHubDeployKeyMaker,
             IRepoHubConnector<RepoPullTemplateDTO> repoHubConnector,
             IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService,
@@ -34,6 +38,7 @@ namespace Infrastructure.Storage
         {
             this.HostingOptions = hostingOptions.Value;
             this.RepoOptions = repoOptions.Value;
+            this.TemplatesRepoOptions = templateRepoOptions.Value;
             this.hostingHubDeployKeyMaker = hostingHubDeployKeyMaker ?? throw new ArgumentNullException(nameof(hostingHubDeployKeyMaker));
             this.repoHubConnector = repoHubConnector ?? throw new ArgumentNullException(nameof(repoHubConnector));
             this.appSiteTemplateService = appSiteTemplateService ?? throw new ArgumentNullException(nameof(appSiteTemplateService));
@@ -86,7 +91,7 @@ namespace Infrastructure.Storage
         public async Task UpdateTemplate(string templateName)
         {
             ////call api and get elements
-            RepoPullTemplateDTO elements = await this.repoHubConnector.PullDataFromHub("",templateName,RepoOptions.RepoAccesTokken);
+            RepoPullTemplateDTO elements = await this.repoHubConnector.PullDataFromHub(TemplatesRepoOptions.TemplatesRepositoryHubId, templateName,RepoOptions.RepoAccesTokken);
             ////convert if is neaded
             await this.appSiteTemplateService.AddTemplateElementsAsync(templateName, elements);
             ////add them to Db
