@@ -38,13 +38,13 @@ namespace Infrastructure.Data
                     await ssbDbContext.SaveChangesAsync();
                 }
 
-                if (!ssbDbContext.Widjets.Any())
-                {
-                    await ssbDbContext.Widjets.AddRangeAsync(
-                        GetPreconfiguredWidjets());
+                ////if (!ssbDbContext.Widjets.Any())
+                ////{
+                ////    await ssbDbContext.Widjets.AddRangeAsync(
+                ////        GetPreconfiguredWidjets());
 
-                    await ssbDbContext.SaveChangesAsync();
-                }
+                ////    await ssbDbContext.SaveChangesAsync();
+                ////}
 
                 if (!ssbDbContext.Users.Any())
                 {
@@ -66,16 +66,16 @@ namespace Infrastructure.Data
                 //    await ssbDbContext.SaveChangesAsync();
                 //}
 
-                if (!ssbDbContext.SiteTemplates.Any())
-                {
-                    await ssbDbContext.SiteTemplates.AddRangeAsync(
-                        await DevelopmentAddPreBuildSiteTemplatesFromDirectory(fileTransporter, ssbDbContext));
+                ////if (!ssbDbContext.SiteTemplates.Any())
+                ////{
+                ////    await ssbDbContext.SiteTemplates.AddRangeAsync(
+                ////        await DevelopmentAddPreBuildSiteTemplatesFromDirectory(fileTransporter, ssbDbContext));
 
-                    await ssbDbContext.SaveChangesAsync();
-                }
+                ////    await ssbDbContext.SaveChangesAsync();
+                ////}
 
               
-                await CustomWidgetUpdater(ssbDbContext);
+                //await CustomWidgetUpdater(ssbDbContext);
             }
             catch (Exception ex)
             {

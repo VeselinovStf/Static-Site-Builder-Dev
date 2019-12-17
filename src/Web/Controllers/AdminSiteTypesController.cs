@@ -93,7 +93,7 @@ namespace Web.Controllers
 
                     this.logger.LogInformation($"{nameof(AdminSiteTypesController)} : {nameof(CreateSiteType)} : Creating administrated site type done.");
 
-                    return RedirectToAction("SiteTypes", "Type", new { siteTypeId = resultModel.Id });
+                    return RedirectToAction("SiteTypes", "AdminSiteTypes", new { siteTypeId = resultModel.Id });
                 }
                 catch (Exception ex)
                 {
