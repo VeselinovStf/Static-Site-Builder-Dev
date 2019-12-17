@@ -15,6 +15,7 @@ using Infrastructure.AdminSiteTypeWidgets;
 using Infrastructure.AdminSiteTypeWidgets.DTOs;
 using Infrastructure.Blog;
 using Infrastructure.Blog.DTOs;
+using Infrastructure.BuildInOptions;
 using Infrastructure.ClientProjects;
 using Infrastructure.ClientProjects.DTOs;
 using Infrastructure.Data;
@@ -205,7 +206,7 @@ namespace Web
 
             //Infrastructure Services
             services.AddScoped<IEmailSender, EmailSender>();
-            services.AddScoped<IRepoHubConnector, RepoHubConnector>();
+            services.AddScoped<IRepoHubConnector<RepoPullTemplateDTO>, RepoHubConnector>();
 
             services.AddScoped<IRepoHubKeyMaker, RepoHubKeyMaker>();
             services.AddScoped<IHostingHubConnector, HostingHubConnector>();
@@ -223,10 +224,12 @@ namespace Web
             services.AddScoped<IAPIHostClientService<NetlifyHubClient>, NetlifyApiClientService>();
             services.AddScoped<IHostDeployToken<DeployKeyDTO>, NetlifyApiClientService>();
             services.AddScoped<IAppSiteTemplatesService<SiteTemplate>, AppSiteTemplatesService>();
+            services.AddScoped<IAppTemplateElementsService<SiteTemplateElement>, AppTemplateElementsService>();
 
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<AuthRepoHubConnectorOptions>(Configuration);
             services.Configure<AuthHostingConnectorOptions>(Configuration);
+            services.Configure<TemplatesRepoOptions>(Configuration);
 
             services.AddHttpClient<GitLabHubClient>(c =>
                 c.BaseAddress = new Uri("https://gitlab.com/api/v4/")

@@ -13,12 +13,12 @@ namespace Infrastructure.Services.RepoHubConnectorService
 {
     public class RepoHubConnector : IRepoHubConnector<RepoPullTemplateDTO>
     {
-        private readonly IAPIRepoClientService<GitLabHubClient> clientHub;
+        private readonly IAPIRepoClientService<RepoPullTemplateDTO> clientHub;
         private readonly IAppSiteTemplatesService<SiteTemplate> appSiteTemplatesService;
         private readonly IAPIRepoClientService<RepoPullTemplateDTO> apiRepoClientService;
 
         public RepoHubConnector(
-            IAPIRepoClientService<GitLabHubClient> clientHub,
+            IAPIRepoClientService<RepoPullTemplateDTO> clientHub,
             IAppSiteTemplatesService<SiteTemplate> appSiteTemplatesService,
             IAPIRepoClientService<RepoPullTemplateDTO> apiRepoClientService
             )
@@ -53,8 +53,8 @@ namespace Infrastructure.Services.RepoHubConnectorService
 
         public async Task<RepoPullTemplateDTO> PullDataFromHub(string hubId, string repositoryName, string accesToken)
         {
-            Validator.StringIsNullOrEmpty(
-              hubId, $"{nameof(RepoHubConnector)} : {nameof(PullDataFromHub)} : {nameof(hubId)} : is null/empty");
+            //Validator.StringIsNullOrEmpty(
+            //  hubId, $"{nameof(RepoHubConnector)} : {nameof(PullDataFromHub)} : {nameof(hubId)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
              repositoryName, $"{nameof(RepoHubConnector)} : {nameof(PullDataFromHub)} : {nameof(repositoryName)} : is null/empty");

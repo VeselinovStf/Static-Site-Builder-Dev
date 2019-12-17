@@ -9,6 +9,8 @@ using Infrastructure.Services.RepoHubConnectorService;
 using Infrastructure.Storage.Exceptions;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Storage
@@ -19,10 +21,11 @@ namespace Infrastructure.Storage
         public AuthRepoHubConnectorOptions RepoOptions { get; }
         public TemplatesRepoOptions TemplatesRepoOptions { get; }
 
-        private readonly IOptions<TemplatesRepoOptions> templateRepoOptions;
+
         private readonly IHubKeyMaker<HostingCreatePrepDTO> hostingHubDeployKeyMaker;
         private readonly IRepoHubConnector<RepoPullTemplateDTO> repoHubConnector;
-        private readonly IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService;
+      
+        private readonly IAppTemplateElementsService<SiteTemplateElement> appTemplateElementsService;
         private readonly IRepoHubKeyMaker repoHubKeyMaker;
         private readonly IHostingHubConnector hostingHubConnector;
 
@@ -32,7 +35,7 @@ namespace Infrastructure.Storage
             IOptions<TemplatesRepoOptions> templateRepoOptions,
             IHubKeyMaker<HostingCreatePrepDTO> hostingHubDeployKeyMaker,
             IRepoHubConnector<RepoPullTemplateDTO> repoHubConnector,
-            IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService,
+            IAppTemplateElementsService<SiteTemplateElement> appTemplateElementsService,
             IRepoHubKeyMaker repoHubKeyMaker,
             IHostingHubConnector hostingHubConnector)
         {
@@ -41,7 +44,8 @@ namespace Infrastructure.Storage
             this.TemplatesRepoOptions = templateRepoOptions.Value;
             this.hostingHubDeployKeyMaker = hostingHubDeployKeyMaker ?? throw new ArgumentNullException(nameof(hostingHubDeployKeyMaker));
             this.repoHubConnector = repoHubConnector ?? throw new ArgumentNullException(nameof(repoHubConnector));
-            this.appSiteTemplateService = appSiteTemplateService ?? throw new ArgumentNullException(nameof(appSiteTemplateService));
+           
+            this.appTemplateElementsService = appTemplateElementsService ?? throw new ArgumentNullException(nameof(appTemplateElementsService));
             this.repoHubKeyMaker = repoHubKeyMaker ?? throw new ArgumentNullException(nameof(repoHubKeyMaker));
             this.hostingHubConnector = hostingHubConnector ?? throw new ArgumentNullException(nameof(hostingHubConnector));
         }
@@ -87,13 +91,20 @@ namespace Infrastructure.Storage
                 throw new SiteStorageCreatorService_StorageCreatorExecute_Exception($"{nameof(SiteStorageCreatorService_StorageCreatorExecute_Exception)} : Exception : Can't add site to storage!! : {ex.Message}");
             }
         }
-
-        public async Task UpdateTemplate(string templateName)
+        
+        public async Task UpdateTemplate(string templateId, string templateName)
         {
             ////call api and get elements
-            RepoPullTemplateDTO elements = await this.repoHubConnector.PullDataFromHub(TemplatesRepoOptions.TemplatesRepositoryHubId, templateName,RepoOptions.RepoAccesTokken);
+            RepoPullTemplateDTO elements = await this.repoHubConnector.PullDataFromHub(TemplatesRepoOptions.TemplatesRepositoryHubId, templateName, RepoOptions.RepoAccesTokken);
             ////convert if is neaded
-            await this.appSiteTemplateService.AddTemplateElementsAsync(templateName, elements);
+            var actionModel = new List<SiteTemplateElement>(elements.Elements.Select(e => new SiteTemplateElement() 
+            {
+                 FilePath = e.FilePath,
+                  FileContent = e.FileContent
+            }));
+
+
+            await this.appTemplateElementsService.AddTemplateElementsAsync(templateId, actionModel);
             ////add them to Db
         }
     }

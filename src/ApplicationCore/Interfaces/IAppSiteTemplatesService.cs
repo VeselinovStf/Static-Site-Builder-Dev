@@ -10,8 +10,7 @@ namespace ApplicationCore.Interfaces
 
         Task<IEnumerable<T>> GetAllTemplatesByTypeAsync(string buildInType);
         Task<T> CreateTemplateAsync(string siteTypeId, string templateName, string description, decimal price);
-        Task AddTemplateElementsAsync(string templateId, object elements);
-
+       
 
 
         //Task AddVariablesAsync(string buildInSiteType, string templateName, string siteId, string accessToken);

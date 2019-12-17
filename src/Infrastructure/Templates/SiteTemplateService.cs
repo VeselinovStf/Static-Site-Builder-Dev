@@ -70,7 +70,7 @@ namespace Infrastructure.Templates
         public async Task UpdateTemplateStructureAsync(string siteTypeId, string templateId, string templateName)
         {
 
-            await this.siteStorageCreatorService.UpdateTemplate(templateName);
+            await this.siteStorageCreatorService.UpdateTemplate(templateId,templateName);
           
             //throw new NotImplementedException();
         }

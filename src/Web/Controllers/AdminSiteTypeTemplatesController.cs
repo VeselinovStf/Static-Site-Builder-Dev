@@ -76,7 +76,7 @@ namespace Web.Controllers
 
 				this.logger.LogInformation($"{nameof(AdminSiteTypeTemplatesController)} : {nameof(UpdateTemplateStructure)} : Template Widgets are Updated.");
 
-				return RedirectToAction("Type", "AdminSiteType", new { siteTypeId = siteTypeId });
+				return RedirectToAction("Type", "AdminSiteTypes", new { siteTypeId = siteTypeId });
 			}
 			catch (Exception ex)
 			{

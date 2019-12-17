@@ -1,5 +1,7 @@
-﻿using Infrastructure.Services.APIClientService.DTOs;
+﻿using ApplicationCore.Interfaces;
+using Infrastructure.Services.APIClientService.DTOs;
 using Infrastructure.Services.APIClientService.Exceptions;
+using Infrastructure.Services.FileTransferrer.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,9 @@ namespace Infrastructure.Services.APIClientService.Clients
     public partial class GitLabHubClient
     {
         private readonly List<string> ImageExtensions = new List<string> { ".img", ".jpg", ".png", ".otf", ".eot", ".ttf", ".woff", ".woff2" };
+      
+
+      
 
         public async Task<string> PostCreateAsync(string newHubName, string credidentials)
         {
@@ -42,22 +47,38 @@ namespace Infrastructure.Services.APIClientService.Clients
 
         public async Task<RepoPullTemplateDTO> PullFromHubAsync(string hubId, string repositoryName, string accesTokken)
         {
-           
+            //GET all projects https://gitlab.com/api/v4/users/veselinovStf/projects?access_token=zVXJZFCZxTkiBdEkG7sb
+            //pars to model with name
+            //test for template : name== repository name
+            //if ok
+            //get id of project
+            //GET current template project https://gitlab.com/api/v4/projects/15770843?access_token=zVXJZFCZxTkiBdEkG7sb
+           var defaultStoreTypeSiteFileRead = await FileTransporter.FilesToList(@"H:\HUB\Static_Store_Builder-SSB-\Dev_V03\src\Web\BuildInTemplates\" + repositoryName);
 
-            var response = await this.Client.GetAsync($"projects?access_tok");
-
-            response.EnsureSuccessStatusCode();
-
-            if (response.IsSuccessStatusCode)
+            var response = new RepoPullTemplateDTO()
             {
-                string responseBody = await response.Content.ReadAsStringAsync();
+                Elements = new List<ConvertedFileElementDTO>(defaultStoreTypeSiteFileRead.Select(e => new ConvertedFileElementDTO()
+                {
+                    FileContent = e.FileContent,
+                    FilePath = e.FilePath
+                }))
+            };
 
-                var resultModel = new RepoPullTemplateDTO();
+            return response;
+            //var response = await this.Client.GetAsync($"projects?access_tok");
 
-                return resultModel;
-            }
+            //response.EnsureSuccessStatusCode();
 
-            throw new GitHubClientPostCreateException($"{nameof(GitHubClientPostCreateException)} : Can't create post to repo hub : {response.StatusCode}");
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    string responseBody = await response.Content.ReadAsStringAsync();
+
+            //    var resultModel = new RepoPullTemplateDTO();
+
+            //    return resultModel;
+            //}
+
+            throw new GitHubClientGetCreateException($"{nameof(GitHubClientGetCreateException)} : Can't pull get from repo hub : Check File Reading");
         }
 
         public async Task<bool> AddRepoKey(string accesToken, string key, string title)
