@@ -8,6 +8,6 @@ namespace ApplicationCore.Interfaces
     public interface ISiteTemplateService
     {
         Task AddTemplateAsync(string siteTypeId, string templateName,string description, decimal price);
-        Task UpdateTemplateStructureAsync(string siteTypeId, string templateId);
+        Task UpdateTemplateStructureAsync(string siteTypeId, string templateId, string templateName);
     }
 }

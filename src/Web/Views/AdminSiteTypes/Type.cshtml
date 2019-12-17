@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                             <div>
-                                <a asp-action="UpdateTemplateStructure" asp-controller="AdminSiteTypeTemplates" asp-route-siteTypeId="@Model.Id" asp-route-templateId="@template.Id" class="btn btn-block accent-gray">Update Structure</a>
+                                <a asp-action="UpdateTemplateStructure" asp-controller="AdminSiteTypeTemplates" asp-route-siteTypeId="@Model.Id" asp-route-templateId="@template.Id" asp-route-templateName="@template.Name" class="btn btn-block accent-gray">Update Structure</a>
                             </div>
                         </div>
                     }

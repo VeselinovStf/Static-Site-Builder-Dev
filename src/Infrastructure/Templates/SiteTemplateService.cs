@@ -2,6 +2,7 @@
 using ApplicationCore.Entities.SiteType;
 using ApplicationCore.Interfaces;
 using Infrastructure.Guard;
+using Infrastructure.Services.APIClientService.DTOs;
 using Infrastructure.Templates.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -15,15 +16,19 @@ namespace Infrastructure.Templates
         private readonly IAppSiteTypesService<SiteType> appSiteTypesService;
         private readonly IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService;
        
+        private readonly ISiteStorageCreatorService siteStorageCreatorService;
 
         public SiteTemplateService(
             IAppSiteTypesService<SiteType> appSiteTypesService,
-            IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService
+            IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService,
+            
+            ISiteStorageCreatorService siteStorageCreatorService
             )
         {
             this.appSiteTypesService = appSiteTypesService ?? throw new ArgumentNullException(nameof(appSiteTypesService));
             this.appSiteTemplateService = appSiteTemplateService ?? throw new ArgumentNullException(nameof(appSiteTemplateService));
           
+            this.siteStorageCreatorService = siteStorageCreatorService ?? throw new ArgumentNullException(nameof(siteStorageCreatorService));
         }
 
         public async Task AddTemplateAsync(string siteTypeId, string templateName, string description, decimal price)
@@ -62,12 +67,12 @@ namespace Infrastructure.Templates
 
         }
 
-        public async Task UpdateTemplateStructureAsync(string siteTypeId, string templateId)
+        public async Task UpdateTemplateStructureAsync(string siteTypeId, string templateId, string templateName)
         {
-            //call api and get elements
-            //convert if is neaded
-            //add them to Db
-            throw new NotImplementedException();
+
+            await this.siteStorageCreatorService.UpdateTemplate(templateName);
+          
+            //throw new NotImplementedException();
         }
     }
 }

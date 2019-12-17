@@ -68,11 +68,11 @@ namespace Web.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> UpdateTemplateStructure(string siteTypeId, string templateId)
+		public async Task<IActionResult> UpdateTemplateStructure(string siteTypeId, string templateId, string templateName)
 		{
 			try
 			{
-				await this.siteTemplateService.UpdateTemplateStructureAsync(siteTypeId, templateId);
+				await this.siteTemplateService.UpdateTemplateStructureAsync(siteTypeId, templateId, templateName);
 
 				this.logger.LogInformation($"{nameof(AdminSiteTypeTemplatesController)} : {nameof(UpdateTemplateStructure)} : Template Widgets are Updated.");
 

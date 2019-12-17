@@ -1,5 +1,7 @@
-﻿using ApplicationCore.Interfaces;
+﻿using ApplicationCore.Entities.SitesTemplates;
+using ApplicationCore.Interfaces;
 using Infrastructure.Guard;
+using Infrastructure.Services.APIClientService.DTOs;
 using Infrastructure.Services.HostingHubConnectorService;
 using Infrastructure.Services.HostingHubConnectorService.DTOs;
 using Infrastructure.Services.RepoHubConnectorService;
@@ -16,7 +18,8 @@ namespace Infrastructure.Storage
         public AuthRepoHubConnectorOptions RepoOptions { get; }
 
         private readonly IHubKeyMaker<HostingCreatePrepDTO> hostingHubDeployKeyMaker;
-        private readonly IRepoHubConnector repositoryHubConnector;
+        private readonly IRepoHubConnector<RepoPullTemplateDTO> repoHubConnector;
+        private readonly IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService;
         private readonly IRepoHubKeyMaker repoHubKeyMaker;
         private readonly IHostingHubConnector hostingHubConnector;
 
@@ -24,14 +27,16 @@ namespace Infrastructure.Storage
             IOptions<AuthHostingConnectorOptions> hostingOptions,
             IOptions<AuthRepoHubConnectorOptions> repoOptions,
             IHubKeyMaker<HostingCreatePrepDTO> hostingHubDeployKeyMaker,
-            IRepoHubConnector repositoryHubConnector,
+            IRepoHubConnector<RepoPullTemplateDTO> repoHubConnector,
+            IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService,
             IRepoHubKeyMaker repoHubKeyMaker,
             IHostingHubConnector hostingHubConnector)
         {
             this.HostingOptions = hostingOptions.Value;
             this.RepoOptions = repoOptions.Value;
             this.hostingHubDeployKeyMaker = hostingHubDeployKeyMaker ?? throw new ArgumentNullException(nameof(hostingHubDeployKeyMaker));
-            this.repositoryHubConnector = repositoryHubConnector ?? throw new ArgumentNullException(nameof(repositoryHubConnector));
+            this.repoHubConnector = repoHubConnector ?? throw new ArgumentNullException(nameof(repoHubConnector));
+            this.appSiteTemplateService = appSiteTemplateService ?? throw new ArgumentNullException(nameof(appSiteTemplateService));
             this.repoHubKeyMaker = repoHubKeyMaker ?? throw new ArgumentNullException(nameof(repoHubKeyMaker));
             this.hostingHubConnector = hostingHubConnector ?? throw new ArgumentNullException(nameof(hostingHubConnector));
         }
@@ -51,14 +56,14 @@ namespace Infrastructure.Storage
                 Validator.ObjectIsNull(
                    hostingDeployKey, $"{nameof(SiteStorageCreatorService)} : {nameof(StorageCreatorExecute)} : {nameof(hostingDeployKey)} : Hosting deploy key is null");
 
-                var createdRepoHubId = await this.repositoryHubConnector.CreateHub(newRepositoryCreateName, RepoOptions.RepoAccesTokken);
+                var createdRepoHubId = await this.repoHubConnector.CreateHub(newRepositoryCreateName, RepoOptions.RepoAccesTokken);
 
                 Validator.StringIsNullOrEmpty(
                     createdRepoHubId, $"{nameof(SiteStorageCreatorService)} : {nameof(StorageCreatorExecute)} : {nameof(createdRepoHubId)} : Created repo hub id is null!");
 
                 var repoUserKey = await this.repoHubKeyMaker.CreateKey(this.RepoOptions.RepoAccesTokken, hostingDeployKey.PublicKey, newRepositoryCreateName);
 
-                var pushToRepo = await this.repositoryHubConnector.PushProject(createdRepoHubId, templateName, RepoOptions.RepoAccesTokken);
+                var pushToRepo = await this.repoHubConnector.PushProject(createdRepoHubId, templateName, RepoOptions.RepoAccesTokken);
 
                 if (!pushToRepo)
                 {
@@ -76,6 +81,15 @@ namespace Infrastructure.Storage
             {
                 throw new SiteStorageCreatorService_StorageCreatorExecute_Exception($"{nameof(SiteStorageCreatorService_StorageCreatorExecute_Exception)} : Exception : Can't add site to storage!! : {ex.Message}");
             }
+        }
+
+        public async Task UpdateTemplate(string templateName)
+        {
+            ////call api and get elements
+            RepoPullTemplateDTO elements = await this.repoHubConnector.PullDataFromHub("",templateName,RepoOptions.RepoAccesTokken);
+            ////convert if is neaded
+            await this.appSiteTemplateService.AddTemplateElementsAsync(templateName, elements);
+            ////add them to Db
         }
     }
 }

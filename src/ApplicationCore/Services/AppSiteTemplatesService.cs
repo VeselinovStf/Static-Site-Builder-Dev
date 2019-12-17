@@ -22,7 +22,21 @@ namespace ApplicationCore.Services
             this.widgetsRepository = widgetsRepository ?? throw new ArgumentNullException(nameof(widgetsRepository));
         }
 
-       
+        public async Task AddTemplateElementsAsync(string templateId, object elements)
+        {
+            var siteTemplate = await this.siteTemplatesRepository.GetByIdAsync(templateId);
+
+            elements
+               .ToList()
+               .ForEach(
+                   d => siteTemplate
+                   .AddElement(
+                       d.FilePath, d.FileContent
+                       )
+                );
+
+            await this.siteTemplatesRepository.UpdateAsync(siteTemplate);
+        }
 
         public async Task<SiteTemplate> CreateTemplateAsync(string siteTypeId, string templateName, string description,decimal price)
         {

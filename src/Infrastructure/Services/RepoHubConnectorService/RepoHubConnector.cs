@@ -2,6 +2,7 @@
 using ApplicationCore.Interfaces;
 using Infrastructure.Guard;
 using Infrastructure.Services.APIClientService.Clients;
+using Infrastructure.Services.APIClientService.DTOs;
 using Infrastructure.Services.RepoHubConnectorService.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -10,18 +11,21 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Services.RepoHubConnectorService
 {
-    public class RepoHubConnector : IRepoHubConnector
+    public class RepoHubConnector : IRepoHubConnector<RepoPullTemplateDTO>
     {
         private readonly IAPIRepoClientService<GitLabHubClient> clientHub;
         private readonly IAppSiteTemplatesService<SiteTemplate> appSiteTemplatesService;
+        private readonly IAPIRepoClientService<RepoPullTemplateDTO> apiRepoClientService;
 
         public RepoHubConnector(
             IAPIRepoClientService<GitLabHubClient> clientHub,
-            IAppSiteTemplatesService<SiteTemplate> appSiteTemplatesService
+            IAppSiteTemplatesService<SiteTemplate> appSiteTemplatesService,
+            IAPIRepoClientService<RepoPullTemplateDTO> apiRepoClientService
             )
         {
             this.clientHub = clientHub ?? throw new ArgumentNullException(nameof(clientHub));
             this.appSiteTemplatesService = appSiteTemplatesService ?? throw new ArgumentNullException(nameof(appSiteTemplatesService));
+            this.apiRepoClientService = apiRepoClientService ?? throw new ArgumentNullException(nameof(apiRepoClientService));
         }
 
         public async Task<string> CreateHub(string name, string accesToken)
@@ -44,6 +48,31 @@ namespace Infrastructure.Services.RepoHubConnectorService
             catch (Exception ex)
             {
                 throw new RepoHubConnectorCreateHubException($"{nameof(RepoHubConnectorCreateHubException)} : Exception : Can't create repo hub! : {ex.Message}");
+            }
+        }
+
+        public async Task<RepoPullTemplateDTO> PullDataFromHub(string hubId, string repositoryName, string accesToken)
+        {
+            Validator.StringIsNullOrEmpty(
+              hubId, $"{nameof(RepoHubConnector)} : {nameof(PullDataFromHub)} : {nameof(hubId)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+             repositoryName, $"{nameof(RepoHubConnector)} : {nameof(PullDataFromHub)} : {nameof(repositoryName)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+              accesToken, $"{nameof(RepoHubConnector)} : {nameof(PullDataFromHub)} : {nameof(accesToken)} : is null/empty");
+
+            try
+            {
+                var result = await this.apiRepoClientService.PullDataFromHub(hubId, repositoryName, accesToken);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw new RepoHubConnectorPullDataFromHubException($"{nameof(RepoHubConnectorPullDataFromHubException)} : Can't Execute Pull to Hub : {ex.Message}");
+
             }
         }
 

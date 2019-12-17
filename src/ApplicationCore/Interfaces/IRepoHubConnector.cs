@@ -2,7 +2,7 @@
 
 namespace ApplicationCore.Interfaces
 {
-    public interface IRepoHubConnector
+    public interface IRepoHubConnector<T>
     {
         /// <summary>
         /// Create site project hub
@@ -19,5 +19,7 @@ namespace ApplicationCore.Interfaces
         /// <param name="copySubDir">copy all or coppy only file</param>
         /// <returns>Pushed or not bool value</returns>
         Task<bool> PushProject(string hubProjectId, string templateName, string accesToken, bool copySubDir = true);
+
+        Task<T> PullDataFromHub(string hubId, string repositoryName, string accesTokken);
     }
 }
