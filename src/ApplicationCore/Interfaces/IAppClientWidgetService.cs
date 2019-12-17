@@ -9,5 +9,6 @@ namespace ApplicationCore.Interfaces
     public interface IAppClientWidgetService
     {
         Task<ApplicationUserWidgets> GetAllAsync(string clientId);
+        Task AddWidget(string widgetId, string clientId);
     }
 }

@@ -114,15 +114,25 @@ namespace Web.Controllers
             {
                 try
                 {
-                    await this.siteTypesService.CreateAsync(
+                    var result = await this.siteTypesService.CreateAsync(
                         model.Name, model.Description, model.ClientId,
                         model.BuildInType, model.TemplateName,
                         model.CardApiKey, model.CardServiceGate, model.HostingServiceGate,
                         model.Repository);
 
-                    this.logger.LogInformation($"{nameof(SiteTypeController)} : {nameof(Create)} : Sucess - Creating Site Type");
+                    if (result)
+                    {
+                        this.logger.LogInformation($"{nameof(SiteTypeController)} : {nameof(Create)} : Sucess - Creating Site Type");
 
-                    return RedirectToAction("Index", "Projects", new { clientId = model.ClientId });
+                        return RedirectToAction("Index", "Projects", new { clientId = model.ClientId });
+                    }
+                    else
+                    {
+                        this.logger.LogWarning($"{nameof(SiteTypeController)} : {nameof(Create)} : Client diamonds are to low to buy widget");
+
+                        return RedirectToAction("IncefitionResourses", "Home", new { message = "You nead more diamonds to buy this widget" });
+                    }
+                    
                 }
                 catch (Exception ex)
                 {

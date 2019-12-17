@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Interfaces
 {
-    public interface IWidgetService<T>
+    public interface IAppWidgetCalculatorService
     {
-        Task<T> GetAllAsync(string clientId);
-        
+        Task<bool> TakeTokensAsync(string clientId, string widgetId);
     }
 }

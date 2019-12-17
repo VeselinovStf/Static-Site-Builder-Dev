@@ -27,10 +27,7 @@ namespace Infrastructure.Widgets
             this.accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
         }
 
-        public Task AddWidget(string widgetId, string clientId)
-        {
-            throw new NotImplementedException();
-        }
+     
 
         public async Task<AdminClientWidgetListDTO> GetAllAsync(string clientId)
         {

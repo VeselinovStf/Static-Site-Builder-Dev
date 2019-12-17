@@ -43,5 +43,11 @@ namespace Web.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = message });
         }
+
+        [Authorize]
+        public IActionResult IncefitionResourses(string message = "Error")
+        {
+            return View(new ErrorViewModel { Message = message });
+        }
     }
 }

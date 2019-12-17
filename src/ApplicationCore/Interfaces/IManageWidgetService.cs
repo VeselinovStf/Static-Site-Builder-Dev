@@ -15,5 +15,7 @@ namespace ApplicationCore.Interfaces
             decimal price, int version, bool isOn, bool isFree, string widgetType,
             string usebleWidgetType, string dependency
             );
+
+        Task<bool> AddWidget(string widgetId, string clientId);
     }
 }

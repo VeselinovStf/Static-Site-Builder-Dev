@@ -45,17 +45,13 @@ namespace ApplicationCore.Services
 
             var templateSpecification = new GetTemplateByNameSpecification(templateName);
 
-            var template = this.siteTemplateRepository.GetSingleBySpec(templateSpecification);
-
-          
+            var template = this.siteTemplateRepository.GetSingleBySpec(templateSpecification);         
 
             //get total price
             var clientWalletDiamonds = wallet.AvailibleDiamons;
            
             var siteTypePrice = siteType.Price;
-            var templatePrice = template.Price;
-
-           
+            var templatePrice = template.Price;          
 
             var totalPriceDiamonds = siteTypePrice + templatePrice;
             //check if is posible
@@ -64,9 +60,7 @@ namespace ApplicationCore.Services
 
             if (diamondsSub > -1)
             {
-                
-
-              
+                             
                     wallet.AvailibleDiamons -= totalPriceDiamonds;
                    
                     await this.walletRepository.UpdateAsync(wallet);

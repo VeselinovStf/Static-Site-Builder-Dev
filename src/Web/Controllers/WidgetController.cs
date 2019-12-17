@@ -14,15 +14,18 @@ namespace Web.Controllers
     public class WidgetController : Controller
     {
         private readonly IWidgetService<ClientWidgetListDTO> widgetService;
+        private readonly IManageWidgetService<ClientSiteWidgetsDTO> manageWidgetService;
         private readonly IWidgetModelFactory modelFactory;
         private readonly IAppLogger<WidgetController> logger;
 
         public WidgetController(
             IWidgetService<ClientWidgetListDTO> widgetService,
+            IManageWidgetService<ClientSiteWidgetsDTO> manageWidgetService,
             IWidgetModelFactory modelFactory,
             IAppLogger<WidgetController> logger)
         {
             this.widgetService = widgetService ?? throw new ArgumentNullException(nameof(widgetService));
+            this.manageWidgetService = manageWidgetService ?? throw new ArgumentNullException(nameof(manageWidgetService));
             this.modelFactory = modelFactory ?? throw new ArgumentNullException(nameof(modelFactory));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -51,15 +54,25 @@ namespace Web.Controllers
         }
 
         [Authorize(Roles = "Client")]
+        [HttpGet]
         public async Task<IActionResult> AddWidget(string widgetId, string clientId)
         {
             try
             {
-                await this.widgetService.AddWidget(widgetId, clientId);
+                var result = await this.manageWidgetService.AddWidget(widgetId, clientId);
 
-                this.logger.LogInformation($"{nameof(WidgetController)} : {nameof(AddWidget)} : Sucess - Adding Client Widgets");              
+                if (result)
+                {
+                    this.logger.LogInformation($"{nameof(WidgetController)} : {nameof(AddWidget)} : Sucess - Adding Client Widgets");
 
-                return RedirectToAction("WidgetController", "ManageClientWidgets", new { clientId = clientId });
+                    return RedirectToAction("ManageClientWidgets", "Widget", new { clientId = clientId });
+                }
+                else
+                {
+                    this.logger.LogWarning($"{nameof(WidgetController)} : {nameof(AddWidget)} : Client tokens are to low to buy widget");
+
+                    return RedirectToAction("IncefitionResourses", "Home", new { message = "You nead more credits to buy this widget" });
+                }
 
             }
             catch (Exception ex)

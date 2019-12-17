@@ -45,7 +45,7 @@ namespace Infrastructure.SiteTypes
                         };
         }
 
-        private async Task ExecuteCreation(SiteTypesEnum action, string clientProjectId,
+        private async Task<bool> ExecuteCreation(SiteTypesEnum action, string clientProjectId,
             string name, string description, string clientId,
             string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
@@ -76,10 +76,12 @@ namespace Infrastructure.SiteTypes
                  buildInType, templateName,
                  cardApiKey, cardServiceGate, hostingServiceGate,
                  repository, newWidgets);
+
+                return true;
             }
             else
             {
-                throw new NotEnoughtDiamondsSiteTypeServiceException_Note("Incofitiant Diamonds");
+                return false;
             }
            
             
@@ -134,7 +136,7 @@ namespace Infrastructure.SiteTypes
             }
         }
 
-        public async Task CreateAsync(
+        public async Task<bool> CreateAsync(
             string name, string description, string clientId,
             string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
@@ -174,11 +176,13 @@ namespace Infrastructure.SiteTypes
                 Validator.StringIsNullOrEmpty(
                     clientProjectId, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(clientProjectId)} : is null/empty");
 
-                await this.ExecuteCreation(type, clientProjectId,
+                var result = await this.ExecuteCreation(type, clientProjectId,
                            name, description, clientId,
                            buildInType, templateName,
                            cardApiKey, cardServiceGate, hostingServiceGate,
                            repository);
+
+                return result;
          
             }
             catch (Exception ex)

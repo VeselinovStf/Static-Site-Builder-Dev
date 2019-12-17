@@ -27,21 +27,7 @@ namespace Infrastructure.Widgets
             this.accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
         }
 
-        public async Task AddWidget(string widgetId, string clientId)
-        {
-            Validator.StringIsNullOrEmpty(
-                  widgetId, $"{nameof(ClientWidgetService)} : {nameof(GetAllAsync)} : {nameof(widgetId)} : is null/empty");
-
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-        }
+      
 
         public async Task<ClientWidgetListDTO> GetAllAsync(string clientId)
         {

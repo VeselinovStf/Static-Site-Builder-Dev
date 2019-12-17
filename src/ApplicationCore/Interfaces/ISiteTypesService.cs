@@ -21,7 +21,7 @@ namespace ApplicationCore.Interfaces
         /// <summary>
         /// Creates new client site
         /// </summary>
-        Task CreateAsync(
+        Task<bool> CreateAsync(
             string name, string description, string clientId,
             string buildInType, string templateLocation,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,

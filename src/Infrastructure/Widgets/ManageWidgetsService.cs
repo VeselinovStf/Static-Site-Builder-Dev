@@ -18,15 +18,49 @@ namespace Infrastructure.Widgets
         private readonly IAppClientWidgetService appClientWidgetService;
         private readonly IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService;
         private readonly IAppWidgetService appWidgetService;
+        private readonly IAppWidgetCalculatorService widgetCalculator;
 
         public ManageWidgetsService(
             IAppClientWidgetService appClientWidgetService,
             IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService,
-            IAppWidgetService appWidgetService)
+            IAppWidgetService appWidgetService,
+            IAppWidgetCalculatorService widgetCalculator)
         {
             this.appClientWidgetService = appClientWidgetService ?? throw new ArgumentNullException(nameof(appClientWidgetService));
             this.appSiteTemplateService = appSiteTemplateService ?? throw new ArgumentNullException(nameof(appSiteTemplateService));
             this.appWidgetService = appWidgetService ?? throw new ArgumentNullException(nameof(appWidgetService));
+            this.widgetCalculator = widgetCalculator ?? throw new ArgumentNullException(nameof(widgetCalculator));
+        }
+
+        public async Task<bool> AddWidget(string widgetId, string clientId)
+        {
+            Validator.StringIsNullOrEmpty(
+                  widgetId, $"{nameof(ManageWidgetsService)} : {nameof(GetAllAsync)} : {nameof(widgetId)} : is null/empty");
+
+            Validator.StringIsNullOrEmpty(
+                 clientId, $"{nameof(ManageWidgetsService)} : {nameof(AddWidget)} : {nameof(clientId)} : is null/empty");
+
+            try
+            {
+                var CanBuy = await this.widgetCalculator.TakeTokensAsync(clientId, widgetId);
+
+                if (CanBuy)
+                {
+                    await this.appClientWidgetService.AddWidget(widgetId, clientId);
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw new ManageWidgetsServiceAddWidgetException($"{nameof(ManageWidgetsServiceAddWidgetException)} : Exception : Can't add client widgets : {ex.Message}");
+
+            }
         }
 
         public async Task CreateWidgetAsync(

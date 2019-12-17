@@ -19,6 +19,20 @@ namespace ApplicationCore.Services
             this.clientWidgetRepository = clientWidgetRepository ?? throw new ArgumentNullException(nameof(clientWidgetRepository));
         }
 
+        public async Task AddWidget(string widgetId, string clientId)
+        {
+            var specification = new ClientWidgetsWithWidgetsSpecification(clientId);
+
+            var clientWidget = this.clientWidgetRepository.GetSingleBySpec(specification);
+
+            clientWidget.ClientWidgets.Add(new ClientWidgets()
+            {
+                WidgetId = widgetId
+            });
+
+            await this.clientWidgetRepository.UpdateAsync(clientWidget);
+        }
+
         public async Task<ApplicationUserWidgets> GetAllAsync(string clientId)
         {
             var specification = new ClientWidgetsWithWidgetsSpecification(clientId);
