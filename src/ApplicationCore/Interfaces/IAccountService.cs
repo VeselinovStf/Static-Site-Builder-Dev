@@ -29,7 +29,7 @@ namespace ApplicationCore.Interfaces
         Task SignOutAsync();
 
         Task PasswordSignInAsync(string email, string password, bool rememberMe, bool lockoutOnFailure);
-
+        Task<bool> GetClientIsInTutorial(string clientId);
         Task<T> FindByEmailAsync(string email);
 
         Task<bool> ConfirmCangePasswordAsync(string userId, string code);

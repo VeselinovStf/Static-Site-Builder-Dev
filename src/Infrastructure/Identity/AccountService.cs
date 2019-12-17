@@ -470,5 +470,22 @@ namespace Infrastructure.Identity
                 throw new AccountServiceGetPaymentsException($"{nameof(AccountServiceGetPaymentsException)} : Can't Change User Email : {ex.Message}");
             }
         }
+
+        public async Task<bool> GetClientIsInTutorial(string clientId)
+        {
+            Validator.StringIsNullOrEmpty(
+              clientId, $"{nameof(AccountService)} : {nameof(GetClientIsInTutorial)} : {nameof(clientId)} : is null/empty");
+
+            try
+            {
+                var user = await this.userManager.FindByIdAsync(clientId);
+
+                return user.IsInTutorial;
+            }
+            catch (Exception ex)
+            {
+                throw new AccountServiceGetClientIsInTutorialException($"{nameof(AccountServiceGetClientIsInTutorialException)}Can't find tutorial status for this client id : {ex.Message}");
+            }
+        }
     }
 }

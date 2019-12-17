@@ -22,6 +22,7 @@ namespace Infrastructure.Identity
         public bool IsDeleted { get; set; }
         public DateTime? DeletedOn { get; set; }
 
+        public bool IsInTutorial { get; set; }
         public MailBox MailBox { get; set; }
 
         public ICollection<Post> Posts { get; set; }
