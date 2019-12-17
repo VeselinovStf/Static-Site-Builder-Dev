@@ -42,13 +42,13 @@ namespace Web.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> AddUsebleTemplate([Bind("SiteTypeId", "TemplateName")]AdminCreateSiteTypeTemplateViewModel model)
+		public async Task<IActionResult> AddUsebleTemplate([Bind("SiteTypeId", "TemplateName","Price", "Description")]AdminCreateSiteTypeTemplateViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
 				try
 				{
-					await this.siteTemplateService.AddUsebleWidgets(model.SiteTypeId, model.TemplateName);
+					await this.siteTemplateService.AddTemplateAsync(model.SiteTypeId, model.TemplateName,model.Description, model.Price);
 
 
 					this.logger.LogInformation($"{nameof(AdminSiteTypeTemplatesController)} : {nameof(AddUsebleTemplate)} : Adding administrated site type template.");

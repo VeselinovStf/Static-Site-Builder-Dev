@@ -8,20 +8,31 @@
                     <h1>Create Site Type Template</h1>
                 </div>
             </div>
-            <div class="col-md-6 offset-3 fadeInUp  ">
-                <form method="post" class="container-fluid services">
+            <div class="col-md-6 offset-3 fadeInUp ">
+                <form method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="@Model.SiteTypeId" />
-                    
+
                     <div class="form-group">
                         <label asp-for="TemplateName"><i class="zmdi zmdi-email"></i></label>
-                        <input asp-for="TemplateName" type="text" name="Name" placeholder="Template Name" />
+                        <input asp-for="TemplateName" type="text" name="TemplateName" placeholder="Template Name" />
                         <span asp-validation-for="TemplateName" class="text-danger"></span>
-                    </div>                 
-                    <div class="form-group form-button text-center">
-                        <input type="submit" class="form-submit" value="Create" />
+                    </div>
+                     <div class="form-group">
+                        <label asp-for="Description"><i class="zmdi zmdi-email"></i></label>
+                        <input asp-for="Description" type="text" name="Description" placeholder="Description" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+
+                        <input asp-for="Price" type="text" name="Price" placeholder="Price" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-button">
+                        <button type="submit" name="signup" id="signup" class="form-submit">Create</button>
                     </div>
                 </form>
+
             </div>
         </div>
     </section>

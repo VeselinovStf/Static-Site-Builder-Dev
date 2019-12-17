@@ -7,6 +7,6 @@ namespace ApplicationCore.Interfaces
 {
     public interface ISiteTemplateService
     {
-        Task AddUsebleWidgets(string siteTypeId, string templateName);
+        Task AddTemplateAsync(string siteTypeId, string templateName,string description, decimal price);
     }
 }
