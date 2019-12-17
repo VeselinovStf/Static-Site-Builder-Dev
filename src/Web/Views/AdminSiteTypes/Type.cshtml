@@ -53,6 +53,9 @@
                                     <p>@template.Description</p>
                                 </div>
                             </div>
+                            <div>
+                                <a asp-action="UpdateTemplateStructure" asp-controller="AdminSiteTypeTemplates" asp-route-siteTypeId="@Model.Id" asp-route-templateId="@template.Id" class="btn btn-block accent-gray">Update Structure</a>
+                            </div>
                         </div>
                     }
 
@@ -68,7 +71,7 @@
                     <div class="col-lg-12 py-1">
 
                         <h2 class="mb-4 text-center">Useble Widgets</h2>
-                        <a asp-action="AddUsebleWidget" asp-controller="AdminSiteTypesWidgets" asp-route-siteTypeId="@Model.Id" class="btn btn-primary d-block px-1 py-1 mb-1 btn-outline-black">Add Widget</a>
+                        <a asp-action="AddUsebleWidget" asp-controller="AdminSiteTypesWidgets" asp-route-siteTypeId="@Model.Id"  class="btn btn-primary d-block px-1 py-1 mb-1 btn-outline-black">Add Widget</a>
 
                     </div>
 

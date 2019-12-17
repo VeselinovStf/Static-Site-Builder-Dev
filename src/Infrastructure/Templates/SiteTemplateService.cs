@@ -58,10 +58,16 @@ namespace Infrastructure.Templates
                 throw new SiteTemplateServiceAddTemplateAsyncException($"{nameof(SiteTemplateServiceAddTemplateAsyncException)} : Exception : Can't add site template : {ex.Message}");
 
             }
+            
+
+        }
+
+        public async Task UpdateTemplateStructureAsync(string siteTypeId, string templateId)
+        {
             //call api and get elements
             //convert if is neaded
             //add them to Db
-
+            throw new NotImplementedException();
         }
     }
 }
