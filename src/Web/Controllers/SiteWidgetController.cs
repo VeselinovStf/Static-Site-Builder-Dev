@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ApplicationCore.Interfaces;
+using Infrastructure.Widgets.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,28 +10,34 @@ using Web.ViewModels.Site;
 
 namespace Web.Controllers
 {
+    [Authorize]
     public class SiteWidgetController : Controller
     {
-        public SiteWidgetController()
-        {
+        private readonly IManageSiteWidgetService manageWidgetService;
 
+        public SiteWidgetController(
+            IManageSiteWidgetService manageWidgetService)
+        {
+            this.manageWidgetService = manageWidgetService ?? throw new ArgumentNullException(nameof(manageWidgetService));
         }
 
         public async Task<IActionResult> Render(string widgetId, string clientId, string templateName, string siteTypeId)
         {
             try
-            {
+            {            
+                var confirmUsebility = await this.manageWidgetService.ConfirmUsebleWidget(widgetId, templateName);
 
+                if (!string.IsNullOrWhiteSpace(confirmUsebility))
+                {                 
 
-                var model = new SiteRenderingViewModel()
+                    return RedirectToAction(confirmUsebility, confirmUsebility + "Widget", new { widgetId = widgetId, clientId = clientId, templateName = templateName, siteTypeId = siteTypeId });
+                
+                }
+                else
                 {
-                    ClientId = clientId,
-                    SiteTypeId = siteTypeId,
-                    PresentationLink = "nope",
-                    TemplateName = templateName
-                };
-
-                return View(model);
+                    return RedirectToAction("Error", "Home");
+                }
+               
             }
             catch (Exception ex)
             {

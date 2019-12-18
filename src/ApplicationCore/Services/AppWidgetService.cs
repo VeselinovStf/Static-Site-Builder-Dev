@@ -56,7 +56,7 @@ namespace ApplicationCore.Services
                  SiteWidgetEnum.None,
                   SiteWidgetEnum.Products,
                    SiteWidgetEnum.SiteStructure,
-                    SiteWidgetEnum.Testing,
+           
                      SiteWidgetEnum.TopProducts
             };
         }

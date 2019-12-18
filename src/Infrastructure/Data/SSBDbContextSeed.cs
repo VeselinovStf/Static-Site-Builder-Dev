@@ -106,7 +106,7 @@ namespace Infrastructure.Data
                 Version = 1,
                 Votes = 0,
                 SiteTypeSpecification = SiteTypesEnum.StoreType,
-                SystemName = SiteWidgetEnum.Testing,
+                SystemName = SiteWidgetEnum.None,
                 Dependency = SiteWidgetEnum.None
             };
 

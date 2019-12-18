@@ -1,7 +1,10 @@
 <!-- 1-st check if current widget is used ( is in used widgets json )-->
-{% assign usedWidget = site.data.widgets.appUsedWidgetsConfig.usedWidgets %}
+{% assign usedWidget = site.data.appUsedWidgetsConfig.usedWidgets %}
+
+
 {% for addedWidget in usedWidget %}
-    {% if addedWidget.name contains  "presentation-products-list" %}
+
+    {% if addedWidget.name contains "presentation-products-list" %}
 
        
         {% assign widget = site.data.widgets.products.presentation-products-list %}

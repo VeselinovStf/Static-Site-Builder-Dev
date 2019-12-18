@@ -1,0 +1,9 @@
+{
+    "widgetType" : "product",
+    "placement" : "site",
+    "name": "addProductWidget",
+    "display": true,
+    "multy" : false,
+    "element": "none",
+    "dependancy" : null    
+}

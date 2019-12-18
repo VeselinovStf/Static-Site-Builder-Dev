@@ -11,6 +11,7 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
         Products = 2,
         SiteStructure = 3,
         TopProducts = 4,
-        Testing = 5
+        AddProduct = 5,
+        Simple = 6,
     }
 }

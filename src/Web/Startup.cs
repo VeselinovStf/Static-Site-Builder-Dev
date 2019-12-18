@@ -207,6 +207,9 @@ namespace Web
             //Tutorial
             services.AddScoped<ITutorialService, TutorialService>();
 
+            //SiteWidgets
+            services.AddScoped<IManageSiteWidgetService, ManageSiteWidgetService>();
+
 
             //Infrastructure Services
             services.AddScoped<IEmailSender, EmailSender>();
