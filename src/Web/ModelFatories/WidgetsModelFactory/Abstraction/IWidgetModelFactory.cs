@@ -10,7 +10,7 @@ namespace Web.ModelFatories.WidgetsModelFactory.Abstraction
 {
     public interface IWidgetModelFactory
     {
-        WidgetsListViewModel Create(ClientWidgetListDTO inputModel);
-        SiteViewModel Create(ClientSiteWidgetsDTO serviceCall);
+        WidgetsListViewModel Create(ClientWidgetListDTO inputModel );
+        SiteViewModel Create(ClientSiteWidgetsDTO serviceCall, string templateName, string siteTypeId, string clientId);
     }
 }

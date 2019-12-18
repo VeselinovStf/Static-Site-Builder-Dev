@@ -22,7 +22,7 @@ namespace Web.Views.ViewComponents.AdminSiteNavigationViewComponents
             this.modelFactory = modelFactory;
             this.logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
         }
-        public async Task<IViewComponentResult> InvokeAsync(string clientId, string templateName)
+        public async Task<IViewComponentResult> InvokeAsync(string clientId, string templateName, string siteTypeId)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace Web.Views.ViewComponents.AdminSiteNavigationViewComponents
 
                 this.logger.LogInformation($"{nameof(AdminSideNavigationViewComponent)} : {nameof(InvokeAsync)} : Sucess - Getting Client Site Widgets");
 
-                var model = this.modelFactory.Create(serviceCall);
+                var model = this.modelFactory.Create(serviceCall,templateName,siteTypeId,clientId);
 
                 return View("AdminSideNavigation", model);
             }

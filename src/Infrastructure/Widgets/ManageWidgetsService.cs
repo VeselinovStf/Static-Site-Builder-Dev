@@ -127,8 +127,11 @@ namespace Infrastructure.Widgets
                     clientUsebleWidgets, $"{nameof(ManageWidgetsService)} : {nameof(GetAllAsync)} : {nameof(clientUsebleWidgets)} : Can't find useble widgets");
 
 
-                var widgets = clientUsebleWidgets.Select(w => w.Widget).ToList();
+                var usedWidgetsId = clientUsebleWidgets.Select(w => w.WidgetId).ToList();
 
+                var systemWidgets = await this.appWidgetService.GetAllWidgetsAsync();
+
+                var widgets = systemWidgets.Where(w => usedWidgetsId.Contains(w.Id));
 
                 var resultModel = new ClientSiteWidgetsDTO()
                 {

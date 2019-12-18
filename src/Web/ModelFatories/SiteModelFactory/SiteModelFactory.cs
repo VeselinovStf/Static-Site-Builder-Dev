@@ -10,13 +10,14 @@ namespace Web.ModelFatories.SiteModelFactory
 {
     public class SiteModelFactory : ISiteModelFactory
     {
-        public SiteRenderingViewModel Create(SiteRenderingDTO serviceModel)
+        public SiteRenderingViewModel Create(SiteRenderingDTO serviceModel,string siteTypeId)
         {
             return new SiteRenderingViewModel()
             {
                 ClientId = serviceModel.ClientId,
                 PresentationLink = serviceModel.PresentationLink,
-                TemplateName = serviceModel.TemplateName
+                TemplateName = serviceModel.TemplateName,
+                SiteTypeId = siteTypeId
             };
         }
     }

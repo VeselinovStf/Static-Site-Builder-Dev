@@ -9,6 +9,6 @@ namespace Web.ModelFatories.SiteModelFactory.Abstraction
 {
     public interface ISiteModelFactory
     {
-        SiteRenderingViewModel Create(SiteRenderingDTO serviceModel);
+        SiteRenderingViewModel Create(SiteRenderingDTO serviceModel, string siteTypeId);
     }
 }

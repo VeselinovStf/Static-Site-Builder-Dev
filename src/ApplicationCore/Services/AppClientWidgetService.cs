@@ -27,7 +27,8 @@ namespace ApplicationCore.Services
 
             clientWidget.ClientWidgets.Add(new ClientWidgets()
             {
-                WidgetId = widgetId
+                WidgetId = widgetId,
+                
             });
 
             await this.clientWidgetRepository.UpdateAsync(clientWidget);

@@ -15,6 +15,7 @@ namespace Web.ModelFatories.WidgetsModelFactory
             return new WidgetsListViewModel()
             {
                 ClientId = inputModel.ClientId,
+                
                 ClientWidgets = new List<WidgetViewModel>(inputModel.ClientWidgets.Select(w => new WidgetViewModel()
                 {
                     Id = w.Id,
@@ -50,10 +51,13 @@ namespace Web.ModelFatories.WidgetsModelFactory
             };
         }
 
-        public SiteViewModel Create(ClientSiteWidgetsDTO serviceCall)
+        public SiteViewModel Create(ClientSiteWidgetsDTO serviceCall, string templateName, string siteTypeId,string clientId)
         {
             return new SiteViewModel()
             {
+                ClientId = clientId,
+               TemplateName = templateName,
+               SiteTypeId = siteTypeId,
                 Widgets = new List<SiteWidgetViewModel>(serviceCall.Widgets.Select(w => new SiteWidgetViewModel()
                 {
                     DisplayName = w.DisplayName,
@@ -62,5 +66,7 @@ namespace Web.ModelFatories.WidgetsModelFactory
                 }))
             };
         }
+
+        
     }
 }

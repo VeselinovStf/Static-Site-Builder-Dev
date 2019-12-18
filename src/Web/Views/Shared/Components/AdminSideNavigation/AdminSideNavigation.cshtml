@@ -22,11 +22,11 @@
                     {
                          
                         <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
+                            <a asp-action="Render" asp-controller="SiteWidget" asp-route-widgetId="@widget.WidgetId" asp-route-clientId="@Model.ClientId" asp-route-templateName="@Model.TemplateName" asp-route-siteTypeId="@Model.SiteTypeId" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
-                                <p>
-                                    @widget.DisplayName                                                                   
-                                </p>
+                                
+                                   <p >@widget.DisplayName</p>                                                                    
+                                
                             </a>
                           
                         </li>

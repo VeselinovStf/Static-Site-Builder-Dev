@@ -53,7 +53,7 @@ namespace Web.Controllers
 
                 this.logger.LogInformation($"{nameof(SiteController)} : {nameof(Site)} : Sucess - Getting Client Site");
           
-                var model = this.modelFactory.Create(serviceModel);
+                var model = this.modelFactory.Create(serviceModel,siteTypeId);
 
                 return View(model);
             }
