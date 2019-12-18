@@ -31,16 +31,16 @@ namespace ApplicationCore.Services
            
         }
 
-        public async Task<bool> TakeDiamondsAsync(string clientId, string buildInType, string templateName)
+        public async Task<bool> TakeDiamondsAsync(string clientId, string buildInType, string templateName, string siteTypeId)
         {
             var walletSpecification = new GetWalletByClientIdSpecification(clientId);
 
             var wallet =  this.walletRepository.GetSingleBySpec(walletSpecification);
 
             
-            var siteTypeSpecification = new GetSiteTypeBySiteTypeEnum(buildInType);
+            //var siteTypeSpecification = new GetSiteTypeBySiteTypeEnum(buildInType);
 
-            var siteType = this.siteTypeRepository.GetSingleBySpec(siteTypeSpecification);
+            var siteType = await this.siteTypeRepository.GetByIdAsync(siteTypeId);
 
 
             var templateSpecification = new GetTemplateByNameSpecification(templateName);

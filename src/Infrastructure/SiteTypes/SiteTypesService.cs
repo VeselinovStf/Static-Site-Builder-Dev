@@ -49,7 +49,7 @@ namespace Infrastructure.SiteTypes
             string name, string description, string clientId,
             string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
-            string repository)
+            string repository,string siteTypeId)
         {
             //Get useble widgets for current template
             var templateUsableWidgets = await this.appSiteTemplateService.GetTemplateAsync(templateName);
@@ -66,7 +66,7 @@ namespace Infrastructure.SiteTypes
             //Get new widget
             var newWidgets = systemWidgetsCall.Where(w => usebleWidgetsId.Contains(w.Id));     
 
-            bool CanBuy = await this.appProjectCalculator.TakeDiamondsAsync(clientId, buildInType, templateName);
+            bool CanBuy = await this.appProjectCalculator.TakeDiamondsAsync(clientId, buildInType, templateName, siteTypeId);
 
             if (CanBuy)
             {
@@ -87,22 +87,36 @@ namespace Infrastructure.SiteTypes
             
         }
 
-        public async Task<IEnumerable<SiteTypeDTO>> GetAllTypesAsync()
+        public async Task<IEnumerable<SiteTypeDTO>> GetAllTypesWithWidgetsAsync(string clientId)
         {
             try
             {
-                var siteTypes = await this.appSiteTypeService.GetAllAsync();
+                var siteTypes = await this.appSiteTypeService.GetAllWithWidgetsAsync();
 
+               
                 Validator.ObjectIsNull(
-                 siteTypes, $"{nameof(SiteTypesService)} : {nameof(GetAllTypesAsync)} : {nameof(siteTypes)} : Can't find build in site types!");
+                 siteTypes, $"{nameof(SiteTypesService)} : {nameof(GetAllTypesWithWidgetsAsync)} : {nameof(siteTypes)} : Can't find build in site types!");
 
+                var widgets = await this.appWidgetService.GetAllWidgetsAsync();
+
+                var clientWidgets = await this.appClientWidgetService.GetAllAsync(clientId);
+
+                
                 var serviceModel = new List<SiteTypeDTO>(siteTypes.Select(t => new SiteTypeDTO()
                 {
-                    
+                    Id = t.Id,
                     Name = t.Name,
                     Description = t.Description,
                     BuildInName = t.Type.ToString(),
-                    Price = t.Price
+                    Price = t.Price,
+                     SiteTypeWidget = new List<SiteTypeWidgetDTO>(t.UsebleWidjets.Select(w => new SiteTypeWidgetDTO()
+                     {
+                          WidgetId = w.WidgetId,
+                           WidgetName = widgets.FirstOrDefault(b => b.Id == w.WidgetId).Name,
+                            Price = widgets.FirstOrDefault(b => b.Id == w.WidgetId).Price,
+                            IsAvailible = 
+                                clientWidgets.ClientWidgets.FirstOrDefault(cw => cw.WidgetId == w.WidgetId) == null ?false:true
+                     }))
                 }));
 
                 return serviceModel;
@@ -118,7 +132,7 @@ namespace Infrastructure.SiteTypes
         {
             try
             {
-                var siteTypes = await this.appSiteTypeService.GetAllAsync();
+                var siteTypes = await this.appSiteTypeService.GetAllWithWidgetsAsync();
 
                 Validator.ObjectIsNull(
                  siteTypes, $"{nameof(SiteTypesService)} : {nameof(ConfirmTypeAsync)} : {nameof(siteTypes)} : Can't find build in site types!");
@@ -140,7 +154,7 @@ namespace Infrastructure.SiteTypes
             string name, string description, string clientId,
             string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
-            string repository)
+            string repository, string siteTypeId)
         {
             Validator.StringIsNullOrEmpty(
                  name, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(name)} : is null/empty");
@@ -161,6 +175,8 @@ namespace Infrastructure.SiteTypes
                 hostingServiceGate, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(hostingServiceGate)} : is null/empty");
             Validator.StringIsNullOrEmpty(
                 repository, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(repository)} : is null/empty");
+            Validator.StringIsNullOrEmpty(
+               siteTypeId, $"{nameof(SiteTypesService)} : {nameof(CreateAsync)} : {nameof(siteTypeId)} : is null/empty");
 
             try
             {
@@ -180,7 +196,7 @@ namespace Infrastructure.SiteTypes
                            name, description, clientId,
                            buildInType, templateName,
                            cardApiKey, cardServiceGate, hostingServiceGate,
-                           repository);
+                           repository, siteTypeId);
 
                 return result;
          

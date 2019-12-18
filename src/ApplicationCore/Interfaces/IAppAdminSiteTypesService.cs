@@ -10,6 +10,6 @@ namespace ApplicationCore.Interfaces
     {
         Task<IEnumerable<T>> GetAllAsync();
         IList<SiteTypesEnum> GetSiteTypes();
-        Task<T> CreateSiteTypeAsync(string name, string description, SiteTypesEnum type);
+        Task<T> CreateSiteTypeAsync(string name, string description, SiteTypesEnum type, decimal price);
     }
 }

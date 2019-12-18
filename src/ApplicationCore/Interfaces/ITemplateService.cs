@@ -5,7 +5,7 @@ namespace ApplicationCore.Interfaces
 {
     public interface ITemplateService<T>
     {
-        Task<IList<T>> GetAllAsync(string buildInType, string clientId);
+        Task<IList<T>> GetAllAsync(string buildInType, string buildInTypeId, string clientId);
 
         
     }

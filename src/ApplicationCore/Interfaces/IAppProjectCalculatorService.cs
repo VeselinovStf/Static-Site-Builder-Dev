@@ -7,6 +7,6 @@ namespace ApplicationCore.Interfaces
 {
     public interface IAppProjectCalculatorService
     {
-        Task<bool> TakeDiamondsAsync(string clientId, string buildInType, string templateName);
+        Task<bool> TakeDiamondsAsync(string clientId, string buildInType, string templateName, string siteTypeId);
     }
 }

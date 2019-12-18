@@ -40,7 +40,7 @@ namespace Web.Controllers
         {
             try
             {
-                var serviceCall = await this.siteTypesService.GetAllTypesAsync();
+                var serviceCall = await this.siteTypesService.GetAllTypesWithWidgetsAsync(clientId);
 
                 this.logger.LogInformation($"{nameof(SiteTypeController)} : {nameof(SelectSiteType)} : Sucess - Getting Site Types");
 
@@ -64,7 +64,7 @@ namespace Web.Controllers
         /// <param name="buildInType">Build in type passed as string from selected site type</param>
         /// <returns>View with model for inputing user info for new project site type</returns>
         [HttpGet]
-        public async Task<IActionResult> Create(string clientId, string buildInType, string templateName)
+        public async Task<IActionResult> Create(string clientId, string buildInType, string siteTypeId,string templateName)
         {
             try
             {
@@ -78,7 +78,8 @@ namespace Web.Controllers
                         {
                             ClientId = clientId,
                             BuildInType = buildInType,
-                            TemplateName = templateName
+                            TemplateName = templateName,
+                            SiteTypeId = siteTypeId
                         };
 
                         return View(model);
@@ -107,7 +108,7 @@ namespace Web.Controllers
             [Bind("Name","Description","ClientId",
             "BuildInType",
             "CardApiKey", "CardServiceGate", "HostingServiceGate",
-            "Repository", "TemplateName")]
+            "Repository", "TemplateName","SiteTypeId")]
             CreateSiteTypeViewModel model)
         {
             if (ModelState.IsValid)
@@ -118,7 +119,7 @@ namespace Web.Controllers
                         model.Name, model.Description, model.ClientId,
                         model.BuildInType, model.TemplateName,
                         model.CardApiKey, model.CardServiceGate, model.HostingServiceGate,
-                        model.Repository);
+                        model.Repository, model.SiteTypeId);
 
                     if (result)
                     {

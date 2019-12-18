@@ -31,5 +31,7 @@ namespace Web.ViewModels.SiteType
 
         [Display(Name = "Repository Name")]
         public string Repository { get; set; }
+
+        public string SiteTypeId { get; set; }
     }
 }

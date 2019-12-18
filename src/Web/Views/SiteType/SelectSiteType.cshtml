@@ -21,8 +21,29 @@
                                     <div class="text-center">
                                         <p class="alert-info">Availible for @type.Price^ </p>
                                     </div>
+                                    <div class="">
+                                        @if (type.SiteTypeWidgets.Count > 0)
+                                        {
+                                            
+                                            @for (int i = 0; i < type.SiteTypeWidgets.Count; i++)
+                                            {
+                                                @if (!type.SiteTypeWidgets[i].IsAvailible)
+                                                {
+                                                    <div class="text-center">
+                                                        <h5>Require</h5>
+                                                        <input type="hidden" asp-for="@type.SiteTypeWidgets[i].WidgetId" />
+                                                        <p class="alert-info">@type.SiteTypeWidgets[i].WidgetName </p>
+                                                        <p class="alert-info">@type.SiteTypeWidgets[i].Price </p>
+                                                    </div>
+                                                    <br />
+                                                }
+
+                                            }
+                                          
+                                        }
+                                    </div>
                                     <div class="text-center">
-                                        <a class="btn btn-info " asp-controller="Template" asp-action="SelectTemplate" asp-route-buildInType="@type.BuildInName" asp-route-clientId="@Model.ClientId">Use</a>
+                                        <a class="btn btn-info " asp-controller="Template" asp-action="SelectTemplate" asp-route-buildInType="@type.BuildInName" asp-route-buildInTypeId="@type.Id" asp-route-clientId="@Model.ClientId">Use</a>
                                     </div>
                                 </div>
                             </div>

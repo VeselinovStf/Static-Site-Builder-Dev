@@ -83,13 +83,13 @@ namespace Web.Controllers
        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateSiteType([Bind("Name", "Description", "SiteType")]CreateSiteTypeTemplateViewModel model)
+        public async Task<IActionResult> CreateSiteType([Bind("Name", "Description", "SiteType", "Price")]CreateSiteTypeTemplateViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var resultModel = await this.siteTypeService.AddSiteTypeAsync(model.Name, model.Description, model.SiteType);
+                    var resultModel = await this.siteTypeService.AddSiteTypeAsync(model.Name, model.Description, model.SiteType, model.Price);
 
                     this.logger.LogInformation($"{nameof(AdminSiteTypesController)} : {nameof(CreateSiteType)} : Creating administrated site type done.");
 

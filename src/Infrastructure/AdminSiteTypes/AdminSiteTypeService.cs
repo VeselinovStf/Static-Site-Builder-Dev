@@ -65,7 +65,7 @@ namespace Infrastructure.AdminSiteTypes
             }
         }
 
-        public async Task<AdminSiteTypeDTO> AddSiteTypeAsync(string name, string description, string siteType)
+        public async Task<AdminSiteTypeDTO> AddSiteTypeAsync(string name, string description, string siteType, decimal price)
         {
             Validator.StringIsNullOrEmpty(
                 name, $"{nameof(AdminSiteTypeService)} : {nameof(AddSiteTypeAsync)} : {nameof(name)} : is null/empty");
@@ -80,7 +80,7 @@ namespace Infrastructure.AdminSiteTypes
             {
                 var type = (SiteTypesEnum)Enum.Parse(typeof(SiteTypesEnum), siteType);
 
-                var newType = await this.appSiteTypeService.CreateSiteTypeAsync(name, description, type);
+                var newType = await this.appSiteTypeService.CreateSiteTypeAsync(name, description, type, price);
 
                 return new AdminSiteTypeDTO()
                 {

@@ -28,16 +28,16 @@ namespace Web.Controllers
 
         [Authorize(Roles = "Client")]
         [HttpGet]
-        public async Task<IActionResult> SelectTemplate(string buildInType, string clientId)
+        public async Task<IActionResult> SelectTemplate(string buildInType, string buildInTypeId,string clientId)
         {
             //TODO: VALIDATION ON INPUT PARAMETTERS
             try
             {
-                var buildInSiteTemplatesServiceCall = await this.templateService.GetAllAsync(buildInType, clientId);
+                var buildInSiteTemplatesServiceCall = await this.templateService.GetAllAsync(buildInType, buildInTypeId,clientId);
 
                 this.logger.LogInformation($"{nameof(TemplateController)} : {nameof(SelectTemplate)} : Sucess - Getting Site Templates");
 
-                var model = this.modelFactory.Create(buildInSiteTemplatesServiceCall.ToList(), buildInType, clientId);
+                var model = this.modelFactory.Create(buildInSiteTemplatesServiceCall.ToList(), buildInType, buildInTypeId,clientId);
 
                 return View(model);
             }

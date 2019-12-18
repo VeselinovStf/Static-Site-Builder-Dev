@@ -9,7 +9,7 @@ namespace ApplicationCore.Interfaces
         /// Get all build in site types
         /// </summary>
         /// <returns>List of build in site types</returns>
-        Task<IEnumerable<T>> GetAllTypesAsync();
+        Task<IEnumerable<T>> GetAllTypesWithWidgetsAsync(string clientId);
 
         /// <summary>
         /// Confirm if site type exist in data
@@ -25,7 +25,7 @@ namespace ApplicationCore.Interfaces
             string name, string description, string clientId,
             string buildInType, string templateLocation,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
-            string repository);
+            string repository, string siteTypeId);
 
        
     }

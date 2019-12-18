@@ -16,14 +16,15 @@ namespace ApplicationCore.Services
             this.siteTypeRepository = siteTypeRepository ?? throw new ArgumentNullException(nameof(siteTypeRepository));
         }
 
-        public async Task<SiteType> CreateSiteTypeAsync(string name, string description, SiteTypesEnum type)
+        public async Task<SiteType> CreateSiteTypeAsync(string name, string description, SiteTypesEnum type, decimal price)
         {
             var createdEntity = await this.siteTypeRepository.AddAsync(new SiteType()
             {
                 
                 Name = name,
                 Description = description,
-                Type = type
+                Type = type,
+                Price = price
             });
 
             return createdEntity;

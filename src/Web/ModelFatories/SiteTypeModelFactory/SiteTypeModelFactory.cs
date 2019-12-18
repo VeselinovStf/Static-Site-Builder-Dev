@@ -15,10 +15,18 @@ namespace Web.ModelFatories.SiteTypeModelFactory
                 ClientId = clientId,
                 SiteTypes = new List<SiteTypeViewModel>(serviceCall.Select(t => new SiteTypeViewModel()
                 {
+                    Id = t.Id,
                     Name = t.Name,
                     Description = t.Description,
                     BuildInName = t.BuildInName,
-                     Price = t.Price
+                     Price = t.Price,
+                      SiteTypeWidgets = new List<SiteTypeWidgetViewModel>(t.SiteTypeWidget.Select(s => new SiteTypeWidgetViewModel()
+                      {
+                           Price = s.Price,
+                            WidgetId = s.WidgetId,
+                             WidgetName = s.WidgetName,
+                             IsAvailible = s.IsAvailible
+                      }))
                 }))
             };
         }

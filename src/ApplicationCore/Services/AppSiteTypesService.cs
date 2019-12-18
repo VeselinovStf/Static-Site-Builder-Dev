@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Entities.SiteType;
 using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -32,9 +33,11 @@ namespace ApplicationCore.Services
             await this.siteTypeRepository.UpdateAsync(siteType);
         }
 
-        public async Task<IEnumerable<SiteType>> GetAllAsync()
+        public async Task<IEnumerable<SiteType>> GetAllWithWidgetsAsync()
         {
-            return await this.siteTypeRepository.ListAllAsync();
+            var specification = new SiteTypesWithUsebleWidgetsSpecification(false);
+
+            return await this.siteTypeRepository.ListAsync(specification);
         }
 
         public async Task<SiteType> GetSiteTypeAsync(string siteTypeId)

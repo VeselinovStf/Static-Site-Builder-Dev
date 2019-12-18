@@ -26,7 +26,7 @@ namespace Infrastructure.Templates
         }
     
 
-        public async Task<IList<SiteTemplateDTO>> GetAllAsync(string buildInType, string clientId)
+        public async Task<IList<SiteTemplateDTO>> GetAllAsync(string buildInType, string buildInTypeId,string clientId)
         {
             try
             {
@@ -35,6 +35,9 @@ namespace Infrastructure.Templates
 
                 Validator.StringIsNullOrEmpty(
                      clientId, $"{nameof(TemplateService)} : {nameof(GetAllAsync)} : {nameof(clientId)} : is null/empty");
+
+                Validator.StringIsNullOrEmpty(
+                     buildInTypeId, $"{nameof(TemplateService)} : {nameof(GetAllAsync)} : {nameof(buildInTypeId)} : is null/empty");
 
                 var elementsCall = await this.appTemplateService.GetAllTemplatesByTypeAsync(buildInType);
 
@@ -46,7 +49,9 @@ namespace Infrastructure.Templates
                     ClientId = clientId,
                     Name = e.Name,
                     SiteType = buildInType,
-                    Description = e.Description
+
+                    Description = e.Description,
+                    Price = e.Price
                 }));
 
                 return returnModel;

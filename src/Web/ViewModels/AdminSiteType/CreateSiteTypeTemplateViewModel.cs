@@ -14,6 +14,8 @@ namespace Web.ViewModels.AdminSiteType
 
         public string SiteType { get; set; }
 
+        public decimal Price { get; set; }
+
         public List<SelectListItem> SiteTypes { get; set; }
     }
 }

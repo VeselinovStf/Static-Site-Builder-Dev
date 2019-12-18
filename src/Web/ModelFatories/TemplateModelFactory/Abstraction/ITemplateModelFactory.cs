@@ -6,6 +6,6 @@ namespace Web.ModelFatories.TemplateModelFactory.Abstraction
 {
     public interface ITemplateModelFactory
     {
-        SelectTemplateViewModel Create(List<SiteTemplateDTO> serviceModel, string buildInTemplate, string clientId);
+        SelectTemplateViewModel Create(List<SiteTemplateDTO> serviceModel, string buildInTemplate, string buildInTypeId,string clientId);
     }
 }

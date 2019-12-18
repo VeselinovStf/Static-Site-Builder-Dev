@@ -11,7 +11,7 @@ namespace ApplicationCore.Interfaces
 
         IList<string> GetBuildInSiteTypes();
 
-        Task<T> AddSiteTypeAsync(string name, string description, string siteType);
+        Task<T> AddSiteTypeAsync(string name, string description, string siteType, decimal price);
         
     }
 }
