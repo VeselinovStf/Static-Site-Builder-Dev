@@ -8,11 +8,12 @@ namespace Web.ModelFatories.ClientModelFactory
 {
     public class ClientModelFactory : IClientModelFactory
     {
-        public HomeAreaViewModel Create(IEnumerable<ClientPostDTO> serviceCall, string clientId)
+        public HomeAreaViewModel Create(IEnumerable<ClientPostDTO> serviceCall, string clientId, bool inTutorial)
         {
             return new HomeAreaViewModel()
             {
                 ClientId = clientId,
+                Tutorial = inTutorial,
                 HomePosts = new List<HomeAreaPostsViewModel>(serviceCall.Select(p => new HomeAreaPostsViewModel()
                 {
                     AuthorName = p.AuthorName,

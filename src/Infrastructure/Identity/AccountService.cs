@@ -487,5 +487,28 @@ namespace Infrastructure.Identity
                 throw new AccountServiceGetClientIsInTutorialException($"{nameof(AccountServiceGetClientIsInTutorialException)}Can't find tutorial status for this client id : {ex.Message}");
             }
         }
+
+        public async Task<bool> ChangeTutorialAsync(ApplicationUser client)
+        {
+            Validator.ObjectIsNull(
+            client, $"{nameof(AccountService)} : {nameof(AddToRoleAsync)} : {nameof(client)} : object is null");
+
+            try
+            {
+                var result = await this.userManager.ChangeTutorialStatus(client);
+
+                if (result.Succeeded)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new AccountServiceChangeTutorialException($"{nameof(AccountServiceChangeTutorialException)} : Can't Change User Tutorial Status : {ex.Message}");
+            }
+
+        }
     }
 }

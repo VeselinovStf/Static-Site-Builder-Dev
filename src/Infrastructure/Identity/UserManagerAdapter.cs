@@ -101,5 +101,19 @@ namespace Infrastructure.Identity
         {
             return await this.userManager.FindByNameAsync(userName);
         }
+
+        public async Task<IdentityResult> ChangeTutorialStatus(ApplicationUser user)
+        {
+            if (user.IsInTutorial)
+            {
+                user.IsInTutorial = false;
+            }
+            else
+            {
+                user.IsInTutorial = true;
+            }
+
+            return await this.userManager.UpdateAsync(user);
+        }
     }
 }

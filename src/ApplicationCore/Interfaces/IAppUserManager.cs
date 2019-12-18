@@ -31,6 +31,8 @@ namespace ApplicationCore.Interfaces
 
         Task<IdentityResult> ChangeEmailNameAsync(T user, string newEmail, string token);
 
+        Task<IdentityResult> ChangeTutorialStatus(T user);
+
         Task<IdentityResult> ChangeUserNameAsync(T user, string userName);
 
         Task<IdentityResult> DeleteClient(string userId);

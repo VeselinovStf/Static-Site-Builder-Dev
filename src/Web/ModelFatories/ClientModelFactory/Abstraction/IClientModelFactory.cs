@@ -6,6 +6,6 @@ namespace Web.ModelFatories.ClientModelFactory.Abstraction
 {
     public interface IClientModelFactory
     {
-        HomeAreaViewModel Create(IEnumerable<ClientPostDTO> serviceCall, string clientId);
+        HomeAreaViewModel Create(IEnumerable<ClientPostDTO> serviceCall, string clientId, bool inTutorial);
     }
 }

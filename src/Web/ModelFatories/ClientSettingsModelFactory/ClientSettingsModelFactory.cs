@@ -10,7 +10,8 @@ namespace Web.ModelFatories.ClientSettingsModelFactory
         {
             return new ClientSettingViewModel()
             {
-                ClientId = serviceModel.Id
+                ClientId = serviceModel.Id,
+                 Tutorial = serviceModel.IsInTutorial
             };
         }
     }

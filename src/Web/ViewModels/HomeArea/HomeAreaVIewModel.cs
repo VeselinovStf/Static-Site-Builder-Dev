@@ -6,6 +6,8 @@ namespace Web.ViewModels.HomeArea
     {
         public string ClientId { get; set; }
 
+        public bool Tutorial { get; set; }
+
         public IList<HomeAreaPostsViewModel> HomePosts { get; set; }
     }
 }

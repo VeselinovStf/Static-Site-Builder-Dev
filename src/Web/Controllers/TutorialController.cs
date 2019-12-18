@@ -1,5 +1,5 @@
 ﻿using ApplicationCore.Interfaces;
-using Infrastructure.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,35 +8,50 @@ using System.Threading.Tasks;
 
 namespace Web.Controllers
 {
+    [Authorize]
     public class TutorialController : Controller
     {
-		private readonly IAccountService<ApplicationUser> accountService;
-		private readonly IAppLogger<TutorialController> logger;
+        private readonly ITutorialService tutorialService;
+        private readonly IAppLogger<TutorialController> logger;
 
-		public TutorialController(
-			IAccountService<ApplicationUser> accountService,
-			IAppLogger<TutorialController> logger)
-		{
-			this.accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
-			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-		}
-        public async Task<IActionResult> Tutorial(string clientId)
+        public TutorialController(
+            ITutorialService tutorialService,
+
+            IAppLogger<TutorialController> logger)
         {
-			try
-			{
-				var clientTutorial = await this.accountService.GetClientIsInTutorial(clientId);
-				//check if client is in tutorial 
+            this.tutorialService = tutorialService ?? throw new ArgumentNullException(nameof(tutorialService));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
-				return this.Json(new { success = clientTutorial });
-			}
-			catch (Exception ex)
-			{
+        public async Task<IActionResult> ChangeTutorialStatus(string clientId)
+        {
+            try
+            {
+                
+                 var tutorialChange = await this.tutorialService.ChangeTutorialStatusAsync(clientId);
 
-				this.logger.LogWarning($"{nameof(TutorialController)} : {nameof(Tutorial)} : Problem in getting tutorial : {ex.Message}");
+                if (tutorialChange)
+                {
+                    this.logger.LogInformation($"{nameof(ClientController)} : {nameof(ChangeTutorialStatus)} : Changing client tutorial status done.");
 
-				return RedirectToAction("Error", "Home", new { message = "Sorry but we have problem with Tutorial System, please try later or contact support for more info." });
+                   
+                }
+                else
+                {
+                    this.logger.LogWarning($"{nameof(ClientController)} : {nameof(ChangeTutorialStatus)} : Problem in chnging client tutorial status done.");
 
-			}
-		}
+                }
+
+                return RedirectToAction("Index", "ClientSettings", new { clientId = clientId });
+                
+                
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning($"{nameof(ClientController)} : {nameof(ChangeTutorialStatus)} : Can't get client posts : {ex.Message}");
+
+                return RedirectToAction("Error", "Home", new { message = "Can't change Tutorial status, please try later or contact support for more info." });
+            }
+        }
     }
 }

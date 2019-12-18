@@ -10,7 +10,18 @@
         <div class="container">           
             <div class="row justify-content-center mb-1">
                 <div class="col-md-5 text-center heading-section heading-section-white ftco-animate">
-                    <h1>Settings</h1>                
+                    <h1>Settings</h1>  
+                    @if (Model.Tutorial)
+                    {
+                    <a asp-action="ChangeTutorialStatus" asp-controller="Tutorial" asp-route-clientId="@Model.ClientId"  class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Turn Off Tutorial</a>
+
+                    }
+                    else
+                    {
+                    <a asp-action="ChangeTutorialStatus" asp-controller="Tutorial" asp-route-clientId="@Model.ClientId" class="btn btn-primary d-block px-3 py-3 mb-4 btn-outline-white">Turn On Tutorial</a>
+
+                    }
+                    
                 </div>
             </div>
         </div>

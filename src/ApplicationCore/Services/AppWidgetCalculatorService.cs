@@ -22,6 +22,24 @@ namespace ApplicationCore.Services
             this.widgetRepository = widgetRepository ?? throw new ArgumentNullException(nameof(widgetRepository));
         }
 
+        public async Task<bool> CheckTakeTokensAsync(string clientId, decimal price)
+        {
+            var walletSpecification = new GetWalletByClientIdSpecification(clientId);
+
+            var wallet = this.walletRepository.GetSingleBySpec(walletSpecification);
+
+            var clientWalletTokens = wallet.AvailibleCredit;
+            var tokensSub = clientWalletTokens - price;
+
+            if (tokensSub > -1)
+            {
+                return true;
+            }
+
+            return false;
+
+        }
+
         public async  Task<bool> TakeTokensAsync(string clientId, string widgetId)
         {
             var walletSpecification = new GetWalletByClientIdSpecification(clientId);

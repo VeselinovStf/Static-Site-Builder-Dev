@@ -31,6 +31,48 @@ namespace ApplicationCore.Services
            
         }
 
+        public async Task<bool> CheckDiamondsAsync(string clientId, string buildInType, string templateName, string siteTypeId)
+        {
+            var walletSpecification = new GetWalletByClientIdSpecification(clientId);
+
+            var wallet = this.walletRepository.GetSingleBySpec(walletSpecification);
+
+
+            //var siteTypeSpecification = new GetSiteTypeBySiteTypeEnum(buildInType);
+
+            var siteType = await this.siteTypeRepository.GetByIdAsync(siteTypeId);
+
+
+            var templateSpecification = new GetTemplateByNameSpecification(templateName);
+
+            var template = this.siteTemplateRepository.GetSingleBySpec(templateSpecification);
+
+            //get total price
+            var clientWalletDiamonds = wallet.AvailibleDiamons;
+
+            var siteTypePrice = siteType.Price;
+            var templatePrice = template.Price;
+
+            var totalPriceDiamonds = siteTypePrice + templatePrice;
+            //check if is posible
+            var diamondsSub = clientWalletDiamonds - totalPriceDiamonds;
+
+
+            if (diamondsSub > -1)
+            {
+
+               
+
+                return true;
+
+
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> TakeDiamondsAsync(string clientId, string buildInType, string templateName, string siteTypeId)
         {
             var walletSpecification = new GetWalletByClientIdSpecification(clientId);

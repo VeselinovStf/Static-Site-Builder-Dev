@@ -6,6 +6,6 @@ namespace Web.ModelFatories.ProjectsModelFactory.Abstraction
 {
     public interface IProjectsModelFactory
     {
-        ProjectsListViewModel Create(IEnumerable<ClientProjectDTO> serviceCall, string clientId, bool walkTry);
+        ProjectsListViewModel Create(IEnumerable<ClientProjectDTO> serviceCall, string clientId);
     }
 }

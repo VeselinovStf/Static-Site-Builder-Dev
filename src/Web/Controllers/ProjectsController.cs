@@ -25,7 +25,7 @@ namespace Web.Controllers
             this.logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
         }
 
-        public async Task<IActionResult> Index(string clientId, bool walktry = false)
+        public async Task<IActionResult> Index(string clientId)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Web.Controllers
 
                 this.logger.LogInformation($"{nameof(ProjectsController)} : {nameof(Index)} : Sucess - Getting Projects");
 
-                var model = this.modelFactory.Create(serviceCall, clientId, walktry);
+                var model = this.modelFactory.Create(serviceCall, clientId);
 
                 return View(model);
             }

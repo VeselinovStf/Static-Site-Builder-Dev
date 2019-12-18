@@ -35,7 +35,7 @@ namespace ApplicationCore.Interfaces
         Task<bool> ConfirmCangePasswordAsync(string userId, string code);
 
         Task<bool> ResetPasswordAsync(string userName, string password, string confirmPassword, string token);
-
+        Task<bool> ChangeTutorialAsync(T client);
         Task<bool> UpdateUserName(T user, string newUserName);
 
         Task<bool> DeleteUser(T user);

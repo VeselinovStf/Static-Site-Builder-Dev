@@ -19,6 +19,7 @@ namespace Infrastructure.SiteTypes
         private readonly IAppClientWidgetService appClientWidgetService;
         private readonly IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService;
         private readonly IAppProjectCalculatorService appProjectCalculator;
+        private readonly IAppWidgetCalculatorService appWidgetCalculatorService;
         private readonly IAppWidgetService appWidgetService;
         private readonly Dictionary<SiteTypesEnum, SiteTypesFactory> _factories;
 
@@ -28,6 +29,7 @@ namespace Infrastructure.SiteTypes
             IAppClientWidgetService appClientWidgetService,
             IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService,
             IAppProjectCalculatorService appProjectCalculator,
+            IAppWidgetCalculatorService appWidgetCalculatorService,
             IAppWidgetService appWidgetService
 
             )
@@ -37,6 +39,7 @@ namespace Infrastructure.SiteTypes
             this.appClientWidgetService = appClientWidgetService ?? throw new ArgumentNullException(nameof(appClientWidgetService));
             this.appSiteTemplateService = appSiteTemplateService ?? throw new ArgumentNullException(nameof(appSiteTemplateService));
             this.appProjectCalculator = appProjectCalculator ?? throw new ArgumentNullException(nameof(appProjectCalculator));
+            this.appWidgetCalculatorService = appWidgetCalculatorService ?? throw new ArgumentNullException(nameof(appWidgetCalculatorService));
             this.appWidgetService = appWidgetService ?? throw new ArgumentNullException(nameof(appWidgetService));
             _factories = new Dictionary<SiteTypesEnum, SiteTypesFactory>
                         {
@@ -49,7 +52,7 @@ namespace Infrastructure.SiteTypes
             string name, string description, string clientId,
             string buildInType, string templateName,
             string cardApiKey, string cardServiceGate, string hostingServiceGate,
-            string repository,string siteTypeId)
+            string repository, string siteTypeId)
         {
             //Get useble widgets for current template
             var templateUsableWidgets = await this.appSiteTemplateService.GetTemplateAsync(templateName);
@@ -64,27 +67,75 @@ namespace Infrastructure.SiteTypes
             var systemWidgetsCall = await this.appWidgetService.GetAllWidgetsAsync();
 
             //Get new widget
-            var newWidgets = systemWidgetsCall.Where(w => usebleWidgetsId.Contains(w.Id));     
+            var newWidgets = systemWidgetsCall.Where(w => usebleWidgetsId.Contains(w.Id));
 
-            bool CanBuy = await this.appProjectCalculator.TakeDiamondsAsync(clientId, buildInType, templateName, siteTypeId);
+            var CanBuyWithDiamonds = await this.appProjectCalculator.CheckDiamondsAsync(clientId, buildInType, templateName, siteTypeId);
 
-            if (CanBuy)
+
+            var clientWidgets = await this.appClientWidgetService.GetAllAsync(clientId);
+
+            if (CanBuyWithDiamonds)
             {
-           
-                await _factories[action].Create(clientProjectId,
-                 name, description, clientId,
-                 buildInType, templateName,
-                 cardApiKey, cardServiceGate, hostingServiceGate,
-                 repository, newWidgets);
+                var clientWidgetsId = clientWidgets.ClientWidgets.Select(w => w.WidgetId);
 
-                return true;
+                var widgetsToBuy = systemWidgetsCall.Where(w => !clientWidgetsId.Contains(w.Id));
+
+                if (widgetsToBuy != null)
+                {
+                    //check for widget bue
+                    var widgetsSum = widgetsToBuy.Sum(w => w.Price);
+
+                    var CanByeWithTokens = await this.appWidgetCalculatorService.CheckTakeTokensAsync(clientId, widgetsSum);
+                    //if is posible bye
+
+                    if (CanByeWithTokens)
+                    {
+                        foreach (var widget in widgetsToBuy)
+                        {
+                            var result = await this.appWidgetCalculatorService.TakeTokensAsync(clientId, widget.Id);
+
+                            if (result)
+                            {
+                                //add to client widget
+                                await this.appClientWidgetService.AddWidget(widget.Id, clientId);
+
+                                continue;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                         
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+
+                bool DiamondsBuy = await this.appProjectCalculator.TakeDiamondsAsync(clientId, buildInType, templateName, siteTypeId);
+
+                if (DiamondsBuy)
+                {
+                    await _factories[action].Create(clientProjectId,
+                        name, description, clientId,
+                        buildInType, templateName,
+                        cardApiKey, cardServiceGate, hostingServiceGate,
+                        repository, newWidgets);
+
+                    return true;
+                }
+
+
+                return false;
             }
             else
             {
                 return false;
             }
-           
-            
+
+
         }
 
         public async Task<IEnumerable<SiteTypeDTO>> GetAllTypesWithWidgetsAsync(string clientId)
@@ -93,7 +144,7 @@ namespace Infrastructure.SiteTypes
             {
                 var siteTypes = await this.appSiteTypeService.GetAllWithWidgetsAsync();
 
-               
+
                 Validator.ObjectIsNull(
                  siteTypes, $"{nameof(SiteTypesService)} : {nameof(GetAllTypesWithWidgetsAsync)} : {nameof(siteTypes)} : Can't find build in site types!");
 
@@ -101,7 +152,7 @@ namespace Infrastructure.SiteTypes
 
                 var clientWidgets = await this.appClientWidgetService.GetAllAsync(clientId);
 
-                
+
                 var serviceModel = new List<SiteTypeDTO>(siteTypes.Select(t => new SiteTypeDTO()
                 {
                     Id = t.Id,
@@ -109,14 +160,14 @@ namespace Infrastructure.SiteTypes
                     Description = t.Description,
                     BuildInName = t.Type.ToString(),
                     Price = t.Price,
-                     SiteTypeWidget = new List<SiteTypeWidgetDTO>(t.UsebleWidjets.Select(w => new SiteTypeWidgetDTO()
-                     {
-                          WidgetId = w.WidgetId,
-                           WidgetName = widgets.FirstOrDefault(b => b.Id == w.WidgetId).Name,
-                            Price = widgets.FirstOrDefault(b => b.Id == w.WidgetId).Price,
-                            IsAvailible = 
-                                clientWidgets.ClientWidgets.FirstOrDefault(cw => cw.WidgetId == w.WidgetId) == null ?false:true
-                     }))
+                    SiteTypeWidget = new List<SiteTypeWidgetDTO>(t.UsebleWidjets.Select(w => new SiteTypeWidgetDTO()
+                    {
+                        WidgetId = w.WidgetId,
+                        WidgetName = widgets.FirstOrDefault(b => b.Id == w.WidgetId).Name,
+                        Price = widgets.FirstOrDefault(b => b.Id == w.WidgetId).Price,
+                        IsAvailible =
+                               clientWidgets.ClientWidgets.FirstOrDefault(cw => cw.WidgetId == w.WidgetId) == null ? false : true
+                    }))
                 }));
 
                 return serviceModel;
@@ -199,7 +250,7 @@ namespace Infrastructure.SiteTypes
                            repository, siteTypeId);
 
                 return result;
-         
+
             }
             catch (Exception ex)
             {
@@ -207,6 +258,6 @@ namespace Infrastructure.SiteTypes
             }
         }
 
-    
+
     }
 }

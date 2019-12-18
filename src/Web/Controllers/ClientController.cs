@@ -12,11 +12,13 @@ namespace Web.Controllers
     public class ClientController : Controller
     {
         private readonly IClientBlogPostService<ClientPostDTO> clientBlogPostService;
+        private readonly ITutorialService tutorialService;
         private readonly IClientModelFactory modelFactory;
         private readonly IAppLogger<ClientController> logger;
 
         public ClientController(
              IClientBlogPostService<ClientPostDTO> clientBlogPostService,
+             ITutorialService tutorialService,
             IClientModelFactory modelFactory,
             IAppLogger<ClientController> logger
             )
@@ -24,6 +26,7 @@ namespace Web.Controllers
             this.modelFactory = modelFactory ?? throw new ArgumentNullException(nameof(modelFactory));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.clientBlogPostService = clientBlogPostService ?? throw new ArgumentNullException(nameof(clientBlogPostService));
+            this.tutorialService = tutorialService ?? throw new ArgumentNullException(nameof(tutorialService));
         }
 
         [HttpGet]
@@ -31,11 +34,15 @@ namespace Web.Controllers
         {
             try
             {
-                var serviceCall = await this.clientBlogPostService.GetAllClientPostsWithCommentsAsync(clientId);
+                var blogPostServiceCall = await this.clientBlogPostService.GetAllClientPostsWithCommentsAsync(clientId);
 
                 this.logger.LogInformation($"{nameof(ClientController)} : {nameof(ClientArea)} : Geting client blog posts done.");
 
-                var model = this.modelFactory.Create(serviceCall, clientId);
+                var inTutorial = await this.tutorialService.IsClientInTutorial(clientId);
+
+                this.logger.LogInformation($"{nameof(ClientController)} : {nameof(ClientArea)} : Geting client tutorial status done.");
+
+                var model = this.modelFactory.Create(blogPostServiceCall, clientId,inTutorial);
 
                 return View(model);
             }

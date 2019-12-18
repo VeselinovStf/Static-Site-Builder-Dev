@@ -41,6 +41,7 @@ using Infrastructure.SiteTypes.DTOs;
 using Infrastructure.Storage;
 using Infrastructure.Templates;
 using Infrastructure.Templates.DTOs;
+using Infrastructure.Tutorial;
 using Infrastructure.Wallet;
 using Infrastructure.Wallet.DTOs;
 using Infrastructure.Widgets;
@@ -202,6 +203,9 @@ namespace Web
             services.AddScoped<IDiamondService, WalletService>();
             services.AddScoped<IAppProjectCalculatorService, AppProjectCalculatorService>();
             services.AddScoped<IAppWidgetCalculatorService, AppWidgetCalculatorService>();
+
+            //Tutorial
+            services.AddScoped<ITutorialService, TutorialService>();
 
 
             //Infrastructure Services
