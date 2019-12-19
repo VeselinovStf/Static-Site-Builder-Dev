@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Web.ModelFatories.SiteModelFactory.Abstraction;
 using Web.ViewModels.Site;
+using Web.ViewModels.SiteRendering;
 
 namespace Web.ModelFatories.SiteModelFactory
 {

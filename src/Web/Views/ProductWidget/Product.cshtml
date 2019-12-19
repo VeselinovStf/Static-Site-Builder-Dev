@@ -1,10 +1,144 @@
-﻿@model SiteRenderingViewModel
+﻿@model ProductsDisplayListViewModel
 @{
 
     Layout = "~/Views/Shared/_SiteAdminLayout.cshtml";
-    ViewData["ClientId"] = Model.ClientId;
-    ViewData["TemplateName"] = Model.TemplateName;
-     ViewData["SiteTypeId"] = Model.SiteTypeId;
+    ViewData["ClientId"] = Model.SiteRendering.ClientId;
+    ViewData["TemplateName"] = Model.SiteRendering.TemplateName;
+     ViewData["SiteTypeId"] = Model.SiteRendering.SiteTypeId;
+
+    
+    ViewData["ProjectId"] = Model.ProjectId;
 }
 
-<h1>Products</h1>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div style="width:1000px">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-edit"></i>
+                            Manage Products
+                        </h3>
+                        <div class="card-tools">
+
+                            <a class="btn btn-info btn-sm" asp-controller="ProductWidget" asp-action="AddProduct" asp-route-projectId="@Model.ProjectId">
+                                <i class="fas fa-ad">
+                                </i>
+                                Add
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body p-0 ">
+                        <table class="table table-striped projects">
+                            <thead>
+                                <tr>
+                                    <th style="width: 1%">
+                                        #
+                                    </th>
+                                    <th style="width: 10%">
+                                        Name
+                                    </th>
+                                    <th style="width: 10%">
+                                        Price
+                                    </th>
+                                    <th style="width: 10%">
+                                        Collection
+                                    </th>
+                                    <th style="width: 10%">
+                                        Category
+                                    </th>
+                                    <th style="width: 30%" class="text-center">
+                                        Actions
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (var i = 0; i < Model.Products.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            @{ var count = i + 1; }
+                                            @count
+                                        </td>
+                                        <td>
+                                            <a>
+                                                @Html.DisplayFor(m => m.Products[i].Name)
+                                            </a>
+                                            <br>
+
+                                        </td>
+                                        <td>
+                                            <a>
+                                                @Html.DisplayFor(m => m.Products[i].Price)
+                                            </a>
+                                            <br>
+
+                                        </td>
+                                        <td>
+                                            <a>
+                                                @Html.DisplayFor(m => m.Products[i].Collection)
+                                            </a>
+                                            <br>
+
+                                        </td>
+                                        <td>
+                                            <a>
+                                                @Html.DisplayFor(m => m.Products[i].Category)
+                                            </a>
+                                            <br>
+
+                                        </td>
+
+                                        <td class="project-actions text-right">
+                                            @if (Model.Products[i].Publish)
+                                            {
+                                                <a class="btn btn-app btn-sm" asp-controller="LeftMenu" asp-action="DeleteElement"asp-route-projectId="@Model.ProjectId" asp-route-id="@Model.Products[i].Id">
+                                                    <i class="fas fa-eye">
+                                                    </i>
+                                                    Preview
+                                                </a>
+                                                <a class="btn btn-app btn-sm" asp-controller="Products" asp-action="UnPublish" asp-route-projectId="@Model.ProjectId" asp-route-id="@Model.Products[i].Id">
+                                                    <i class="fas fa-trash">
+                                                    </i>
+                                                    Un-Publish
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-app btn-sm" asp-controller="Products" asp-action="Publish" asp-route-projectId="@Model.ProjectId" asp-route-id="@Model.Products[i].Id">
+                                                    <i class="fas fa-anchor">
+                                                    </i>
+                                                    Publish
+                                                </a>
+                                                <a class="btn btn-info btn-sm" asp-controller="Products" asp-action="EditProduct" asp-route-projectId="@Model.ProjectId" asp-route-id="@Model.Products[i].Id">
+                                                    <i class="fas fa-pencil-alt">
+                                                    </i>
+                                                    Edit
+                                                </a>
+                                                <a class="btn btn-danger btn-sm" asp-controller="Products" asp-action="DeleteProduct" asp-route-projectId="@Model.ProjectId" asp-route-id="@Model.Products[i].Id">
+                                                    <i class="fas fa-trash">
+                                                    </i>
+                                                    Delete
+                                                </a>
+                                            }
+
+
+
+
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</section>

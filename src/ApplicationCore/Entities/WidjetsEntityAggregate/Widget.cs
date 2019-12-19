@@ -28,6 +28,7 @@ namespace ApplicationCore.Entities.WidjetsEntityAggregate
                 this.UnitPrice = value;
             }
         }
+        public string Icon { get; set; }
 
         public int Version { get; set; }
 
