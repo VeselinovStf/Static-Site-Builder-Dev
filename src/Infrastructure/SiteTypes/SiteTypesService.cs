@@ -55,7 +55,7 @@ namespace Infrastructure.SiteTypes
             string repository, string siteTypeId)
         {
             //Get useble widgets for current template
-            var templateUsableWidgets = await this.appSiteTemplateService.GetTemplateAsync(templateName);
+            var templateUsableWidgets = await this.appSiteTemplateService.GetByTemplateNameAsync(templateName);
 
             Validator.ObjectIsNull(
                 templateUsableWidgets, $"{nameof(SiteTypesService)} : {nameof(ExecuteCreation)} : {nameof(templateUsableWidgets)} : {templateName} -> FATAL : Can't find template useble widgets");

@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Entities.BlogSiteTypeEntities;
 using ApplicationCore.Entities.SiteProjectAggregate;
 using ApplicationCore.Entities.SitesTemplates;
+using ApplicationCore.Entities.SiteType;
 using ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate;
 using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
@@ -25,13 +26,15 @@ namespace Infrastructure.Site
         private readonly IAppBlogTypeSiteService<BlogTypeSite> appBlogTypeSiteService;
         private readonly IAppStoreTypeSiteService<StoreTypeSite> appStoreTypeSiteService;
         private readonly IAppWidgetService appWidgetService;
+       
 
         public SiteService(IAppSiteTemplatesService<SiteTemplate> appSiteTemplateService,
             IAppClientWidgetService appClientWidgetService,
             IAppProjectsService<Project> appProjectService,
             IAppBlogTypeSiteService<BlogTypeSite> appBlogTypeSiteService,
             IAppStoreTypeSiteService<StoreTypeSite> appStoreTypeSiteService,
-            IAppWidgetService appWidgetService)
+            IAppWidgetService appWidgetService,
+            IAppSiteTypesService<SiteType> appSiteTypeService)
         {
             this.appSiteTemplateService = appSiteTemplateService ?? throw new ArgumentNullException(nameof(appSiteTemplateService));
             this.appClientWidgetService = appClientWidgetService ?? throw new ArgumentNullException(nameof(appClientWidgetService));
@@ -39,42 +42,46 @@ namespace Infrastructure.Site
             this.appBlogTypeSiteService = appBlogTypeSiteService ?? throw new ArgumentNullException(nameof(appBlogTypeSiteService));
             this.appStoreTypeSiteService = appStoreTypeSiteService ?? throw new ArgumentNullException(nameof(appStoreTypeSiteService));
             this.appWidgetService = appWidgetService ?? throw new ArgumentNullException(nameof(appWidgetService));
+            
         }
 
-        public async Task<SiteRenderingDTO> RenderSiteAsync(string clientId, string defaultStoreSiteTemplateName, string siteTypeId)
+        public async Task<SiteRenderingDTO> RenderSiteAsync(string clientId, string siteTypeId)
         {
             Validator.StringIsNullOrEmpty(
                clientId, $"{nameof(SiteService)} : {nameof(RenderSiteAsync)} : {nameof(clientId)} : is null/empty");
 
             Validator.StringIsNullOrEmpty(
-              defaultStoreSiteTemplateName, $"{nameof(SiteService)} : {nameof(RenderSiteAsync)} : {nameof(defaultStoreSiteTemplateName)} : is null/empty");
+              siteTypeId, $"{nameof(SiteService)} : {nameof(RenderSiteAsync)} : {nameof(siteTypeId)} : is null/empty");
 
-            Validator.StringIsNullOrEmpty(
-                defaultStoreSiteTemplateName, $"{nameof(SiteService)} : {nameof(RenderSiteAsync)} : {nameof(defaultStoreSiteTemplateName)} : is null/empty");
-
+          
             try
             {
-                var usebleWidgetsCall = await this.appSiteTemplateService.GetTemplateAsync(defaultStoreSiteTemplateName);
+                //Get from StoreTypeSIte and from BlogTypeSites Tables
+               // var usebleWidgetsCall = await this.appSiteTypeService.GetAllWithUsableWidgetsAsync(siteTypeId);
 
                 var clientProjectCall = await this.appProjectService.GetClientProject(clientId);
 
                 Validator.ObjectIsNull(
                     clientProjectCall, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(clientProjectCall)} : {clientId} -> FATAL : Can't find project");
 
-                var clientBlogProjectWidgetsId = clientProjectCall.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
-                var clientStoreProjectWidgetsId = clientProjectCall.StoreSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
+               // var clientBlogProjectWidgetsId = clientProjectCall.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
+                //var clientStoreProjectWidgetsId = clientProjectCall.StoreSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
 
-                var usebleWidgetsId = usebleWidgetsCall.SiteType.UsebleWidjets.Select(w => w.WidgetId).ToList();
+               // var usebleWidgetsId = usebleWidgetsCall.UsebleWidjets.Select(w => w.WidgetId).ToList();
 
                 var widgetsCompareResultCall = await this.appWidgetService.GetAllWidgetsAsync();
 
-                var usebleTemplateWidgets = widgetsCompareResultCall.Where(w => usebleWidgetsId.Contains(w.Id));
+                //var usebleTemplateWidgets = widgetsCompareResultCall.Where(w => usebleWidgetsId.Contains(w.Id));
 
-                var clientBlogProjectWidgets = usebleTemplateWidgets.Where(x => clientBlogProjectWidgetsId.Id != x.Id);
-                var clientStoreProjectWidgets = usebleTemplateWidgets.Where(x => clientStoreProjectWidgetsId.Id != x.Id);
+                //var clientBlogProjectWidgets = usebleTemplateWidgets.Where(x => clientBlogProjectWidgetsId.Id != x.Id);
+                //var clientStoreProjectWidgets = usebleTemplateWidgets.Where(x => clientStoreProjectWidgetsId.Id != x.Id);
 
-              
 
+                var serviceModel = new SiteRenderingDTO()
+                {
+                    ClientId = clientId,
+                  
+                };
                 var siteWidgets = new List<Widget>();
 
               
@@ -89,10 +96,17 @@ namespace Infrastructure.Site
                 {
                     if (clientStoreProject != null)
                     {
+                        //GEt from StoreSiteTypes
+                        var usebleWidgetsCall = await this.appStoreTypeSiteService.GetTypeWithUsedWidgetsSite(siteTypeId);
+                        var usebleWidgetsId = usebleWidgetsCall.SiteUsedWidgets.Select(w => w.WidgetId).ToList();
+                        var usebleTemplateWidgets = widgetsCompareResultCall.Where(w => usebleWidgetsId.Contains(w.Id));
+                        var clientStoreProjectWidgetsId = clientProjectCall.StoreSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
+                        var clientStoreProjectWidgets = usebleTemplateWidgets.Where(x => clientStoreProjectWidgetsId.Id != x.Id);
 
                         //storeProject add
                         siteWidgets.AddRange(clientStoreProjectWidgets);
                         siteAddress = clientStoreProjectWidgetsId.Name;
+                        serviceModel.TemplateName = usebleWidgetsCall.TemplateName;
                     }
                     else
                     {
@@ -102,22 +116,22 @@ namespace Infrastructure.Site
                 }
                 else
                 {
+                    //GEt from BlogSiteTypes
+                    var usebleWidgetsCall = await this.appBlogTypeSiteService.GetTypeWithUsedWidgetsSite(siteTypeId);
+                    var usebleWidgetsId = usebleWidgetsCall.SiteUsedWidgets.Select(w => w.WidgetId).ToList();
+                    var usebleTemplateWidgets = widgetsCompareResultCall.Where(w => usebleWidgetsId.Contains(w.Id));
+                    var clientBlogProjectWidgetsId = clientProjectCall.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
+                    var clientBlogProjectWidgets = usebleTemplateWidgets.Where(x => clientBlogProjectWidgetsId.Id != x.Id);
+
                     //add to blogType by id
                     siteWidgets.AddRange(clientBlogProjectWidgets);
                     siteAddress = clientBlogProjectWidgetsId.Name;
-
+                    serviceModel.TemplateName = usebleWidgetsCall.TemplateName;
                 }
 
                 //Add widgets -> usable
-                var serviceModel = new SiteRenderingDTO()
-                {
-                    ClientId = clientId,
-                    PresentationLink = "https://" + siteAddress + SITE_RENDERING_DOMAIN,
-                    TemplateName = defaultStoreSiteTemplateName
-                };
-                
-
-
+                serviceModel.PresentationLink = "https://" + siteAddress + SITE_RENDERING_DOMAIN;
+                                                  
                 return serviceModel;
             }
             catch (Exception ex)
@@ -141,7 +155,7 @@ namespace Infrastructure.Site
             try
             {
                 //Get useble widgets for current template
-                var templateUsableWidgets = await this.appSiteTemplateService.GetTemplateAsync(defaultStoreSiteTemplateName);
+                var templateUsableWidgets = await this.appSiteTemplateService.GetByTemplateNameAsync(defaultStoreSiteTemplateName);
 
                 Validator.ObjectIsNull(
                  templateUsableWidgets, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(templateUsableWidgets)} : {defaultStoreSiteTemplateName} -> FATAL : Can't find template useble widgets");

@@ -60,16 +60,18 @@ namespace ApplicationCore.Services
             return await this.siteTemplatesRepository.ListAsync(specification);
         }
 
-        public async Task<SiteTemplate> GetTemplateAsync(string templateName)
+        public async Task<SiteTemplate> GetByTemplateNameAsync(string templateName)
         {
             var specification = new SiteTemplateByNameWithWidgetsSpecification(templateName);
 
             return this.siteTemplatesRepository.GetSingleBySpec(specification);
         }
 
+      
+
         public async Task<SiteTemplate> GetTemplateWithElementsAsync(string templateName)
         {
-            var specification = new SiteTemplateWithElementsSpecification(templateName);
+            var specification = new SiteTemplateByNameWithWidgetsSpecification(templateName);
 
             return this.siteTemplatesRepository.GetSingleBySpec(specification);
         }

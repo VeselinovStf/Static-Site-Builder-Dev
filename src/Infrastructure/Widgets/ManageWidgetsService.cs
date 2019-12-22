@@ -112,7 +112,7 @@ namespace Infrastructure.Widgets
                     clientWidgets, $"{nameof(ManageWidgetsService)} : {nameof(GetAllAsync)} : {nameof(clientWidgets)} : Can't find widgets with this client ID");
 
 
-                var usebleWidgetsCall = await this.appSiteTemplateService.GetTemplateAsync(templateName);
+                var usebleWidgetsCall = await this.appSiteTemplateService.GetByTemplateNameAsync(templateName);
 
                 Validator.ObjectIsNull(
                     usebleWidgetsCall, $"{nameof(ManageWidgetsService)} : {nameof(GetAllAsync)} : {nameof(usebleWidgetsCall)} : Can't find template");

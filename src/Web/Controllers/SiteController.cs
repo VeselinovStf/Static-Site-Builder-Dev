@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Interfaces;
+using Infrastructure.Identity;
 using Infrastructure.Site.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,15 +14,18 @@ namespace Web.Controllers
     public class SiteController : Controller
     {
         private readonly ISiteService<SiteRenderingDTO> siteRenderingService;
+        private readonly IAccountService<ApplicationUser> accountService;
         private readonly ISiteModelFactory modelFactory;
         private readonly IAppLogger<SiteController> logger;
 
         public SiteController(
             ISiteService<SiteRenderingDTO> siteRenderingService,
+            IAccountService<ApplicationUser> accountService,
             ISiteModelFactory modelFactory,
             IAppLogger<SiteController> logger)
         {
             this.siteRenderingService = siteRenderingService ?? throw new ArgumentNullException(nameof(siteRenderingService));
+            this.accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
             this.modelFactory = modelFactory ?? throw new ArgumentNullException(nameof(modelFactory));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -34,7 +38,7 @@ namespace Web.Controllers
 
                 this.logger.LogInformation($"{nameof(SiteController)} : {nameof(Use)} : Sucess - Updating Site Widgets");
 
-                return RedirectToAction(returnUrl, "Site", new { clientId = clientId, siteTemplateName = siteTemplateName, siteTypeId = siteTypeId });
+                return RedirectToAction(returnUrl, "Site", new { siteTypeId = siteTypeId });
             }
             catch (Exception ex)
             {
@@ -44,12 +48,13 @@ namespace Web.Controllers
             }
         }
 
-        public async Task<IActionResult> Site(string clientId,string siteTemplateName, string siteTypeId)
+        public async Task<IActionResult> Site( string siteTypeId)
         {
             try
             {
-               
-                var serviceModel = await this.siteRenderingService.RenderSiteAsync(clientId, siteTemplateName,siteTypeId);
+                var client = await this.accountService.RetrieveUserAsync(this.User);
+
+                var serviceModel = await this.siteRenderingService.RenderSiteAsync(client.Id,siteTypeId);
 
                 this.logger.LogInformation($"{nameof(SiteController)} : {nameof(Site)} : Sucess - Getting Client Site");
           

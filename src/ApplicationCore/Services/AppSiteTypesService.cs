@@ -33,6 +33,8 @@ namespace ApplicationCore.Services
             await this.siteTypeRepository.UpdateAsync(siteType);
         }
 
+     
+
         public async Task<IEnumerable<SiteType>> GetAllWithWidgetsAsync()
         {
             var specification = new SiteTypesWithUsebleWidgetsSpecification(false);

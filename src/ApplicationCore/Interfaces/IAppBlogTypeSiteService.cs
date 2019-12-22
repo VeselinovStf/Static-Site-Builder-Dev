@@ -10,5 +10,7 @@ namespace ApplicationCore.Interfaces
         Task EditClientBlogProjectAsync(string clientId, string name, string description, string cardApiKey, string cardServiceGate, string hostingServiceGate, string repository);
 
         Task DeleteClientBlogProjectAsync(string clientId);
+
+        Task<T> GetTypeWithUsedWidgetsSite(string siteTypeId);
     }
 }

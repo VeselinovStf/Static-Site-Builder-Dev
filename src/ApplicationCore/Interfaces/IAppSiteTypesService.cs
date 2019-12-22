@@ -9,5 +9,6 @@ namespace ApplicationCore.Interfaces
         Task<IEnumerable<T>> GetAllWithWidgetsAsync();
         Task<T> GetSiteTypeAsync(string siteTypeId);
         Task AddWidgetAsync(string siteTypeId, string widgetId);
+        
     }
 }

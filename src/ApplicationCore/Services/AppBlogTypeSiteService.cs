@@ -62,5 +62,12 @@ namespace ApplicationCore.Services
 
             await this.blogTypeRepository.UpdateAsync(blog);
         }
+
+        public async Task<BlogTypeSite> GetTypeWithUsedWidgetsSite(string siteTypeId)
+        {
+            var specification = new BlogTypeSiteWithWidgetsSpecification(siteTypeId);
+
+            return this.blogTypeRepository.GetSingleBySpec(specification);
+        }
     }
 }

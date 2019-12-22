@@ -64,5 +64,12 @@ namespace ApplicationCore.Services
 
             await this.storeTypeRepository.UpdateAsync(store);
         }
+
+        public async Task<StoreTypeSite> GetTypeWithUsedWidgetsSite(string siteTypeId)
+        {
+            var specification = new StoreTypeSiteWithWidgetsSpecification(siteTypeId);
+
+            return this.storeTypeRepository.GetSingleBySpec(specification);
+        }
     }
 }
