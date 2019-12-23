@@ -19,7 +19,7 @@ namespace Web.Views.ViewComponents.AdminSiteNavigationViewComponents
             IAppLogger<AdminSideNavigationViewComponent> logger)
         {
             this.manageWidgetService = manageWidgetService ?? throw new System.ArgumentNullException(nameof(manageWidgetService));
-            this.modelFactory = modelFactory;
+            this.modelFactory = modelFactory ?? throw new ArgumentNullException(nameof(modelFactory));
             this.logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
         }
         public async Task<IViewComponentResult> InvokeAsync(string clientId, string templateName, string siteTypeId)

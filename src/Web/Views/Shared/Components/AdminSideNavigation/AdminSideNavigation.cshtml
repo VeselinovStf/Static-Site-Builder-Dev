@@ -2,7 +2,7 @@
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a asp-controller="Site" asp-action="Site" asp-route-siteTypeId="@Model.SiteTypeId" class="brand-link">
         <img src="~/adminSite/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
              style="opacity: .8">
         <span class="brand-text font-weight-light">Admin Board</span>
@@ -139,7 +139,7 @@
                                 }
                             </ul>
                         </li>*@
-                    }
+                    @*}*@
 
                     @*<li class="nav-header">FUTURES</li>
                         <li class="nav-item has-treeview">

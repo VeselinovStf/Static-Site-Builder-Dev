@@ -40,6 +40,7 @@ namespace Web.Controllers
             return View(model);
         }
 
+        //NOTE: When client neat project -> search in StoreTypeSite table for id
         public IActionResult AddProduct(string projectId)
         {
             if (string.IsNullOrWhiteSpace(projectId))

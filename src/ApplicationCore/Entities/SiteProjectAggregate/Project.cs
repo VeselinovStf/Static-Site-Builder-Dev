@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Entities.BaseEntities;
 using ApplicationCore.Entities.BlogSiteTypeEntities;
+using ApplicationCore.Entities.SiteType;
 using ApplicationCore.Entities.StoreSiteTypeEntitiesAggregate;
 using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
@@ -33,6 +34,7 @@ namespace ApplicationCore.Entities.SiteProjectAggregate
                 return new List<BlogTypeSite>(_blogSiteTypes.AsReadOnly().Where(b => !b.IsDeleted));
             }
         }
+      
 
         public void AddStoreTypeSite(string clientProjectId, string name, string description, string clientId,
             string buildInType, string templateName,

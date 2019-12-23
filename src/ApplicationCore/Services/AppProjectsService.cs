@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities.SiteProjectAggregate;
+using ApplicationCore.Entities.SiteType;
 using ApplicationCore.Entities.WidjetsEntityAggregate;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
@@ -58,5 +59,7 @@ namespace ApplicationCore.Services
 
             await this.projectRepository.UpdateAsync(projectStores);
         }
+
+       
     }
 }

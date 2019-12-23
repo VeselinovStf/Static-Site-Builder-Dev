@@ -56,26 +56,12 @@ namespace Infrastructure.Site
           
             try
             {
-                //Get from StoreTypeSIte and from BlogTypeSites Tables
-               // var usebleWidgetsCall = await this.appSiteTypeService.GetAllWithUsableWidgetsAsync(siteTypeId);
-
-                var clientProjectCall = await this.appProjectService.GetClientProject(clientId);
+                 var clientProjectCall = await this.appProjectService.GetClientProject(clientId);
 
                 Validator.ObjectIsNull(
                     clientProjectCall, $"{nameof(SiteService)} : {nameof(UpdateSiteWidgetsAsync)} : {nameof(clientProjectCall)} : {clientId} -> FATAL : Can't find project");
 
-               // var clientBlogProjectWidgetsId = clientProjectCall.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
-                //var clientStoreProjectWidgetsId = clientProjectCall.StoreSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
-
-               // var usebleWidgetsId = usebleWidgetsCall.UsebleWidjets.Select(w => w.WidgetId).ToList();
-
                 var widgetsCompareResultCall = await this.appWidgetService.GetAllWidgetsAsync();
-
-                //var usebleTemplateWidgets = widgetsCompareResultCall.Where(w => usebleWidgetsId.Contains(w.Id));
-
-                //var clientBlogProjectWidgets = usebleTemplateWidgets.Where(x => clientBlogProjectWidgetsId.Id != x.Id);
-                //var clientStoreProjectWidgets = usebleTemplateWidgets.Where(x => clientStoreProjectWidgetsId.Id != x.Id);
-
 
                 var serviceModel = new SiteRenderingDTO()
                 {
@@ -83,13 +69,10 @@ namespace Infrastructure.Site
                   
                 };
                 var siteWidgets = new List<Widget>();
-
-              
+             
                 //return
                 var clientBlogProject = clientProjectCall.BlogSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
                 var clientStoreProject = clientProjectCall.StoreSiteTypes.FirstOrDefault(b => b.Id == siteTypeId);
-
-                // var clientNewWidgets = clientWidgetsCall.ClientWidgets.Add(widgetsCompareResult.Select(w => new ClientWidgets() {  }));
 
                 var siteAddress = string.Empty;
                 if (clientBlogProject == null)
