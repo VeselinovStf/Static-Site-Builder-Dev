@@ -2,6 +2,7 @@
 using Infrastructure.Identity;
 using Infrastructure.Site.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -37,6 +38,11 @@ namespace Web.Controllers
                 await this.siteRenderingService.UpdateSiteWidgetsAsync(clientId, siteTemplateName, siteTypeId);
 
                 this.logger.LogInformation($"{nameof(SiteController)} : {nameof(Use)} : Sucess - Updating Site Widgets");
+
+                if (string.IsNullOrEmpty(HttpContext.Session.GetString("_SiteTemplateName")))
+                {
+                    HttpContext.Session.SetString("_SiteTemplateName", siteTemplateName);                  
+                }
 
                 return RedirectToAction(returnUrl, "Site", new { siteTypeId = siteTypeId });
             }

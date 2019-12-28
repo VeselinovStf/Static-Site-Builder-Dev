@@ -248,6 +248,13 @@ namespace Web
 
             services.AddHttpContextAccessor();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".SiteProject.Session";
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.IsEssential = true;
+            });
         }
 
         private void ConfigureAppDbContext(IServiceCollection services)
@@ -300,7 +307,7 @@ namespace Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
-
+            app.UseSession();
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>

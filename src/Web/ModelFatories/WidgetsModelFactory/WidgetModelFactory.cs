@@ -51,13 +51,11 @@ namespace Web.ModelFatories.WidgetsModelFactory
             };
         }
 
-        public SiteViewModel Create(ClientSiteWidgetsDTO serviceCall, string templateName, string siteTypeId,string clientId)
+        public SiteViewModel Create(ClientSiteWidgetsDTO serviceCall)
         {
             return new SiteViewModel()
             {
-                ClientId = clientId,
-               TemplateName = templateName,
-               SiteTypeId = siteTypeId,
+               
                 Widgets = new List<SiteWidgetViewModel>(serviceCall.Widgets.Select(w => new SiteWidgetViewModel()
                 {
                     DisplayName = w.DisplayName,
